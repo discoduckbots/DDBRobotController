@@ -7,11 +7,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.discoduckbots.control.PIDF;
 import org.firstinspires.ftc.teamcode.discoduckbots.util.NumberUtility;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -32,8 +30,6 @@ public class MecanumDrivetrain implements DrivetrainInterface {
     private LinearOpMode opMode;
     private IMU imu;
     private ColorSensor colorSensor;
-    private PIDF headingPID;
-
 
     /**
      * @deprecated Use MecanumDrivetrain(telemetry, opMode, imu, colorSensor, frontLeft, frontRight, backLeft, backRight)
@@ -85,14 +81,6 @@ public class MecanumDrivetrain implements DrivetrainInterface {
         mBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        headingPID = new PIDF(0.95, 0, 0.01, 0);
-        headingPID.setPhase(false);
-        headingPID.setPeakOutputForward(1);
-        headingPID.setPeakOutputReverse(-1);
-        headingPID.setContinuityRange(-Math.PI, Math.PI);
-        headingPID.setContinuous(true);
-        headingPID.setAtTargetThreshold(Math.toRadians(3));
 
         mFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -466,22 +454,6 @@ public class MecanumDrivetrain implements DrivetrainInterface {
         mTelemetry.addData("mFrontRight: " , mFrontRight.getCurrentPosition() - firstPosition4);
         mTelemetry.update();
         stop();
-    }
-
-    public void turnToHeading(LinearOpMode opMode, double heading, Runnable whileWaiting){
-        headingPID.setSetpoint(heading);
-        while (!opMode.isStopRequested()){
-            if (whileWaiting != null){
-                whileWaiting.run();
-            }
-
-            if (Math.abs(headingPID.getLastError()) < Math.toRadians(6)){
-                break;
-            }
-
-            //Code that Turns Use this to adjust power
-            //headingPID.update(imu.getIMUHeading());
-        }
     }
 
     public void gyroTurn(double degrees, double basePower, LinearOpMode opMode) {
