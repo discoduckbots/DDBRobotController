@@ -37,6 +37,10 @@ public class PixelGrabber {
         buttonPress = false;
     }
 
+    public double getWristPostion(){
+        return wristServo.getPosition();
+    }
+
     public void onPressPivot() {
         if (buttonPressPivot) return;
         buttonPressPivot = true;
@@ -54,8 +58,11 @@ public class PixelGrabber {
     }
 
     public void rotate(double position) {
-        wristServo.setPosition(position);
+        if (position >= 0.0 && position <= 1.0){
+            wristServo.setPosition(position);
+        }
     }
+
     public void pushPixel() {
         //pusherServo.setPosition(1.0);
     }
