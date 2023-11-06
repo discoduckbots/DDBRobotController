@@ -163,21 +163,11 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
 //            }
 
             if (gamepad2.x) {
-                double max = 1.0;
-                double pos = hardwareStore.wristServo.getPosition();
-                if (pos < max) {
-                    pos += 0.01;
-                }
-                pixelGrabber.rotate(pos);
+                pixelGrabber.rotate(pixelGrabber.getWristPostion() + 0.01);
             }
 
             if (gamepad2.y) {
-                double min = 0.5;
-                double pos = hardwareStore.wristServo.getPosition();
-                if (pos > min) {
-                    pos -= 0.01;
-                }
-                pixelGrabber.rotate(pos);
+                pixelGrabber.rotate(pixelGrabber.getWristPostion() - 0.01);
             }
 
             telemetry.addData("wristServo pos: ", hardwareStore.wristServo.getPosition());
