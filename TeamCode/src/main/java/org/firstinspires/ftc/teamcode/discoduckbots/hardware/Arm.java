@@ -16,6 +16,12 @@ public class Arm {
         this.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    public int getLiftPos() {
+        return liftMotor.getCurrentPosition();
+    }
+    private int getPivotPos() {
+        return pivotMotor.getCurrentPosition();
+    }
     public void lift(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -30,6 +36,7 @@ public class Arm {
     }
 
     public void stopLift() {
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor.setPower(0);
     }
 
@@ -54,6 +61,7 @@ public class Arm {
     }
 
     public void stopPivot() {
+        pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pivotMotor.setPower(0);
     }
 
