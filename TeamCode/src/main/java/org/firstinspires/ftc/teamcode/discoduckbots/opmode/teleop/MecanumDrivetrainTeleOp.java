@@ -59,7 +59,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Centerstage Opmode", group="Linear Opmode")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Centerstage Opmode", group= "Linear Opmode")
 
 public class MecanumDrivetrainTeleOp extends LinearOpMode {
 
@@ -76,6 +76,8 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
     private static int PIVOT_POS_2 = 40;
     private static int PIVOT_POS_3 = 80;
     private static int PIVOT_RESET = 0;
+    boolean liftAtEncoderPos = false;
+    boolean pivotAtEncoderPos = false;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -100,9 +102,21 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
 
             Log.d("LIFT" , "pos : " + hardwareStore.liftMotor.getCurrentPosition());
             Log.d("PIVOT", "pos : " + hardwareStore.pivotMotor.getCurrentPosition());
+            Log.d("ARM", "lift pos : " + hardwareStore.liftMotor.getCurrentPosition() +
+                    "pivot pos : " + hardwareStore.pivotMotor.getCurrentPosition());
 
              //Gamepad 1
             mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
+
+            if (gamepad1.left_trigger > 0.05) {
+                intake.outtake(gamepad1.left_trigger);
+            }
+            else if (gamepad1.right_trigger > 0.05) {
+                intake.intake(gamepad1.right_trigger);
+            }
+            else {
+                intake.stop();
+            }
 
             if (gamepad1.left_bumper) {
                 intake.outtake(OUTAKE_SPEED);
@@ -113,26 +127,31 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
             else {
                 intake.stop();
             }
-            if (gamepad1.right_trigger > 0) {
+
+            if (gamepad1.a) {
                 THROTTLE = .4;
             }
-            if (gamepad1.left_trigger > 0) {
+            if (gamepad1.b) {
                 THROTTLE = .75;
             }
             if (gamepad2.dpad_up) {
+                liftAtEncoderPos = false;
                 arm.lift(SLIDE_SPEED);
 
             } else if (gamepad2.dpad_down) {
+                liftAtEncoderPos = false;
                 arm.lower(SLIDE_SPEED);
 
-            }   else {
-                arm.stopLift();
+            }   else if (!liftAtEncoderPos){
+                    arm.stopLift();
             }
 
             if (Math.abs(gamepad2.right_stick_y) > 0.05) {
+                pivotAtEncoderPos = false;
                 arm.pivotForward(gamepad2.right_stick_y/2);
-            } else {
-                arm.stopPivot();
+
+            }   else if (!pivotAtEncoderPos){
+                    arm.stopPivot();
             }
 
             if (gamepad2.a) {
@@ -150,12 +169,15 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.right_trigger > 0.05) {
+                liftAtEncoderPos = true;
                 arm.liftToPosition(SLIDE_POS_2, SLIDE_SPEED);
             }
             if (gamepad2.left_trigger > 0.05) {
+                pivotAtEncoderPos = true;
                 arm.pivotToPosition(PIVOT_POS_2, PIVOT_SPEED);
             }
             if (gamepad2.right_bumper) {
+                liftAtEncoderPos = true;
                 arm.liftToPosition(SLIDE_RESET, SLIDE_SPEED);
             }
 //            if (gamepad2.left_bumper) {
@@ -169,6 +191,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
             if (gamepad2.y) {
                 pixelGrabber.rotate(pixelGrabber.getWristPostion() - 0.01);
             }
+
 
             telemetry.addData("wristServo pos: ", hardwareStore.wristServo.getPosition());
 
