@@ -11,15 +11,21 @@ public class Arm {
     private DcMotor pivotMotor;
 
     public Arm(DcMotor liftMotor, DcMotor pivotMotor) {
+
         this.liftMotor = liftMotor;
+        this.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.pivotMotor = pivotMotor;
+        this.pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.pivotMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public int getLiftPos() {
         return liftMotor.getCurrentPosition();
     }
-    private int getPivotPos() {
+    public int getPivotPos() {
         return pivotMotor.getCurrentPosition();
     }
     public void lift(double power) {
@@ -44,10 +50,6 @@ public class Arm {
         liftMotor.setTargetPosition(position);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(power);
-
-//        while (liftMotor.isBusy()) {
-//            //wait for motor to be done
-//        }
     }
 
     public void pivotForward(double power) {

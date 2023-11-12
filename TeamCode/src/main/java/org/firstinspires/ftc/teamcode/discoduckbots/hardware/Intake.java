@@ -11,12 +11,12 @@ public class Intake {
     }
 
     public void intake(double power) {
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeMotor.setPower(power);
     }
 
     public void outtake(double power) {
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setPower(power);
     }
     public void stop() {
