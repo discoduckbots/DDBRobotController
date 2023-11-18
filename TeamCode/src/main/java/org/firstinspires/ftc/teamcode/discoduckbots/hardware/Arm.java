@@ -37,8 +37,8 @@ public class Arm {
 
     public void lower(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor.setDirection(DcMotor.Direction.FORWARD);
-        liftMotor.setPower(power);
+        liftMotor.setDirection(DcMotor.Direction.REVERSE);
+        liftMotor.setPower(-power);
     }
 
     public void stopLift() {
