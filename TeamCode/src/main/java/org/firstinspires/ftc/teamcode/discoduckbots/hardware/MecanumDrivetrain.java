@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -95,6 +96,10 @@ public class MecanumDrivetrain implements DrivetrainInterface {
 
 
     }
+
+    public MecanumDrivetrain(HardwareMap hardwareMap) {
+    }
+
     public void print() {
         Log.d("FTC", "backLeft: " + mBackLeft.getCurrentPosition() );
         Log.d("FTC", "backRight: " + mBackRight.getCurrentPosition() );

@@ -14,10 +14,12 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 //import org.firstinspires.ftc.teamcode.util.Encoder;
 
 public class HardwareStore {
     private MecanumDrivetrain mecanumDrivetrain;
+    private SampleMecanumDrive sampleMecanumDrive;
     private Arm arm;
     private PixelGrabber pixelGrabber;
     private Intake intake;
@@ -74,7 +76,7 @@ public class HardwareStore {
         //hardwareMap.get(DcMotorEx.class, "backLeft").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-       mecanumDrivetrain = createDrivetrain(telemetry, opMode, frontLeft, frontRight, backLeft, backRight);
+        mecanumDrivetrain = createDrivetrain(telemetry, opMode, frontLeft, frontRight, backLeft, backRight);
     }
 
     protected MecanumDrivetrain createDrivetrain(Telemetry telemetry,
@@ -89,6 +91,8 @@ public class HardwareStore {
     public MecanumDrivetrain getMecanumDrivetrain() {
         return mecanumDrivetrain;
     }
+
+    public SampleMecanumDrive getSampleMecanumDrive() { return sampleMecanumDrive; }
 
     //public TouchSensor getArmStoppingSensor() { return armStoppingSensor; }
     //public DistanceSensor getDistanceSensor() { return distanceSensor; }
