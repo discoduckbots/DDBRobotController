@@ -79,7 +79,7 @@ public class WingBlueAutoGoated extends LinearOpMode {
                         slowVelocityConstraint, slowAccelerationConstraint)
                 .build();
 
-        Trajectory moveALittleForward = sampleMecanumDrive.trajectoryBuilder(driveToDuck.end())
+        /*Trajectory moveALittleForward = sampleMecanumDrive.trajectoryBuilder(driveToDuck.end())
                 .lineToLinearHeading(FORWARD_LITTLE, velocityConstraint, accelerationConstraint)
                 .build();
 
@@ -97,7 +97,7 @@ public class WingBlueAutoGoated extends LinearOpMode {
 
         Trajectory driveAwayFromBoard = sampleMecanumDrive.trajectoryBuilder(driveToBoard.end())
                 .lineToLinearHeading(AWAY_FROM_BOARD, velocityConstraint, accelerationConstraint)
-                .build();
+                .build(); */
 
 
 
@@ -112,12 +112,12 @@ public class WingBlueAutoGoated extends LinearOpMode {
             //push pixel
             arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
             sleep(600);
-            sampleMecanumDrive.followTrajectory(moveALittleForward);
-            sleep(500);
-            sampleMecanumDrive.followTrajectory(strafeFromDuck);
+//            sampleMecanumDrive.followTrajectory(moveALittleForward);
+//            sleep(500);
+            /*sampleMecanumDrive.followTrajectory(strafeFromDuck);
             sleep(500);
             sampleMecanumDrive.followTrajectory(driveUnderBridge);
-            sleep(500);
+            sleep(500); //
             sampleMecanumDrive.turn(Math.toRadians(90));
             sleep(500);
             arm.pivotToPosition(PIVOT_BOARD, PIVOT_SPEED);
@@ -131,6 +131,8 @@ public class WingBlueAutoGoated extends LinearOpMode {
             //place pixel
             sampleMecanumDrive.followTrajectory(driveAwayFromBoard);
             sleep(500);
+
+             */
             arm.liftToPosition(MOVE_LIFT_FOR_PIVOT, LIFT_SPEED);
             sleep(1000);
             pixelGrabber.rotate(1);

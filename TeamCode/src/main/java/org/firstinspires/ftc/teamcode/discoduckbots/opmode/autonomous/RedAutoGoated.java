@@ -138,10 +138,14 @@ public class RedAutoGoated extends LinearOpMode {
             arm.liftToPosition(MOVE_LIFT_FOR_PIVOT, LIFT_SPEED);
             sleep(1000);
             pixelGrabber.rotate(1);
-            sleep(1000);
-            arm.pivotToPosition(0, PIVOT_SPEED_RESET);
-            sleep(300);
-            arm.liftToPosition(0, LIFT_SPEED);
+            //sleep(1000);
+            //arm.pivotToPosition(0, PIVOT_SPEED_RESET);
+            //sleep(300);
+            //arm.liftToPosition(0, LIFT_SPEED);
+
+
+
+
          }
     }
 }
