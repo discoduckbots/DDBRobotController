@@ -53,6 +53,7 @@ public class Arm {
     }
 
     public void pivotForward(double power) {
+        pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pivotMotor.setDirection(DcMotor.Direction.FORWARD);
         pivotMotor.setPower(power);
     }
@@ -72,9 +73,6 @@ public class Arm {
         pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         pivotMotor.setPower(power);
 
-        while (pivotMotor.isBusy()) {
-            //wait for motor to be done
-        }
     }
 
 }

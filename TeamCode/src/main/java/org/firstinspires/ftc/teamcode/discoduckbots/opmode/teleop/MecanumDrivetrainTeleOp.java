@@ -66,7 +66,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
     private static double THROTTLE = 0.75;
     private static double INTAKE_SPEED = 0.75;
     private static double OUTAKE_SPEED = 1.0;
-    private static double SLIDE_SPEED = 0.6;
+    private static double SLIDE_SPEED = 0.75;
     private static double PIVOT_SPEED = 0.5;
     private static int SLIDE_POS_1 = 0;
     private static int SLIDE_POS_2 = -350;
@@ -76,6 +76,8 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
     private static int PIVOT_POS_2 = 40;
     private static int PIVOT_POS_3 = 80;
     private static int PIVOT_RESET = 0;
+    private int liftPosition = 0;
+    private int pivotPosition = 0;
     boolean liftAtEncoderPos = false;
     boolean pivotAtEncoderPos = false;
 
@@ -137,22 +139,38 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
             if (gamepad2.dpad_up) {
                 liftAtEncoderPos = false;
                 arm.lift(SLIDE_SPEED);
+                liftPosition = arm.getLiftPos();
 
             } else if (gamepad2.dpad_down) {
                 liftAtEncoderPos = false;
                 arm.lower(SLIDE_SPEED);
+                liftPosition = arm.getLiftPos();
 
-            }   else if (!liftAtEncoderPos){
-                    arm.stopLift();
+
+            } else {
+                arm.liftToPosition(liftPosition, SLIDE_SPEED);
             }
 
+            /*}   else if (!liftAtEncoderPos){
+                arm.stopLift();
+            } */
+
+            Log.d("RT_STICK", "" + gamepad2.right_stick_y);
             if (Math.abs(gamepad2.right_stick_y) > 0.05) {
                 pivotAtEncoderPos = false;
-                arm.pivotForward(gamepad2.right_stick_y/2);
-
-            }   else if (!pivotAtEncoderPos){
-                    arm.stopPivot();
+                arm.pivotForward(gamepad2.right_stick_y / 2);
+                Log.d("IN_IF", "" + gamepad2.right_stick_y);
+                pivotPosition = arm.getPivotPos();
             }
+
+             else {
+                 Log.d("SET_PIV", "" + pivotPosition + " " + gamepad2.right_stick_y);
+                arm.pivotToPosition(pivotPosition, PIVOT_SPEED);
+            }
+
+             /*else if (!pivotAtEncoderPos) {
+                arm.stopPivot();
+            } */
 
             if (gamepad2.a) {
                 pixelGrabber.onPress();
