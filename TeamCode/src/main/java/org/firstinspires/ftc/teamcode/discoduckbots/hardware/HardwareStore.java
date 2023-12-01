@@ -24,6 +24,8 @@ public class HardwareStore {
     private PixelGrabber pixelGrabber;
     private Intake intake;
 
+    private DuckSensor duckSensor;
+
     //private IMU imu;
     //private TouchSensor touchSensor = null;
     //private DistanceSensor distanceSensor = null;
@@ -38,6 +40,8 @@ public class HardwareStore {
     public DcMotor pivotMotor;
     public Servo grabberServo;
     public Servo wristServo;
+    public DistanceSensor distanceSensor1;
+    public DistanceSensor distanceSensor2;
     //public RevBlinkinLedDriver ledDriver;
 
     public HardwareStore(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
@@ -66,7 +70,9 @@ public class HardwareStore {
        //  frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         //webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         //turretSensor = hardwareMap.get(TouchSensor.class, "resetSensor");
-        //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
+        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
+        duckSensor = new DuckSensor(distanceSensor1, distanceSensor2);
 
         //BNO055IMU gyro = hardwareMap.get(BNO055IMU.class, "imu");
        //imu = new IMU(gyro);
@@ -95,7 +101,7 @@ public class HardwareStore {
     public SampleMecanumDrive getSampleMecanumDrive() { return sampleMecanumDrive; }
 
     //public TouchSensor getArmStoppingSensor() { return armStoppingSensor; }
-    //public DistanceSensor getDistanceSensor() { return distanceSensor; }
+    public DuckSensor getDuckSensor() { return duckSensor; }
 
     //public WebcamName getWebcam() {return webcam;}
 
