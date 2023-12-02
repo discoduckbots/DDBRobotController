@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensor;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
@@ -23,11 +24,13 @@ public class RedAutoGoated extends LinearOpMode {
     private Intake intake = null;
     private Arm arm = null;
     private PixelGrabber pixelGrabber = null;
+    private DuckSensor duckSensor = null;
     private static final double AUTONOMOUS_SPEED = 0.5;
     private static final double AUTONOMOUS_SPEED_SLOW = .3;
     private static final double LIFT_SPEED = 0.3;
     private static final double PIVOT_SPEED = 0.7;
     private static final double PIVOT_SPEED_RESET = .75;
+    private static final double OUTTAKE_SPEED = 0.6;
     private static final int PIVOT_UP_LITTLE = 60;
     private static final int MOVE_LIFT_FOR_PIVOT = 800;
     private static final int MOVE_LIFT_FOR_PUSH = 867;
@@ -35,6 +38,7 @@ public class RedAutoGoated extends LinearOpMode {
     private static final int PIVOT_CM = -675;
     private static final int PIVOT_BOARD = -1080;
     private static final double WRIST_GROUND = 0.53;
+    private static double HEADING = 0;
 
     @Override
     public void runOpMode(){
@@ -42,9 +46,13 @@ public class RedAutoGoated extends LinearOpMode {
         sampleMecanumDrive = hardwareStore.getSampleMecanumDrive();
         arm = hardwareStore.getArm();
         pixelGrabber = hardwareStore.getPixelGrabber();
+        duckSensor = hardwareStore.getDuckSensor();
+        intake = hardwareStore.getIntake();
 
         Arm arm = new Arm(hardwareStore.liftMotor, hardwareStore.pivotMotor);
         PixelGrabber pixelGrabber = new PixelGrabber(hardwareStore.grabberServo, hardwareStore.wristServo);
+        Intake intake = new Intake(hardwareStore.intakeMotor);
+        DuckSensor duckSensor = new DuckSensor(hardwareStore.distanceSensor1, hardwareStore.distanceSensor2);
         SampleMecanumDrive sampleMecanumDrive = new SampleMecanumDrive(hardwareMap);
 
         sampleMecanumDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -98,9 +106,29 @@ public class RedAutoGoated extends LinearOpMode {
             sleep(250);
             arm.pivotToPosition(PIVOT_UP_LITTLE, PIVOT_SPEED);
             sampleMecanumDrive.followTrajectory(driveToDuck);
-            arm.liftToPosition(MOVE_LIFT_FOR_PUSH, LIFT_SPEED);
+            sleep(250);
+            int duckPos = duckSensor.getDuckPos();
+            sleep(500);
+            if (duckPos == 1) {
+                sampleMecanumDrive.turn(90);
+                sleep(250);
+                intake.outtake(OUTTAKE_SPEED);
+                sleep(1000);
+                sampleMecanumDrive.turn(-90);
+                HEADING = 90;
+            }
+            else if (duckPos == 3) {
+                sampleMecanumDrive.turn(-90);
+                HEADING = -90;
+            }
+            else {
+                HEADING = 0;
+            }
+            intake.outtake(OUTTAKE_SPEED);
+
+            //arm.liftToPosition(MOVE_LIFT_FOR_PUSH, LIFT_SPEED);
             sleep(1000);
-            arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
+            //arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
             /*sleep(500);
             pixelGrabber.rotate(WRIST_GROUND);
             sleep(500);
@@ -119,10 +147,10 @@ public class RedAutoGoated extends LinearOpMode {
             arm.liftToPosition(0, LIFT_SPEED);
             sleep(1000); */
             //pixelGrabber.grab();
-            sleep(600);
+            //sleep(600);
             sampleMecanumDrive.followTrajectory(moveALittleForward);
             sleep(500);
-            sampleMecanumDrive.turn(Math.toRadians(90));
+            sampleMecanumDrive.turn(Math.toRadians(-90));
             sleep(500);
             arm.pivotToPosition(PIVOT_BOARD, PIVOT_SPEED);
             sleep(250);
