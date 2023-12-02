@@ -66,6 +66,9 @@ public class WingRedAutoGoated extends LinearOpMode {
 
 
         Pose2d DUCK_POS = new Pose2d(-23.8, 1.4, Math.toRadians(0));
+        Pose2d DRIVE_TO_BRIDGE = new Pose2d(-47, 1.4, Math.toRadians(0));
+        Pose2d DRIVE_TO_PARK = new Pose2d(-47,38, Math.toRadians(90));
+
         Pose2d FORWARD_LITTLE = new Pose2d(-19.9, -1.0, Math.toRadians(0));
         Pose2d STRAFE_FROM_DUCK = new Pose2d(10, 10, Math.toRadians(0)); //diagonal??
         Pose2d DRIVE_UNDER_BRIDGE = new Pose2d(10, 10, Math.toRadians(0));
@@ -77,6 +80,16 @@ public class WingRedAutoGoated extends LinearOpMode {
         Trajectory driveToDuck = sampleMecanumDrive.trajectoryBuilder(new Pose2d())
                 .lineToLinearHeading( DUCK_POS,
                         slowVelocityConstraint, slowAccelerationConstraint)
+                .build();
+
+        Trajectory driveToFlipBridge = sampleMecanumDrive.trajectoryBuilder(new Pose2d())
+                .lineToLinearHeading( DRIVE_TO_BRIDGE,
+                        velocityConstraint, accelerationConstraint)
+                .build();
+
+        Trajectory driveToPark = sampleMecanumDrive.trajectoryBuilder(new Pose2d())
+                .lineToLinearHeading(DRIVE_TO_PARK,
+                        velocityConstraint, accelerationConstraint)
                 .build();
 
         Trajectory moveALittleForward = sampleMecanumDrive.trajectoryBuilder(driveToDuck.end())
@@ -112,8 +125,11 @@ public class WingRedAutoGoated extends LinearOpMode {
             //push pixel
             arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
             sleep(600);
-            sampleMecanumDrive.followTrajectory(moveALittleForward);
-            sleep(500);
+            sampleMecanumDrive.followTrajectory(driveToFlipBridge);
+            sampleMecanumDrive.turn(Math.toRadians(90));
+            sampleMecanumDrive.followTrajectory(driveToPark);
+            //sampleMecanumDrive.followTrajectory(moveALittleForward);
+            //sleep(500);
             /*sampleMecanumDrive.followTrajectory(strafeFromDuck);
             sleep(500);
             sampleMecanumDrive.followTrajectory(driveUnderBridge);
