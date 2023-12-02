@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.autonomous;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.profile.AccelerationConstraint;
+import com.acmerobotics.roadrunner.profile.VelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
@@ -66,6 +68,10 @@ public class WingBlueAutoGoated extends LinearOpMode {
 
 
         Pose2d DUCK_POS = new Pose2d(-23.8, 1.4, Math.toRadians(0));
+        Pose2d BRIDGE_POS = new Pose2d(-47,1.4,Math.toRadians(0));
+        Pose2d MOVE_TO_PARK = new Pose2d(-47, -40, Math.toRadians(90));
+
+
         Pose2d FORWARD_LITTLE = new Pose2d(-19.9, 1.0, Math.toRadians(0));
         Pose2d STRAFE_FROM_DUCK = new Pose2d(10, 10, Math.toRadians(0)); //diagonal??
         Pose2d DRIVE_UNDER_BRIDGE = new Pose2d(10, 10, Math.toRadians(0));
@@ -77,6 +83,16 @@ public class WingBlueAutoGoated extends LinearOpMode {
         Trajectory driveToDuck = sampleMecanumDrive.trajectoryBuilder(new Pose2d())
                 .lineToLinearHeading( DUCK_POS,
                         slowVelocityConstraint, slowAccelerationConstraint)
+                .build();
+
+        Trajectory driveToFlipBridge = sampleMecanumDrive.trajectoryBuilder(new Pose2d())
+                .lineToLinearHeading(BRIDGE_POS,
+                        velocityConstraint, accelerationConstraint)
+                .build();
+
+        Trajectory drivetoPark = sampleMecanumDrive.trajectoryBuilder(new Pose2d())
+                .lineToLinearHeading(MOVE_TO_PARK,
+                        velocityConstraint, accelerationConstraint)
                 .build();
 
         /*Trajectory moveALittleForward = sampleMecanumDrive.trajectoryBuilder(driveToDuck.end())
@@ -112,6 +128,9 @@ public class WingBlueAutoGoated extends LinearOpMode {
             //push pixel
             arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
             sleep(600);
+            sampleMecanumDrive.followTrajectory(driveToFlipBridge);
+            sampleMecanumDrive.turn(Math.toRadians(90));
+            sampleMecanumDrive.followTrajectory(drivetoPark);
 //            sampleMecanumDrive.followTrajectory(moveALittleForward);
 //            sleep(500);
             /*sampleMecanumDrive.followTrajectory(strafeFromDuck);
