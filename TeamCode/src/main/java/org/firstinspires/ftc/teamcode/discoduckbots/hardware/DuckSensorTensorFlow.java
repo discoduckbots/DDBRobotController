@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DuckSensorTensorFlow {
@@ -33,6 +34,8 @@ public class DuckSensorTensorFlow {
 
     private static String PINK_DUCK = "PinkDuck";
     private static String BLUE_DUCK = "BlueDuck";
+
+    private static String DUCK_FILE = "FileName";
 
     public DuckSensorTensorFlow (HardwareMap hardwareMap ){
         this.hardwareMap= hardwareMap;
@@ -64,6 +67,9 @@ public class DuckSensorTensorFlow {
     private void initTfod() {
         // Create the TensorFlow processor the easy way.
         tfod = TfodProcessor.easyCreateWithDefaults();
+        List<String> labels = new ArrayList<>();
+        labels.add (PINK_DUCK);
+        labels.add (BLUE_DUCK);
         tfod = new TfodProcessor.Builder()
 
                 // With the following lines commented out, the default TfodProcessor Builder
@@ -72,19 +78,21 @@ public class DuckSensorTensorFlow {
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 //.setModelAssetName(TFOD_MODEL_ASSET)
-                .setModelFileName(TFOD_MODEL_FILE)
+                .setModelFileName(DUCK_FILE)
+                //TODO change file name later
+
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.
-                .setModelLabels(BLUE_DUCK);
-                .setIsModelTensorFlow2(true) ;
+                .setModelLabels(labels)
+               .setIsModelTensorFlow2(true)
                 //.setIsModelQuantized(true) ~~
                 //.setModelInputSize(300) 
                 .setModelAspectRatio(16.0 / 9.0)
 
                 .build();
 
-        TfodProcessor.Builder builder = new TfodProcessor.Builder();
+        /* TfodProcessor.Builder builder = new TfodProcessor.Builder();
         builder = builder.setModelFileName(TFOD_MODEL_FILE);
         builder = builder.setModelLabels(BLUE_DUCK);
         builder = builder.setIsModelTensorFlow2(true) ;
@@ -94,7 +102,7 @@ public class DuckSensorTensorFlow {
 
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), tfod);
-
+         */
 
 
     }   // end method initTfod()
