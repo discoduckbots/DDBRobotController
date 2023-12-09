@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.hardware;
 
+import android.util.Log;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -27,36 +29,40 @@ public class DuckSensorTensorFlow {
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
     private HardwareMap hardwareMap;
-    private static float LEFT_POSITION = 20.0f;
+    private static float LEFT_POSITION = 100.0f;
     private static float RIGHT_POSITION = 60.0f;
-    private static float CENTER_POSITION = 40.0f;
+    private static float CENTER_MIN = 350.0f;
+    private static float CENTER_MAX = 400.0f;
 
 
-    private static String PINK_DUCK = "PinkDuck";
-    private static String BLUE_DUCK = "BlueDuck";
+    private static String PINK_DUCK = "PDUCK";
+    private static String BLUE_DUCK = "BDUCK";
 
-    private static String DUCK_FILE = "FileName";
+    private static final String DUCK_FILE = "duckfile1.tflite";
 
     public DuckSensorTensorFlow (HardwareMap hardwareMap ){
         this.hardwareMap= hardwareMap;
         initTfod();
     }
-    private int getDuckPos() {
+    public int getDuckPos() {
         List<Recognition> currentRecognitions = tfod.getRecognitions();
+        Log.d("DUCK_POS", "POS: " + tfod.getRecognitions());
 
 
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
+            Log.d("DUCK_POS", "LABEL: " + recognition.getLabel() + " " + recognition.getConfidence());
+            Log.d("DUCK_POS", "left_border: " + recognition.getLeft());
 
             if ((recognition.getLabel().equals(PINK_DUCK ) || recognition.getLabel().equals(BLUE_DUCK ))&& recognition.getConfidence() >= 90) {
-               if (LEFT_POSITION == recognition.getLeft()) {
+               if (recognition.getLeft() < LEFT_POSITION) {
                    return 1;
                }
-              if (RIGHT_POSITION == recognition.getLeft())  {
+              /* if (RIGHT_POSITION == recognition.getLeft())  {
                   return 2;
-              }
-              if (CENTER_POSITION == recognition.getLeft()){
-                  return 3;
+              } */
+              if (recognition.getLeft() > CENTER_MIN && recognition.getLeft() < CENTER_MAX) {
+                  return 2;
               }
             }
 
@@ -77,8 +83,8 @@ public class DuckSensorTensorFlow {
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName(TFOD_MODEL_ASSET)
-                .setModelFileName(DUCK_FILE)
+                .setModelAssetName(DUCK_FILE)
+                //.setModelFileName(DUCK_FILE)
                 //TODO change file name later
 
 
@@ -87,7 +93,7 @@ public class DuckSensorTensorFlow {
                 .setModelLabels(labels)
                .setIsModelTensorFlow2(true)
                 //.setIsModelQuantized(true) ~~
-                //.setModelInputSize(300) 
+                .setModelInputSize(300)
                 .setModelAspectRatio(16.0 / 9.0)
 
                 .build();
@@ -97,13 +103,11 @@ public class DuckSensorTensorFlow {
         builder = builder.setModelLabels(BLUE_DUCK);
         builder = builder.setIsModelTensorFlow2(true) ;
         TfodProcessor tfod = builder.build();
-
+*/
         // Create the vision portal the easy way.
 
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), tfod);
-         */
-
 
     }   // end method initTfod()
 
