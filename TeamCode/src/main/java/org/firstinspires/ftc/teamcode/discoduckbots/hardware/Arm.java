@@ -8,7 +8,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Arm {
     private DcMotor liftMotor;
+
     private DcMotor pivotMotor;
+    //delete pivotMotor and rename to extensionMotor
+
 
     public Arm(DcMotor liftMotor, DcMotor pivotMotor) {
 

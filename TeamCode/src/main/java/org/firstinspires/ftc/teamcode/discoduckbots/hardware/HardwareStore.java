@@ -23,7 +23,6 @@ public class HardwareStore {
     private Arm arm;
     private PixelGrabber pixelGrabber;
     private Intake intake;
-
     private DuckSensor duckSensor;
 
     //private IMU imu;
@@ -38,10 +37,23 @@ public class HardwareStore {
     public DcMotor intakeMotor;
     public DcMotor liftMotor;
     public DcMotor pivotMotor;
+    //public DcMotor hangMotor;
     public Servo grabberServo;
     public Servo wristServo;
     public DistanceSensor distanceSensor1;
     public DistanceSensor distanceSensor2;
+
+    //new things
+    /*
+    public Servo leftIntakeGrabber;
+    public Servo rightIntakeGrabber;
+    public Servo leftHook;
+    public Servo rightHook;
+    public DcMotor intakeFlipMotor;
+    public DcMotor extendMotor;
+    public DistanceSensor leftIntakeSensor;
+    public DistanceSensor rightIntakeSensor;
+     */
     //public RevBlinkinLedDriver ledDriver;
 
     public HardwareStore(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
@@ -57,14 +69,29 @@ public class HardwareStore {
         pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        //hangMotor = hardwareMap.get(DcMotor.class, "hangMotor");
+        //hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         grabberServo = hardwareMap.get(Servo.class, "grabberServo");
         wristServo = hardwareMap.get(Servo.class, "wristServo");
+
+        /*
+        leftIntakeGrabber = hardwareMap.get(Servo.class, "leftIntakeGrabber");
+        rightIntakeGrabber = hardwareMap.get(Servo.class, "rightIntakeGrabber");
+        leftIntakeHook = hardwareMap.get(Servo.class, "leftIntakeHook");
+        rightIntakeHook = hardwareMap.get(Servo.class, "rightIntakeHook");
+        IntakeFlip = hardwareMap.get(DcMotor.class, "intakeFlip");
+        intakeFlip.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        reuse sensing distanceSensors and pivot to extend
+         */
         //ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "led");
         //ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
-        arm = new Arm(liftMotor, pivotMotor);
+        arm = new Arm(liftMotor, pivotMotor); //replace pivot
         pixelGrabber = new PixelGrabber(grabberServo, wristServo);
         intake = new Intake(intakeMotor);
+        //pixelGrabber = new PixelGrabber(intakeFlipMotor, rightHookGrabber, leftHookGrabber, rightIntakeGrabber, leftIntakeGrabber);
+
 
         // frontRight.setDirection(DcMotorEx.Direction.FORWARD);
        //  frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -115,6 +142,9 @@ public class HardwareStore {
     }
     public PixelGrabber getPixelGrabber() {
         return pixelGrabber;
+    }
+    /*public DcMotor getHangMotor() {
+        return hangMotor;
     }
    /* public DcMotor getPivotMotor() {
         return pivotMotor;

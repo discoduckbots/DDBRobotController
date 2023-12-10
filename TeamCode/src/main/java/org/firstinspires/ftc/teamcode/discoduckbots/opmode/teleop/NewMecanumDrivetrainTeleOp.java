@@ -32,11 +32,13 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensor;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
 
 
 /**
@@ -51,43 +53,83 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test Opmode", group= "Linear Opmode")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="NEw Centerstage Opmode", group= "Linear Opmode")
 
-public class TestTeleop extends LinearOpMode {
+public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
+    private static double THROTTLE = 0.75;
+    private static double INTAKE_SPEED = 0.75;
+    private static double OUTAKE_SPEED = 1.0;
+    private static double SLIDE_SPEED = 0.75;
+    private static double PIVOT_SPEED = 0.5;
+    private static double HANG_SPEED = 0.3;
 
+    boolean liftAtEncoderPos = false;
+    boolean pivotAtEncoderPos = false;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DuckSensor duckSensor = null;
-    private DistanceSensor distanceSensor1 = null;
-    private DistanceSensor distanceSensor2 = null;
+    private MecanumDrivetrain mecanumDrivetrain = null;
+    private Intake intake = null;
+    private Arm arm = null;
+    //private DcMotor hangMotor = null;
+    private PixelGrabber pixelGrabber = null;
 
     @Override
     public void runOpMode() {
-        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
-        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
-        duckSensor = new DuckSensor(distanceSensor1, distanceSensor2);
+        HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
+        mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
+        arm = hardwareStore.getArm();
+        intake = hardwareStore.getIntake();
+        pixelGrabber = hardwareStore.getPixelGrabber();
+        //hangMotor = hardwareStore.getHangMotor();
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
-            Log.d("DIST", "pos 1: " + duckSensor.getDistance1() + " pos 2: " + duckSensor.getDistance2());
 
-            if (duckSensor.getDuckPos() == 1) {
-                Log.d("POS_1" , "pos : " + duckSensor.getDistance1());
+            Log.d("LIFT" , "pos : " + hardwareStore.liftMotor.getCurrentPosition());
+            Log.d("PIVOT", "pos : " + hardwareStore.pivotMotor.getCurrentPosition());
+            Log.d("ARM", "lift pos : " + hardwareStore.liftMotor.getCurrentPosition() +
+                    "pivot pos : " + hardwareStore.pivotMotor.getCurrentPosition());
+
+             //Gamepad 1
+            mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
+
+
+            if (gamepad1.a) {
+                THROTTLE = .4;
             }
-            else if (duckSensor.getDuckPos() == 3) {
-                Log.d("POS_3" , "pos : " + duckSensor.getDistance2());
+            if (gamepad1.b) {
+                THROTTLE = .75;
             }
+
+            /*if (gamepad1.left_trigger > 0.05) {
+                hangMotor.setDirection(DcMotor.Direction.FORWARD);
+                hangMotor.setPower(gamepad1.left_trigger);
+            }
+            else if (gamepad1.right_trigger > 0.05) {
+                hangMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+                hangMotor.setPower(gamepad1.right_trigger);
+            }
+            else {
+                hangMotor.setPower(0);
+            } */
+
+            //gamepad 2
+
+
         }
 
 
+        telemetry.addData("MecanumDrivetrainTeleOp", "Stopping");
 
         shutDown();
     }
 
     private void shutDown(){
+        mecanumDrivetrain.stop(); 
     }
 }

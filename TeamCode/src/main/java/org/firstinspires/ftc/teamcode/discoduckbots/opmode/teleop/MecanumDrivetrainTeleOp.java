@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -68,6 +69,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
     private static double OUTAKE_SPEED = 1.0;
     private static double SLIDE_SPEED = 0.75;
     private static double PIVOT_SPEED = 0.5;
+    private static double HANG_SPEED = 0.3;
     private static int SLIDE_POS_1 = 0;
     private static int SLIDE_POS_2 = -350;
     private static int SLIDE_POS_3 = 100;
@@ -86,6 +88,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
     private MecanumDrivetrain mecanumDrivetrain = null;
     private Intake intake = null;
     private Arm arm = null;
+    //private DcMotor hangMotor = null;
     private PixelGrabber pixelGrabber = null;
 
     @Override
@@ -95,6 +98,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
         arm = hardwareStore.getArm();
         intake = hardwareStore.getIntake();
         pixelGrabber = hardwareStore.getPixelGrabber();
+        //hangMotor = hardwareStore.getHangMotor();
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -110,7 +114,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
              //Gamepad 1
             mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
 
-            if (gamepad1.left_trigger > 0.05) {
+            /*if (gamepad1.left_trigger > 0.05) {
                 intake.outtake(gamepad1.left_trigger);
             }
             else if (gamepad1.right_trigger > 0.05) {
@@ -118,7 +122,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
             }
             else {
                 intake.stop();
-            }
+            }*/
 
             if (gamepad1.left_bumper) {
                 intake.outtake(OUTAKE_SPEED);
@@ -136,6 +140,21 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
             if (gamepad1.b) {
                 THROTTLE = .75;
             }
+
+            /*if (gamepad1.left_trigger > 0.05) {
+                hangMotor.setDirection(DcMotor.Direction.FORWARD);
+                hangMotor.setPower(gamepad1.left_trigger);
+            }
+            else if (gamepad1.right_trigger > 0.05) {
+                hangMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+                hangMotor.setPower(gamepad1.right_trigger);
+            }
+            else {
+                hangMotor.setPower(0);
+            } */
+
+            //gamepad 2
+
             if (gamepad2.dpad_up) {
                 liftAtEncoderPos = false;
                 arm.lift(SLIDE_SPEED);

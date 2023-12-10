@@ -38,7 +38,6 @@ public class RedAutoGoated extends LinearOpMode {
     private static final int PIVOT_CM = -675;
     private static final int PIVOT_BOARD = -1080;
     private static final double WRIST_GROUND = 0.53;
-    private static double HEADING = 0;
 
     @Override
     public void runOpMode(){
@@ -73,6 +72,7 @@ public class RedAutoGoated extends LinearOpMode {
                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED_SLOW);
 
                 Pose2d DUCK_POS = new Pose2d(-25.8, 1.4, Math.toRadians(0));
+                Pose2d MOVE_PAST_DUCK = new Pose2d(-30, 1.4, Math.toRadians(0));
                 Pose2d FORWARD_LITTLE = new Pose2d(-19.9, 1.0, Math.toRadians(0));
                 Pose2d DRIVE_TO_BOARD = new Pose2d(-24.2, 35.6, Math.toRadians(-90));
                 Pose2d AWAY_FROM_BOARD = new Pose2d(-24.0, 27.5, Math.toRadians(-90));
@@ -81,12 +81,14 @@ public class RedAutoGoated extends LinearOpMode {
 
        Trajectory driveToDuck = sampleMecanumDrive.trajectoryBuilder(new Pose2d())
 
-                       .lineToLinearHeading( DUCK_POS,
-                               velocityConstraint, accelerationConstraint)
+               .lineToLinearHeading( DUCK_POS, velocityConstraint, accelerationConstraint)
+               .build();
 
-                       .build();
+        Trajectory movePastDuck = sampleMecanumDrive.trajectoryBuilder(driveToDuck.end())
+                .lineToLinearHeading(MOVE_PAST_DUCK, velocityConstraint, accelerationConstraint)
+                .build();
 
-       Trajectory moveALittleForward = sampleMecanumDrive.trajectoryBuilder(driveToDuck.end())
+       Trajectory moveALittleForward = sampleMecanumDrive.trajectoryBuilder(movePastDuck.end())
                .lineToLinearHeading(FORWARD_LITTLE, velocityConstraint, accelerationConstraint)
                .build();
 
@@ -108,26 +110,29 @@ public class RedAutoGoated extends LinearOpMode {
             sampleMecanumDrive.followTrajectory(driveToDuck);
             sleep(250);
             int duckPos = duckSensor.getDuckPos();
-            sleep(500);
+            sleep(1000);
+
             if (duckPos == 1) {
                 sampleMecanumDrive.turn(90);
                 sleep(250);
                 intake.outtake(OUTTAKE_SPEED);
                 sleep(1000);
                 sampleMecanumDrive.turn(-90);
-                HEADING = 90;
             }
             else if (duckPos == 3) {
                 sampleMecanumDrive.turn(-90);
-                HEADING = -90;
+                intake.outtake(OUTTAKE_SPEED);
+                sleep(1000);
+                sampleMecanumDrive.turn(90);
             }
             else {
-                HEADING = 0;
+                sampleMecanumDrive.followTrajectory(movePastDuck);
+                sleep(250);
+                intake.outtake(OUTTAKE_SPEED);
+                sleep(1000);
             }
-            intake.outtake(OUTTAKE_SPEED);
 
             //arm.liftToPosition(MOVE_LIFT_FOR_PUSH, LIFT_SPEED);
-            sleep(1000);
             //arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
             /*sleep(500);
             pixelGrabber.rotate(WRIST_GROUND);
@@ -147,7 +152,7 @@ public class RedAutoGoated extends LinearOpMode {
             arm.liftToPosition(0, LIFT_SPEED);
             sleep(1000); */
             //pixelGrabber.grab();
-            //sleep(600);
+            sleep(600);
             sampleMecanumDrive.followTrajectory(moveALittleForward);
             sleep(500);
             sampleMecanumDrive.turn(Math.toRadians(-90));
