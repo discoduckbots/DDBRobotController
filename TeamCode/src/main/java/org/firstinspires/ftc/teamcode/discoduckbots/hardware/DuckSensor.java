@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class DuckSensor {
     private DistanceSensor distanceSensor1;
     private DistanceSensor distanceSensor2;
-    double SENSOR1_MAX = 5;
+    double SENSOR1_MAX = 13;
     double SENSOR2_MAX = 5;
 
     public DuckSensor(DistanceSensor distanceSensor1, DistanceSensor distanceSensor2) {
