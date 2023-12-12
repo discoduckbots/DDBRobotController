@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.autonomous;
-
+/*
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
@@ -227,4 +227,4 @@ public class ForwardBlueAutoGoated extends LinearOpMode {
 
          }
     }
-}
+} */

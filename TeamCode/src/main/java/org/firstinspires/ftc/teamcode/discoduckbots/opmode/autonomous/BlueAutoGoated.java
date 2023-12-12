@@ -15,19 +15,22 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensor;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
+//import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 
 
+/*
 @Autonomous(name="blueAutoGoated", group="Robot")
+
+
 public class BlueAutoGoated extends LinearOpMode {
 
     private SampleMecanumDrive sampleMecanumDrive = null;
     private Intake intake = null;
     private Arm arm = null;
-    private PixelGrabber pixelGrabber = null;
+    //private PixelGrabber pixelGrabber = null;
     private DuckSensor duckSensor = null;
     private static final double AUTONOMOUS_SPEED = 0.5;
     private static final double AUTONOMOUS_SPEED_SLOW = .3;
@@ -141,7 +144,7 @@ public class BlueAutoGoated extends LinearOpMode {
             arm.liftToPosition(0, LIFT_SPEED);
             sleep(1100);
             pixelGrabber.release();
-            sleep(400); */
+            sleep(400);
             //place pixel
             //arm.pivotToPosition(PIVOT_CM, PIVOT_SPEED);
             /*arm.liftToPosition(MOVE_LIFT_FOR_PIVOT, LIFT_SPEED);
@@ -151,7 +154,7 @@ public class BlueAutoGoated extends LinearOpMode {
             arm.pivotToPosition(0, PIVOT_SPEED);
             sleep(300);
             arm.liftToPosition(0, LIFT_SPEED);
-            sleep(1000); */
+            sleep(1000);
             //pixelGrabber.grab();
             sleep(600);
             sampleMecanumDrive.followTrajectory(moveALittleForward);
@@ -178,4 +181,4 @@ public class BlueAutoGoated extends LinearOpMode {
             //arm.liftToPosition(0, LIFT_SPEED);
         }
     }
-}
+} */

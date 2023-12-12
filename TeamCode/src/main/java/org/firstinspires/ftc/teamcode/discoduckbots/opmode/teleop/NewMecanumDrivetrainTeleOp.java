@@ -35,10 +35,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.FlipStateMachine;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
 
 
 /**
@@ -73,16 +74,18 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
     private Intake intake = null;
     private Arm arm = null;
     //private DcMotor hangMotor = null;
-    private PixelGrabber pixelGrabber = null;
+    private PixelMechanism pixelMechanism = null;
+    private FlipStateMachine flipStateMachine = null;
+    boolean flipMotorAtEncoderPos = false;
 
     @Override
     public void runOpMode() {
         HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
         mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
         arm = hardwareStore.getArm();
-        intake = hardwareStore.getIntake();
-        pixelGrabber = hardwareStore.getPixelGrabber();
+        pixelMechanism = hardwareStore.getPixelMechanism();
         //hangMotor = hardwareStore.getHangMotor();
+        flipStateMachine = hardwareStore.getFlipStateMachine();
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -91,9 +94,11 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             Log.d("LIFT" , "pos : " + hardwareStore.liftMotor.getCurrentPosition());
-            Log.d("PIVOT", "pos : " + hardwareStore.pivotMotor.getCurrentPosition());
+
             Log.d("ARM", "lift pos : " + hardwareStore.liftMotor.getCurrentPosition() +
-                    "pivot pos : " + hardwareStore.pivotMotor.getCurrentPosition());
+                    " extend pos : " + hardwareStore.extensionMotor.getCurrentPosition());
+
+            Log.d("FLIP" , "pos : " + hardwareStore.flipMotor.getCurrentPosition());
 
              //Gamepad 1
             mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
@@ -120,9 +125,53 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
             //gamepad 2
 
+            if (gamepad2.a) {
+                pixelMechanism.increasePosition(pixelMechanism.leftHook, "leftHook");
+            }
+            if (gamepad2.b) {
+                pixelMechanism.decreasePosition(pixelMechanism.leftHook, "leftHook");
+            }
+            if (gamepad2.x) {
+                pixelMechanism.increasePosition(pixelMechanism.rightHook, "rightHook");
+            }
+            if (gamepad2.y) {
+                pixelMechanism.decreasePosition(pixelMechanism.rightHook, "rightHook");
+            }
+
+            if (gamepad2.dpad_up) {
+                pixelMechanism.flipMotor.setPower(0.45);
+            }
+            else if (gamepad2.dpad_down) {
+                pixelMechanism.flipMotor.setPower(-0.45);
+            }
+            else {
+                pixelMechanism.flipMotor.setPower(0);
+            }
+
+            /*if (gamepad2.a) {
+                pixelMechanism.onPressLeftGrabber();
+                pixelMechanism.onPressRightGrabber();
+            } else {
+                pixelMechanism.onReleaseLeftGrabber();
+                pixelMechanism.onReleaseRightGrabber();
+            }*/
+
+
+            if (gamepad2.left_stick_y > 0.01) {
+                arm.extendForward(gamepad2.left_stick_x);
+            }
+            else {
+                arm.stopExtend();
+            }
+
+            if (gamepad2.left_bumper) {
+                pixelMechanism.grabFlipHook();
+
+            }
+
+
 
         }
-
 
         telemetry.addData("MecanumDrivetrainTeleOp", "Stopping");
 

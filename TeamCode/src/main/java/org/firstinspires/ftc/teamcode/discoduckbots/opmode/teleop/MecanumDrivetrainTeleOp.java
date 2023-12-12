@@ -45,7 +45,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
+
 
 
 /**
@@ -60,8 +60,10 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
+/*
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Centerstage Opmode", group= "Linear Opmode")
-
+@Disabled
+/*
 public class MecanumDrivetrainTeleOp extends LinearOpMode {
 
     private static double THROTTLE = 0.75;
@@ -122,7 +124,7 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
             }
             else {
                 intake.stop();
-            }*/
+            }
 
             if (gamepad1.left_bumper) {
                 intake.outtake(OUTAKE_SPEED);
@@ -141,18 +143,6 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
                 THROTTLE = .75;
             }
 
-            /*if (gamepad1.left_trigger > 0.05) {
-                hangMotor.setDirection(DcMotor.Direction.FORWARD);
-                hangMotor.setPower(gamepad1.left_trigger);
-            }
-            else if (gamepad1.right_trigger > 0.05) {
-                hangMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-                hangMotor.setPower(gamepad1.right_trigger);
-            }
-            else {
-                hangMotor.setPower(0);
-            } */
-
             //gamepad 2
 
             if (gamepad2.dpad_up) {
@@ -170,9 +160,6 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
                 arm.liftToPosition(liftPosition, SLIDE_SPEED);
             }
 
-            /*}   else if (!liftAtEncoderPos){
-                arm.stopLift();
-            } */
 
             Log.d("RT_STICK", "" + gamepad2.right_stick_y);
             if (Math.abs(gamepad2.right_stick_y) > 0.05) {
@@ -186,10 +173,6 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
                  Log.d("SET_PIV", "" + pivotPosition + " " + gamepad2.right_stick_y);
                 arm.pivotToPosition(pivotPosition, PIVOT_SPEED);
             }
-
-             /*else if (!pivotAtEncoderPos) {
-                arm.stopPivot();
-            } */
 
             if (gamepad2.a) {
                 pixelGrabber.onPress();
@@ -243,4 +226,4 @@ public class MecanumDrivetrainTeleOp extends LinearOpMode {
     private void shutDown(){
         mecanumDrivetrain.stop(); 
     }
-}
+} */
