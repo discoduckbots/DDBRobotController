@@ -29,10 +29,16 @@ public class DuckSensorTensorFlow {
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
     private HardwareMap hardwareMap;
+    private Boolean isRed;
     private static float LEFT_POSITION = 100.0f;
     private static float RIGHT_POSITION = 60.0f;
     private static float CENTER_MIN = 350.0f;
     private static float CENTER_MAX = 400.0f;
+
+    public static int FARTHER = 0;
+    public static int CLOSER = 1;
+    public static int CENTER = 2;
+
 
 
     private static String PINK_DUCK = "PDUCK";
@@ -40,8 +46,9 @@ public class DuckSensorTensorFlow {
 
     private static final String DUCK_FILE = "duckfile1.tflite";
 
-    public DuckSensorTensorFlow (HardwareMap hardwareMap ){
+    public DuckSensorTensorFlow (HardwareMap hardwareMap,Boolean isRed){
         this.hardwareMap= hardwareMap;
+        this.isRed= isRed;
         initTfod();
     }
     public int getDuckPos() {
@@ -54,20 +61,24 @@ public class DuckSensorTensorFlow {
             Log.d("DUCK_POS", "LABEL: " + recognition.getLabel() + " " + recognition.getConfidence());
             Log.d("DUCK_POS", "left_border: " + recognition.getLeft());
 
-            if ((recognition.getLabel().equals(PINK_DUCK ) || recognition.getLabel().equals(BLUE_DUCK ))&& recognition.getConfidence() >= 90) {
-               if (recognition.getLeft() < LEFT_POSITION) {
-                   return 1;
-               }
-              /* if (RIGHT_POSITION == recognition.getLeft())  {
-                  return 2;
-              } */
-              if (recognition.getLeft() > CENTER_MIN && recognition.getLeft() < CENTER_MAX) {
-                  return 2;
-              }
+            if (recognition.getConfidence() >= .90 &&
+                    (recognition.getLabel().equals(BLUE_DUCK) ||
+                            recognition.getLabel().equals(PINK_DUCK))){
+                if (recognition.getLeft() < LEFT_POSITION){
+                    if (isRed){
+                        return FARTHER;
+                    }
+                    else return CLOSER;
+                }else {
+                    return CENTER;
+                }
             }
 
-        }   // end for() loop
-        return 0;
+        }
+        if(isRed) {
+            return CLOSER;
+        }
+        else return FARTHER;
     }
 
     private void initTfod() {

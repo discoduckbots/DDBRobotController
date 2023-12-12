@@ -10,11 +10,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensorTensorFlow;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -27,6 +29,8 @@ public class GeneratedAutonomous extends LinearOpMode{
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
     private MecanumDrivetrain mecanumDrivetrain = null;
+    private DuckSensorTensorFlow duckSensor =null;
+
 
     private static final double AUTONOMOUS_SPEED = 1;
 
@@ -37,6 +41,8 @@ public class GeneratedAutonomous extends LinearOpMode{
     public void runOpMode() {
         HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
         mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
+
+        duckSensor = new DuckSensorTensorFlow(hardwareMap, true);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -53,13 +59,27 @@ public class GeneratedAutonomous extends LinearOpMode{
         Trajectory trajectory_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(18.462442205144974  ,0.27833799073156706 ,4.620535381995583 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(19.100284937737502  ,1.8521106471621476 ,1.5274125798671756 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(29.179120664232556  ,-34.29128340299693 ,1.5083216099537857 ), velocityConstraint, accelerationConstraint).build();
+
+
         waitForStart();
 
         if (opModeIsActive()) {
-        drive.followTrajectory(trajectory_0 );
-        drive.followTrajectory(trajectory_1 );
-        drive.followTrajectory(trajectory_2 );
-        drive.followTrajectory(trajectory_3 );
+
+            int duckPos = duckSensor.getDuckPos();
+                if (duckPos == DuckSensorTensorFlow.CLOSER) {
+
+                }
+               if (duckPos == DuckSensorTensorFlow.CENTER) {
+                   drive.followTrajectory(trajectory_0 );
+                   drive.followTrajectory(trajectory_1 );
+                   drive.followTrajectory(trajectory_2 );
+                   drive.followTrajectory(trajectory_3 );
+               }
+              if (duckPos == DuckSensorTensorFlow.FARTHER){
+
+              }
+
+
        }
     }
 }
