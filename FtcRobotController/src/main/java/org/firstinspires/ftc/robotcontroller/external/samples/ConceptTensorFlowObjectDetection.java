@@ -1,3 +1,4 @@
+
 /* Copyright (c) 2019 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -159,6 +160,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         // If set "true", monitor shows solid orange screen if no processors enabled.
         // If set "false", monitor shows camera view without annotations.
         //builder.setAutoStopLiveView(false);
+
 
         // Set and enable the processor.
         builder.addProcessor(tfod);
