@@ -69,16 +69,14 @@ public class TestTensor extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        duckSensor = new DuckSensorTensorFlow(hardwareMap);
+        duckSensor = new DuckSensorTensorFlow(hardwareMap, false);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
-            duckSensor.getDuckPos();
+            Log.d("DUCKPOS: " , "pos = " + duckSensor.getDuckPos());
         }
-
-
 
         shutDown();
     }
