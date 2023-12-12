@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.autonomous;
-
+/*
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
@@ -150,7 +150,7 @@ public class RedAutoGoated extends LinearOpMode {
             arm.pivotToPosition(0, PIVOT_SPEED);
             sleep(300);
             arm.liftToPosition(0, LIFT_SPEED);
-            sleep(1000); */
+            sleep(1000);
             //pixelGrabber.grab();
             sleep(600);
             sampleMecanumDrive.followTrajectory(moveALittleForward);
@@ -181,4 +181,4 @@ public class RedAutoGoated extends LinearOpMode {
 
          }
     }
-}
+} */

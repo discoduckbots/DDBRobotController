@@ -49,7 +49,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 

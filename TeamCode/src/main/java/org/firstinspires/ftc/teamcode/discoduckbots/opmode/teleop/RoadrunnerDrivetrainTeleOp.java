@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
-
+/*
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Centerstage Roadrunner Opmode", group = "Linear Opmode")
 public class RoadrunnerDrivetrainTeleOp extends LinearOpMode {
@@ -35,7 +35,7 @@ public class RoadrunnerDrivetrainTeleOp extends LinearOpMode {
     private DcMotor liftMotor = null;
     private DcMotor hangMotor = null;
     private DcMotor pivotMotor = null;
-    private PixelGrabber pixelGrabber = null;
+    private PixelMecanism pixelGrabber = null;
     private Servo grabberServo = null;
     private Servo wristServo = null;
     private Servo droneServo = null;
@@ -161,4 +161,4 @@ public class RoadrunnerDrivetrainTeleOp extends LinearOpMode {
         }
     }
 
-}
+} */

@@ -1,19 +1,12 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.hardware;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 //import org.firstinspires.ftc.teamcode.util.Encoder;
 
@@ -21,39 +14,31 @@ public class HardwareStore {
     private MecanumDrivetrain mecanumDrivetrain;
     private SampleMecanumDrive sampleMecanumDrive;
     private Arm arm;
-    private PixelGrabber pixelGrabber;
-    private Intake intake;
-    private DuckSensor duckSensor;
+    private PixelMechanism pixelMechanism;
+    private FlipStateMachine flipStateMachine;
+
+    //private DuckSensor duckSensor;
 
     //private IMU imu;
     //private TouchSensor touchSensor = null;
-    //private DistanceSensor distanceSensor = null;
     //private WebcamName webcam = null;
 
     public DcMotorEx frontLeft ;
     public DcMotorEx frontRight ;
     public DcMotorEx backRight ;
     public DcMotorEx backLeft ;
-    public DcMotor intakeMotor;
     public DcMotor liftMotor;
-    public DcMotor pivotMotor;
+    public DcMotor extensionMotor;
     //public DcMotor hangMotor;
-    public Servo grabberServo;
-    public Servo wristServo;
-    public DistanceSensor distanceSensor1;
-    public DistanceSensor distanceSensor2;
-
-    //new things
-    /*
-    public Servo leftIntakeGrabber;
-    public Servo rightIntakeGrabber;
+    public Servo leftGrabber;
+    public Servo rightGrabber;
     public Servo leftHook;
     public Servo rightHook;
-    public DcMotor intakeFlipMotor;
-    public DcMotor extendMotor;
-    public DistanceSensor leftIntakeSensor;
-    public DistanceSensor rightIntakeSensor;
-     */
+    public DcMotor flipMotor;
+
+    //public DistanceSensor leftIntakeSensor;
+    //public DistanceSensor rightIntakeSensor;
+
     //public RevBlinkinLedDriver ledDriver;
 
     public HardwareStore(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
@@ -61,45 +46,41 @@ public class HardwareStore {
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
-        pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extensionMotor = hardwareMap.get(DcMotor.class, "extensionMotor");
+        extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //hangMotor = hardwareMap.get(DcMotor.class, "hangMotor");
         //hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        grabberServo = hardwareMap.get(Servo.class, "grabberServo");
-        wristServo = hardwareMap.get(Servo.class, "wristServo");
+        leftGrabber = hardwareMap.get(Servo.class, "leftGrabber");
+        rightGrabber = hardwareMap.get(Servo.class, "rightGrabber");
 
-        /*
-        leftIntakeGrabber = hardwareMap.get(Servo.class, "leftIntakeGrabber");
-        rightIntakeGrabber = hardwareMap.get(Servo.class, "rightIntakeGrabber");
-        leftIntakeHook = hardwareMap.get(Servo.class, "leftIntakeHook");
-        rightIntakeHook = hardwareMap.get(Servo.class, "rightIntakeHook");
-        IntakeFlip = hardwareMap.get(DcMotor.class, "intakeFlip");
-        intakeFlip.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        reuse sensing distanceSensors and pivot to extend
-         */
+        leftHook = hardwareMap.get(Servo.class, "leftHook");
+        rightHook = hardwareMap.get(Servo.class, "rightHook");
+
+        flipMotor = hardwareMap.get(DcMotor.class, "flipMotor");
+        flipMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        flipStateMachine = new FlipStateMachine();
+
         //ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "led");
         //ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
-        arm = new Arm(liftMotor, pivotMotor); //replace pivot
-        pixelGrabber = new PixelGrabber(grabberServo, wristServo);
-        intake = new Intake(intakeMotor);
-        //pixelGrabber = new PixelGrabber(intakeFlipMotor, rightHookGrabber, leftHookGrabber, rightIntakeGrabber, leftIntakeGrabber);
+        arm = new Arm(liftMotor, extensionMotor);
+        pixelMechanism = new PixelMechanism(flipMotor, rightHook, leftHook, rightGrabber, leftGrabber, flipStateMachine);
 
 
         // frontRight.setDirection(DcMotorEx.Direction.FORWARD);
        //  frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         //webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         //turretSensor = hardwareMap.get(TouchSensor.class, "resetSensor");
-        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
-        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
-        duckSensor = new DuckSensor(distanceSensor1, distanceSensor2);
+        //distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
+        //distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
+        //duckSensor = new DuckSensor(distanceSensor1, distanceSensor2);
 
         //BNO055IMU gyro = hardwareMap.get(BNO055IMU.class, "imu");
        //imu = new IMU(gyro);
@@ -127,35 +108,21 @@ public class HardwareStore {
 
     public SampleMecanumDrive getSampleMecanumDrive() { return sampleMecanumDrive; }
 
-    //public TouchSensor getArmStoppingSensor() { return armStoppingSensor; }
-    public DuckSensor getDuckSensor() { return duckSensor; }
+    //public DuckSensor getDuckSensor() { return duckSensor; }
 
     //public WebcamName getWebcam() {return webcam;}
 
     //public RevBlinkinLedDriver getLedDriver() { return ledDriver;}
 
-    public Intake getIntake() {
-        return intake;
-    }
+
     public Arm getArm() {
         return arm;
     }
-    public PixelGrabber getPixelGrabber() {
-        return pixelGrabber;
+    public PixelMechanism getPixelMechanism() {
+        return pixelMechanism;
     }
     /*public DcMotor getHangMotor() {
         return hangMotor;
-    }
-   /* public DcMotor getPivotMotor() {
-        return pivotMotor;
-    }
-    public DcMotor getLiftMotor() {
-        return liftMotor;
-    }
-    public Servo getGrabberServo() {
-        return grabberServo;
-    }
-    public Servo getWristServo() {
-        return wristServo;
-    } */
+    }  */
+    public FlipStateMachine getFlipStateMachine() {return flipStateMachine; }
 }
