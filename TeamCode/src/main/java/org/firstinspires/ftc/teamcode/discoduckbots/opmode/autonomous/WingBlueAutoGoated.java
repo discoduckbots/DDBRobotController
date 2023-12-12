@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensor;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelGrabber;
@@ -25,11 +26,13 @@ public class WingBlueAutoGoated extends LinearOpMode {
     private Intake intake = null;
     private Arm arm = null;
     private PixelGrabber pixelGrabber = null;
+    private DuckSensor duckSensor = null;
     private static final double AUTONOMOUS_SPEED = 0.5;
     private static final double AUTONOMOUS_SPEED_SLOW = .3;
     private static final double LIFT_SPEED = 0.3;
     private static final double PIVOT_SPEED = 0.3;
     private static final double PIVOT_SPEED_RESET = .75;
+    private static final double OUTTAKE_SPEED = 0.6;
     private static final int PIVOT_UP_LITTLE = 60;
     private static final int MOVE_LIFT_FOR_PUSH = 867;
     private static final int MOVE_LIFT_FOR_PIVOT = 800;
@@ -44,9 +47,12 @@ public class WingBlueAutoGoated extends LinearOpMode {
         sampleMecanumDrive = hardwareStore.getSampleMecanumDrive();
         arm = hardwareStore.getArm();
         pixelGrabber = hardwareStore.getPixelGrabber();
+        intake = hardwareStore.getIntake();
+        duckSensor = hardwareStore.getDuckSensor();
 
         Arm arm = new Arm(hardwareStore.liftMotor, hardwareStore.pivotMotor);
         PixelGrabber pixelGrabber = new PixelGrabber(hardwareStore.grabberServo, hardwareStore.wristServo);
+        DuckSensor duckSensor = new DuckSensor(hardwareStore.distanceSensor1, hardwareStore.distanceSensor2);
         SampleMecanumDrive sampleMecanumDrive = new SampleMecanumDrive(hardwareMap);
 
         sampleMecanumDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -123,11 +129,30 @@ public class WingBlueAutoGoated extends LinearOpMode {
             sleep(250);
             arm.pivotToPosition(PIVOT_UP_LITTLE, PIVOT_SPEED);
             sampleMecanumDrive.followTrajectory(driveToDuck);
-            arm.liftToPosition(MOVE_LIFT_FOR_PUSH, LIFT_SPEED);
-            sleep(1000);
+            int duckPos = duckSensor.getDuckPos();
+            sleep(500);
+            if (duckPos == 1) {
+                sampleMecanumDrive.turn(-90);
+                sleep(250);
+                intake.outtake(OUTTAKE_SPEED);
+                sleep(1000);
+                sampleMecanumDrive.turn(90);
+            }
+            else if (duckPos == 3) {
+                sampleMecanumDrive.turn(90);
+                intake.outtake(OUTTAKE_SPEED);
+                sleep(1000);
+                sampleMecanumDrive.turn(-90);
+            }
+            else {
+                intake.outtake(OUTTAKE_SPEED);
+                sleep(1000);
+            }
+            //arm.liftToPosition(MOVE_LIFT_FOR_PUSH, LIFT_SPEED);
+            //sleep(1000);
             //push pixel
-            arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
-            sleep(600);
+            //arm.pivotToPosition(PIVOT_GROUND, PIVOT_SPEED);
+            //sleep(600);
             sampleMecanumDrive.followTrajectory(driveToFlipBridge);
             sampleMecanumDrive.turn(Math.toRadians(90));
             sampleMecanumDrive.followTrajectory(drivetoPark);
