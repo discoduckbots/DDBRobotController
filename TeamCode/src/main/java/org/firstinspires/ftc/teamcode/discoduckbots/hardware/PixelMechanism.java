@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.discoduckbots.hardware;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.StateMachine;
+import org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop.NewMecanumDrivetrainTeleOp;
 
 public class PixelMechanism {
     public Servo leftGrabber;
@@ -25,8 +26,8 @@ public class PixelMechanism {
     private boolean buttonPressLH = false;
     private boolean buttonPressRH = false;
 
-    private static int DOWN_POSITION = -122;
-    private static int FLIP_POWER;
+    private static int DOWN_POSITION = -124;
+    private static double FLIP_POWER = .75;
     private static double LG_OPEN_POS = 0.4;
     private static double LG_CLOSE_POS = 0.15;
     private static double RG_OPEN_POS = 0.35;
@@ -35,12 +36,14 @@ public class PixelMechanism {
     private static double LH_CLOSE_POS;
     private static double RH_OPEN_POS;
     private static double RH_CLOSE_POS;
+    private static int FLIP_GROUND;
 
 
 
     public PixelMechanism(DcMotor flipMotor, Servo rightHook, Servo leftHook, Servo rightGrabber, Servo leftGrabber, FlipStateMachine flipStateMachine) {
         this.flipMotor = flipMotor;
-        flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.rightHook = rightHook;
         this.leftHook = leftHook;
         this.rightGrabber = rightGrabber;
@@ -56,6 +59,19 @@ public class PixelMechanism {
 
     }
 
+        public void intakeLeft() {
+            intakeLeft(LG_CLOSE_POS);
+        }
+    public void outtakeLeft() {
+        intakeLeft(LG_OPEN_POS);
+    }
+
+    public void outtakeRight() {
+        intakeRight(RG_OPEN_POS);
+    }
+    public void intakeRight() {
+        intakeRight(RG_CLOSE_POS);
+    }
         public void intakeLeft(double position) {
             leftGrabber.setPosition(position);
         }
@@ -70,13 +86,27 @@ public class PixelMechanism {
         }
 
         public void grabFlipHook() {
-            intakeLeft(LG_CLOSE_POS);
-            intakeRight(RG_CLOSE_POS);
+            flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            intakeLeft(0);
+            intakeRight(1);
             //maybe sleep(250);
             flipToPosition(0, FLIP_POWER);
             flipStateMachine.flippingUp();
             //maybe sleep(250);
+            hookLeft(1);
+            hookRight(1);
         }
+
+        public void resetIntake(LinearOpMode opmode) {
+            flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            intakeLeft(.5);
+            intakeRight(.5);
+            flipToPosition(-124, FLIP_POWER);
+            opmode.sleep(100);
+            intakeLeft(1);
+            intakeRight(0);
+        }
+
 
         public void updateState() {
             FlipStateMachine.State state = flipStateMachine.onFlipMovement(flipMotor);
@@ -136,6 +166,12 @@ public class PixelMechanism {
     public void onReleaseRightGrabber() {
         buttonPressRG = false;
     }
+
+    public void print() {
+        Log.d("FLIP_MOTOR:" , "pos : " + flipMotor.getCurrentPosition());
+    }
+
+
 
    /* public double getWristPostion(){
         return wristServo.getPosition();

@@ -10,7 +10,19 @@ public class Arm {
 
     private DcMotor extensionMotor;
     //delete pivotMotor and rename to extensionMotor
-
+    private static double LIFT_POWER = .5;
+    private static int EXTEND_OUT = 3226;
+    public static int AUTOEXTEND = 1933;
+    public static int LIFT_ROW1 = 445;
+    public static int LIFT_ROW2 = 1097;
+    public static int LIFT_ROW3 = 1676;
+    private static int LIFT_ROW4;
+    private static int LIFT_ROW5;
+    private boolean buttonPressArm = false;
+    private boolean isRow0 = false;
+    private boolean isRow1 = false;
+    private boolean isRow2 = false;
+    private boolean isRow3 = false;
 
     public Arm(DcMotor liftMotor, DcMotor extensionMotor) {
 
@@ -76,5 +88,23 @@ public class Arm {
         extensionMotor.setPower(power);
 
     }
+    public void onReleaseArm() {
+        buttonPressArm = false;
+    }
+    public void onPressArm() {
+        //if (buttonPressArm) return;
+        buttonPressArm = true;
+        if(getLiftPos() == 0) {
+            liftToPosition(LIFT_ROW1, LIFT_POWER);
+        } else if (getLiftPos() == LIFT_ROW1) {
+            liftToPosition(LIFT_ROW2, LIFT_POWER);
+        } else if (getLiftPos() == LIFT_ROW2) {
+            liftToPosition(LIFT_ROW3, LIFT_POWER);
+        }
+    }
 
+    public void print() {
+        Log.d("LIFT_MOTOR:" , "pos : " + liftMotor.getCurrentPosition());
+        Log.d("EXT_MOTOR:" , "pos : " + extensionMotor.getCurrentPosition());
+    }
 }

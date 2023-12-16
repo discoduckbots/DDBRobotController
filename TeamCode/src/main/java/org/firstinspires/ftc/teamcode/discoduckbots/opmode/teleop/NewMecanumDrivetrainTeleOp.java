@@ -64,6 +64,8 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
     private static double SLIDE_SPEED = 0.75;
     private static double PIVOT_SPEED = 0.5;
     private static double HANG_SPEED = 0.3;
+    private static double LIFT_POWER = .5;
+    private static double EXTEND_POWER = 1;
 
     boolean liftAtEncoderPos = false;
     boolean pivotAtEncoderPos = false;
@@ -125,7 +127,7 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
             //gamepad 2
 
-            if (gamepad2.a) {
+            /*if (gamepad2.a) {
                 pixelMechanism.increasePosition(pixelMechanism.leftHook, "leftHook");
             }
             if (gamepad2.b) {
@@ -136,17 +138,27 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
             }
             if (gamepad2.y) {
                 pixelMechanism.decreasePosition(pixelMechanism.rightHook, "rightHook");
-            }
+            } */
 
-            if (gamepad2.dpad_up) {
+            /*if (gamepad2.dpad_up) {
+                Log.d("dpadup " , "setpower 0.45");
                 pixelMechanism.flipMotor.setPower(0.45);
             }
             else if (gamepad2.dpad_down) {
                 pixelMechanism.flipMotor.setPower(-0.45);
+                Log.d("dpadup " , "setpower - 0.45");
             }
             else {
+                Log.d("dpadup " , "setpower 0");
                 pixelMechanism.flipMotor.setPower(0);
-            }
+            } */
+            /*if (gamepad1.dpad_up) {
+                arm.extendForward(.45);
+            } else if (gamepad1.dpad_down) {
+                arm.extendBackward(.45);
+            } else {
+                arm.stopExtend();
+            } */
 
             /*if (gamepad2.a) {
                 pixelMechanism.onPressLeftGrabber();
@@ -157,17 +169,45 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
             }*/
 
 
-            if (gamepad2.left_stick_y > 0.01) {
+            /*if (gamepad2.left_stick_y != 0) {
+                Log.d("LEFT_STICK", "value " + )
                 arm.extendForward(gamepad2.left_stick_x);
             }
             else {
                 arm.stopExtend();
-            }
+            }*/
 
-            if (gamepad2.left_bumper) {
+            if (gamepad1.left_bumper) {
                 pixelMechanism.grabFlipHook();
 
             }
+            if (gamepad1.right_bumper) {
+                pixelMechanism.resetIntake(this);
+            }
+
+            /*if(gamepad1.left_bumper) { //open
+                pixelMechanism.intakeLeft(1);
+                pixelMechanism.intakeRight(0);
+            }
+            if(gamepad1.right_bumper) { //close
+                pixelMechanism.intakeLeft(0);
+                pixelMechanism.intakeRight(1);
+            } */
+            if (gamepad2.right_bumper) {
+                arm.onPressArm();
+            } else {
+                arm.onReleaseArm();
+            }
+            if (gamepad2.left_bumper) {
+                arm.liftToPosition(0, LIFT_POWER);
+            }
+            if(gamepad2.a) {
+                arm.extendToPosition(3226, EXTEND_POWER);
+            }
+            if(gamepad2.b) {
+                arm.extendToPosition(0, EXTEND_POWER);
+            }
+
 
 
 

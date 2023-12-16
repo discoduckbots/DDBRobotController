@@ -95,6 +95,8 @@ public class NewAutonomousGenerator extends LinearOpMode {
             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * THROTTLE);
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+    private Arm arm;
+    private PixelMechanism pixelMechanism;
 
 
     @Override
@@ -102,6 +104,8 @@ public class NewAutonomousGenerator extends LinearOpMode {
 
         HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
         sampleMecanumDrive = new SampleMecanumDrive(hardwareMap);
+        arm = hardwareStore.getArm();
+        pixelMechanism = hardwareStore.getPixelMechanism();
       //  arm = hardwareStore.getArm();
       //  pixelGrabber = hardwareStore.getPixelGrabber();
 
@@ -140,11 +144,46 @@ public class NewAutonomousGenerator extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            arm.print();
+            pixelMechanism.print();
+            pixelMechanism.intakeLeft();
+
 
          //   Log.d("Pivot " , "pos : " + arm.getPivotCurrentPosition());
          //   Log.d("Motor " , "pos : " + arm.getLiftMotorPosition());
 
-
+            if (gamepad2.dpad_up) {
+                Log.d("dpadup " , "setpower 0.45");
+                pixelMechanism.flipMotor.setPower(0.45);
+            }
+            else if (gamepad2.dpad_down) {
+                pixelMechanism.flipMotor.setPower(-0.45);
+                Log.d("dpadup " , "setpower - 0.45");
+            }
+            else {
+                Log.d("dpadup " , "setpower 0");
+                pixelMechanism.flipMotor.setPower(0);
+            }
+            if (gamepad2.dpad_left) {
+                pixelMechanism.intakeLeft();
+            }
+            if (gamepad2.dpad_right) {
+                pixelMechanism.outtakeLeft();
+            }
+            if (gamepad1.dpad_right) {
+                arm.extendForward(.45);
+            } else if (gamepad1.dpad_left) {
+                arm.extendBackward(.45);
+            } else {
+                arm.stopExtend();
+            }
+            if (gamepad1.dpad_up) {
+                arm.lift(.5);
+            } else if (gamepad1.dpad_down) {
+                arm.lift(-0.5);
+            }else {
+                arm.stopLift();
+            }
 
             /* Gamepad 1 */
             {
@@ -230,7 +269,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
                // coneArm.onRelease();
             }
 
-            if (gamepad1.dpad_up) {
+            if (gamepad1.left_bumper) {
                 Log.d("GEN", "LB " + gamepad1.left_bumper + " LBP " + leftBumperPressed);
                 if(!leftBumperPressed){
                     leftBumperPressed = true;
@@ -240,7 +279,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 leftBumperPressed = false;
             }
 
-            if (gamepad1.dpad_down) {
+            if (gamepad1.right_bumper) {
                 if(!rightBumperPressed) {
                     rightBumperPressed = true;
                     completeAutonomousPath(sampleMecanumDrive);
