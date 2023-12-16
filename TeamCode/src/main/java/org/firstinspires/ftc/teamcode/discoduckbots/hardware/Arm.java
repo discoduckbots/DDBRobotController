@@ -11,11 +11,12 @@ public class Arm {
     private DcMotor extensionMotor;
     //delete pivotMotor and rename to extensionMotor
     private static double LIFT_POWER = .5;
-    private static int EXTEND_OUT = 3226;
     public static int AUTOEXTEND = 1933;
     public static int LIFT_ROW1 = 445;
     public static int LIFT_ROW2 = 1097;
     public static int LIFT_ROW3 = 1676;
+    public static int EXTEND_IN = 285;
+    public static int EXTEND_OUT = -1584;
     private static int LIFT_ROW4;
     private static int LIFT_ROW5;
     private boolean buttonPressArm = false;
@@ -31,8 +32,8 @@ public class Arm {
         this.liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.extensionMotor = extensionMotor;
-        this.extensionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.extensionMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.extensionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
@@ -68,13 +69,12 @@ public class Arm {
 
     public void extendForward(double power) {
         extensionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extensionMotor.setDirection(DcMotor.Direction.FORWARD);
         extensionMotor.setPower(power);
     }
 
     public void extendBackward(double power) {
-        extensionMotor.setDirection(DcMotor.Direction.REVERSE);
-        extensionMotor.setPower(power);
+        extensionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        extensionMotor.setPower(power * -1);
     }
 
     public void stopExtend() {
@@ -83,8 +83,8 @@ public class Arm {
     }
 
     public void extendToPosition(int position, double power) {
-        extensionMotor.setTargetPosition(position);
         extensionMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        extensionMotor.setTargetPosition(position);
         extensionMotor.setPower(power);
 
     }

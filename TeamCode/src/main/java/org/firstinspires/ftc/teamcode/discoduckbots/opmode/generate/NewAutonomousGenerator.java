@@ -146,7 +146,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
         while (opModeIsActive()) {
             arm.print();
             pixelMechanism.print();
-            pixelMechanism.intakeLeft();
+            pixelMechanism.intakeLeft(1);
 
 
          //   Log.d("Pivot " , "pos : " + arm.getPivotCurrentPosition());
@@ -165,10 +165,10 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 pixelMechanism.flipMotor.setPower(0);
             }
             if (gamepad2.dpad_left) {
-                pixelMechanism.intakeLeft();
+                pixelMechanism.intakeLeft(1);
             }
             if (gamepad2.dpad_right) {
-                pixelMechanism.outtakeLeft();
+                pixelMechanism.intakeLeft(1);
             }
             if (gamepad1.dpad_right) {
                 arm.extendForward(.45);
