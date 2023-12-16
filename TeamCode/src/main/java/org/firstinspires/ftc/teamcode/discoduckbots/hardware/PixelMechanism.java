@@ -28,14 +28,16 @@ public class PixelMechanism {
 
     private static int DOWN_POSITION = -124;
     private static double FLIP_POWER = .75;
-    private static double LG_OPEN_POS = 0.4;
-    private static double LG_CLOSE_POS = 0.15;
-    private static double RG_OPEN_POS = 0.35;
-    private static double RG_CLOSE_POS = 0.6;
-    private static double LH_OPEN_POS;
-    private static double LH_CLOSE_POS;
-    private static double RH_OPEN_POS;
-    private static double RH_CLOSE_POS;
+    public static double LG_OPEN_POS = 1;
+    public static double LG_CLOSE_POS = 0;
+    public static double LG_HALF_POS = .5;
+    public static double RG_OPEN_POS = 0;
+    public static double RG_CLOSE_POS = 1;
+    public static double RG_HALF_POS = .5;
+    public static double LH_OPEN_POS = 0;
+    public static double LH_CLOSE_POS = 1;
+    public static double RH_OPEN_POS = 1;
+    public static double RH_CLOSE_POS = 0;
     private static int FLIP_GROUND;
 
 
@@ -59,19 +61,7 @@ public class PixelMechanism {
 
     }
 
-        public void intakeLeft() {
-            intakeLeft(LG_CLOSE_POS);
-        }
-    public void outtakeLeft() {
-        intakeLeft(LG_OPEN_POS);
-    }
 
-    public void outtakeRight() {
-        intakeRight(RG_OPEN_POS);
-    }
-    public void intakeRight() {
-        intakeRight(RG_CLOSE_POS);
-    }
         public void intakeLeft(double position) {
             leftGrabber.setPosition(position);
         }
@@ -87,20 +77,20 @@ public class PixelMechanism {
 
         public void grabFlipHook() {
             flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeLeft(0);
-            intakeRight(1);
+            intakeLeft(LG_CLOSE_POS);
+            intakeRight(RG_CLOSE_POS);
             //maybe sleep(250);
             flipToPosition(0, FLIP_POWER);
             flipStateMachine.flippingUp();
             //maybe sleep(250);
-            hookLeft(1);
-            hookRight(1);
+            hookLeft(LH_CLOSE_POS);
+            hookRight(RH_CLOSE_POS);
         }
 
         public void resetIntake(LinearOpMode opmode) {
             flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeLeft(.5);
-            intakeRight(.5);
+            intakeLeft(LG_HALF_POS);
+            intakeRight(RG_HALF_POS);
             flipToPosition(-124, FLIP_POWER);
             opmode.sleep(100);
             intakeLeft(1);

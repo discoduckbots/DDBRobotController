@@ -65,7 +65,7 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
     private static double PIVOT_SPEED = 0.5;
     private static double HANG_SPEED = 0.3;
     private static double LIFT_POWER = .5;
-    private static double EXTEND_POWER = 1;
+    private static double EXTEND_POWER = .5;
 
     boolean liftAtEncoderPos = false;
     boolean pivotAtEncoderPos = false;
@@ -92,6 +92,8 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+
+        boolean extendingManually = false;
 
         while (opModeIsActive()) {
 
@@ -201,12 +203,39 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
             if (gamepad2.left_bumper) {
                 arm.liftToPosition(0, LIFT_POWER);
             }
+
+            if(gamepad2.dpad_down) {
+                extendingManually = true;
+                arm.extendBackward(EXTEND_POWER);
+            }
+            else if (gamepad2.dpad_up) {
+                extendingManually = true;
+                arm.extendForward(EXTEND_POWER);
+            }
+            else {
+                if (extendingManually) {
+                    arm.stopExtend();
+                }
+            }
+
             if(gamepad2.a) {
-                arm.extendToPosition(3226, EXTEND_POWER);
+                extendingManually = false;
+                arm.extendToPosition(Arm.EXTEND_IN, EXTEND_POWER);
             }
+
             if(gamepad2.b) {
-                arm.extendToPosition(0, EXTEND_POWER);
+                extendingManually = false;
+                arm.extendToPosition(Arm.EXTEND_OUT, EXTEND_POWER);
             }
+
+            /*if(gamepad2.x) { //close
+                pixelMechanism.hookLeft(1);
+                pixelMechanism.hookRight(0);
+            }
+            if(gamepad2.y) { //release
+                pixelMechanism.hookLeft(0);
+                pixelMechanism.hookRight(1);
+            }*/
 
 
 
