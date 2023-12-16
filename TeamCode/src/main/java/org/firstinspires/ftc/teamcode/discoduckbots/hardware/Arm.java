@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Arm {
-    private DcMotor liftMotor;
+    public DcMotor liftMotor;
 
-    private DcMotor extensionMotor;
+    public DcMotor extensionMotor;
     //delete pivotMotor and rename to extensionMotor
     private static double LIFT_POWER = .5;
     public static int AUTOEXTEND = 1933;

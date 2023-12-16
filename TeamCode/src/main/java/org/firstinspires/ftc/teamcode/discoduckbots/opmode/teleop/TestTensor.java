@@ -37,8 +37,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensor;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensorTensorFlow;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 
 
 /**
@@ -68,16 +70,21 @@ public class TestTensor extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
+        HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
+        Arm arm = hardwareStore.getArm();
         duckSensor = new DuckSensorTensorFlow(hardwareMap, false);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
+        boolean startedArm = false;
         while (opModeIsActive()) {
             Log.d("DUCKPOS: " , "pos = " + duckSensor.getDuckPos());
-
-
+            if (!startedArm) {
+                startedArm = true;
+                arm.extendToPosition(Arm.AUTOEXTEND, 0.5);
+                //sleep(1000);
+            }
+            arm.print();
         }
 
         shutDown();
