@@ -83,8 +83,8 @@ public class Arm {
     }
 
     public void extendToPosition(int position, double power) {
-        extensionMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         extensionMotor.setTargetPosition(position);
+        extensionMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         extensionMotor.setPower(power);
 
     }

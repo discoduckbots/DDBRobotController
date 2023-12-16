@@ -51,90 +51,88 @@ public class RedLeftAutonomous extends LinearOpMode{
                 DriveConstants.TRACK_WIDTH);
         TrajectoryAccelerationConstraint accelerationConstraint =
                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);
-        Trajectory trajectory_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(25.02307299221072  ,-1.6323970010151758 ,4.826679289444172 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(34.05269148749113  ,39.21633051623326 ,4.685907491092916 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(3.0932097021644545  ,34.47346962790206 ,4.685328976853096 ), velocityConstraint, accelerationConstraint).build();
 
-        Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(29.01983435553843  ,0.6159402153823778 ,0.018319617593649973 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(23.21095741253507  ,0.28597339084468903 ,0.016584074874249843 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(26.901732509020526  ,39.39505887225584 ,4.729296059077911 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(2.888611744260757  ,35.11650332889798 ,4.743180400833097 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(22.067561198990784  ,-0.025956250469601375 ,0.022947731512052982 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(25.008092126757244  ,-4.641995333186972 ,5.340978448626011 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(7.08112010532648  ,12.18211128313812 ,0.9279368406385107 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(4.3941117163532235  ,-51.624400666117545 ,1.5735587322548295 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_4 = drive.trajectoryBuilder(trajectory_3.end()).lineToLinearHeading( new Pose2d(22.91484051286949  ,-84.915102703212 ,1.6059555296835786 ), velocityConstraint, accelerationConstraint).build();
 
-        Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(25.132896597351902  ,4.208402079906273 ,0.767109881974231 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(14.0987834775114  ,2.565614006193363 ,0.935071849596044 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(16.963410363055445  ,37.91843733826426 ,4.724532958363216 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(2.669060205122779  ,35.20350125321692 ,4.722411739483938 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(29.300902986998118  ,1.2532034978367506 ,0.02873287391004542 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(4.237831838899467  ,9.495063150152824 ,1.587828750169912 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(4.047294548075504  ,-49.71136412928731 ,1.5486826199434756 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(29.90381760963904  ,-85.26416288808537 ,1.6098122912823065 ), velocityConstraint, accelerationConstraint).build();
+
+        Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(23.628367632661362  ,4.749119303030841 ,0.6998093920775394 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(2.989977755305425  ,7.576600611549671 ,1.5918783498484812 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(5.923393881274236  ,-45.61696378976919 ,1.6059555296836052 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(38.150964111315794  ,-84.75767127196804 ,1.6042199869641944 ), velocityConstraint, accelerationConstraint).build();
 
         pixelMechanism.intakeLeft(pixelMechanism.LG_CLOSE_POS);
-        pixelMechanism.intakeRight(pixelMechanism.RG_CLOSE_POS);
+        pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
         waitForStart();
 
         if (opModeIsActive()) {
             int duckPos = duckSensor.getDuckPos();
             if (duckPos == DuckSensorTensorFlow.CLOSER) {
                 pixelMechanism.flipToPosition(-124, 0.5);
-                drive.followTrajectory(trajectory_2_0 );
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
-                pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
+                drive.followTrajectory(trajectory_0);
                 sleep(350);
+                drive.followTrajectory(trajectory_1);
+                sleep(350);
+                pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
+                sleep(1000);
                 pixelMechanism.flipToPosition(0, 0.5);
                 //drive backward
-                drive.followTrajectory(trajectory_2_1 );
-                pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
-                sleep(350);
-                pixelMechanism.intakeRight(pixelMechanism.RG_HALF_POS);
+                drive.followTrajectory(trajectory_2);
                 sleep(350);
                 arm.extendToPosition(arm.AUTOEXTEND, 0.5);
+                drive.followTrajectory(trajectory_3 );
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
-                drive.followTrajectory(trajectory_2_2 );
                 sleep(350);
+                drive.followTrajectory(trajectory_4 );
+                sleep(2000);
                 pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(350);
-                drive.followTrajectory(trajectory_2_3 );
+
             } else if (duckPos == DuckSensorTensorFlow.CENTER) {
                 pixelMechanism.flipToPosition(-124, 0.5);
                 //drive forward
                 drive.followTrajectory(trajectory_1_0);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+                sleep(1000);
                 pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
                 sleep(350);
                 pixelMechanism.flipToPosition(0, 0.5);
                 //drive backward
                 drive.followTrajectory(trajectory_1_1);
-                pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
                 sleep(350);
-                pixelMechanism.intakeRight(pixelMechanism.RG_HALF_POS);
-                sleep(350);
+                drive.followTrajectory(trajectory_1_2);
                 arm.extendToPosition(arm.AUTOEXTEND, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
                 //drive to board
-                drive.followTrajectory(trajectory_1_2);
-
-                sleep(350);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
-                sleep(350);
-                //drive to side
                 drive.followTrajectory(trajectory_1_3);
+                sleep(1000);
+                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+                sleep(1000);
+
 
             } else { // far from board
                 pixelMechanism.flipToPosition(-124, 0.5);
-                drive.followTrajectory(trajectory_0);
+                drive.followTrajectory(trajectory_2_0);
                 sleep(350);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
                 sleep(350);
                 pixelMechanism.flipToPosition(0, 0.5);
-                drive.followTrajectory(trajectory_1);
-                pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
+                drive.followTrajectory(trajectory_2_1);
                 sleep(350);
-                pixelMechanism.intakeRight(pixelMechanism.RG_HALF_POS);
+                drive.followTrajectory(trajectory_2_2);
                 sleep(350);
                 arm.extendToPosition(arm.AUTOEXTEND, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
-                drive.followTrajectory(trajectory_2);
-                sleep(350);
+                drive.followTrajectory(trajectory_2_3);
+                sleep(1000);
                 pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
-                sleep(350);
+                sleep(1000);
 
             }
         }
