@@ -61,6 +61,8 @@ public class RedRightAutonomous extends LinearOpMode{
         Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(28.907379980810653  ,3.147741594887895 ,1.6182971667993566 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_1_0.end()).lineToLinearHeading( new Pose2d(28.573443508450513  ,-38.04058030993238 ,1.5878287501699226 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1_1.end()).lineToLinearHeading( new Pose2d(28.589000167270125  ,-37.959045816080724 ,1.5903356452090591 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_1_2.end()).strafeLeft(24).build();
+             //   lineToLinearHeading( new Pose2d(28.589000167270125  ,-37.959045816080724 ,1.5903356452090591 ), velocityConstraint, accelerationConstraint).build();
 
         Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(21.539860680873545  ,-11.448070861875262 ,0.08870551676927008 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(15.23173752765713  ,-12.02890547767913 ,0.07559252733381339 ), velocityConstraint, accelerationConstraint).build();
@@ -75,7 +77,8 @@ public class RedRightAutonomous extends LinearOpMode{
         if (opModeIsActive()) {
             int duckPos = duckSensor.getDuckPos();
             if (duckPos == DuckSensorTensorFlow.CLOSER) {
-                pixelMechanism.flipToPosition(-124, 0.5);
+                pixelMechanism.flipToPosition(-124, 0.75);
+                sleep(1000);
                 drive.followTrajectory(trajectory_2_0 );
                 sleep(1000);
                 pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
@@ -85,14 +88,17 @@ public class RedRightAutonomous extends LinearOpMode{
                 drive.followTrajectory(trajectory_2_1 );
                 sleep(350);
                 arm.extendToPosition(arm.EXTEND_OUT, 0.5);
-                arm.liftToPosition(arm.LIFT_ROW1, 0.5);
+                arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 sleep(1000);
                 drive.followTrajectory(trajectory_2_2 );
                 pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(350);
+                arm.extendToPosition(0, .5);
+                sleep(1000);
                 drive.followTrajectory(trajectory_2_3 );
             } else if (duckPos == DuckSensorTensorFlow.CENTER) {
-                pixelMechanism.flipToPosition(-124, 0.5);
+                pixelMechanism.flipToPosition(-124, 0.75);
+                sleep(1000);
                 //drive forward
                 drive.followTrajectory(trajectory_0);
                 pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
@@ -102,17 +108,19 @@ public class RedRightAutonomous extends LinearOpMode{
                 drive.followTrajectory(trajectory_1);
                 sleep(350);
                 arm.extendToPosition(arm.EXTEND_OUT, 0.5);
-                arm.liftToPosition(arm.LIFT_ROW1, 0.5);
+                arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 //drive to board
                 drive.followTrajectory(trajectory_2);
                 sleep(350);
                 pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(350);
+                arm.extendToPosition(0, .5);
                 //drive to side
                 drive.followTrajectory(trajectory_3);
 
             } else { // far from board
-                pixelMechanism.flipToPosition(-124, 0.5);
+                pixelMechanism.flipToPosition(-124, 0.75);
+                sleep(1000);
                 drive.followTrajectory(trajectory_1_0);
                 sleep(350);
                 pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
@@ -121,11 +129,12 @@ public class RedRightAutonomous extends LinearOpMode{
                 drive.followTrajectory(trajectory_1_1);
                 sleep(350);
                 arm.extendToPosition(arm.AUTOEXTEND, 0.5);
-                arm.liftToPosition(arm.LIFT_ROW1, 0.5);
+                arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 drive.followTrajectory(trajectory_1_2);
                 sleep(350);
                 pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(350);
+                drive.followTrajectory(trajectory_1_3);
 
             }
         }

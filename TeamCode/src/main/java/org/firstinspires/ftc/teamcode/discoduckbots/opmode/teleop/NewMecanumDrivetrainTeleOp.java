@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
@@ -108,10 +109,10 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
             mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
 
 
-            if (gamepad1.a) {
+            if (gamepad1.x) {
                 THROTTLE = .4;
             }
-            if (gamepad1.b) {
+            if (gamepad1.y) {
                 THROTTLE = .75;
             }
 
@@ -170,6 +171,14 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
                 pixelMechanism.onReleaseRightHook();
             }
 
+            if (gamepad1.a) {
+                pixelMechanism.onPressLeftGrabber();
+                pixelMechanism.onPressRightGrabber();
+            } else {
+                pixelMechanism.onReleaseLeftGrabber();
+                pixelMechanism.onReleaseRightGrabber();
+            }
+
 
             /*if (gamepad2.left_stick_y != 0) {
                 Log.d("LEFT_STICK", "value " + )
@@ -179,13 +188,37 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
                 arm.stopExtend();
             }*/
 
-            if (gamepad1.left_bumper) {
+            /*if (gamepad1.left_bumper) {
                 pixelMechanism.newGrabFlipHook(this);
 
+            } */
+            if(gamepad1.dpad_up) {
+                pixelMechanism.flipMotor.setPower(0.5);
+            } else if(gamepad1.dpad_down) {
+                pixelMechanism.flipMotor.setPower(-0.5);
+            } else {
+                pixelMechanism.flipMotor.setPower(0);
             }
-            if (gamepad1.right_bumper) {
+            if(gamepad2.dpad_left) {
+                arm.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                arm.liftMotor.setPower(.5);
+            } else if (gamepad2.dpad_right) {
+                arm.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                arm.liftMotor.setPower(-.5);
+            } else {
+                arm.liftMotor.setTargetPosition(arm.liftMotor.getCurrentPosition());
+                arm.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.liftMotor.setPower(.5);
+            }
+
+            if(gamepad1.b) {
+                pixelMechanism.intakeLeft(pixelMechanism.LG_CLOSE_POS);
+                pixelMechanism.intakeRight(pixelMechanism.RG_CLOSE_POS);
+            }
+
+           /* if (gamepad1.right_bumper) {
                 pixelMechanism.resetIntake(this);
-            }
+            } */
 
             /*if(gamepad1.left_bumper) { //open
                 pixelMechanism.intakeLeft(1);
@@ -202,6 +235,10 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
             }
             if (gamepad2.left_bumper) {
                 arm.liftToPosition(0, LIFT_POWER);
+            }
+            if(gamepad2.y) {
+                pixelMechanism.intakeLeft(.5);
+                pixelMechanism.intakeRight(.5);
             }
 
             if(gamepad2.dpad_down) {

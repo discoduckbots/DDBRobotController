@@ -26,7 +26,8 @@ public class PixelMechanism {
     private boolean buttonPressLH = false;
     private boolean buttonPressRH = false;
 
-    public static int FLIP_DOWN = -97;
+    public static int FLIP_DOWN = -115;
+    public static int FLIP_UP_TELEOP = 112;
     private static double FLIP_POWER = .75;
     public static double LG_OPEN_POS = 1;
     public static double LG_CLOSE_POS = 0;
@@ -91,15 +92,15 @@ public class PixelMechanism {
             flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intakeLeft(LG_CLOSE_POS);
             intakeRight(RG_CLOSE_POS);
-            opmode.sleep(100);
-            flipToPosition(0, FLIP_POWER);
+            opmode.sleep(200);
+            flipToPosition(FLIP_UP_TELEOP, FLIP_POWER);
         }
         public void resetIntake(LinearOpMode opmode) {
             flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intakeLeft(LG_CLOSE_POS);
             intakeRight(RG_CLOSE_POS);
-            flipToPosition(FLIP_DOWN, FLIP_POWER);
-            opmode.sleep(100);
+            flipToPosition(0, FLIP_POWER);
+            opmode.sleep(200);
             intakeLeft(1);
             intakeRight(0);
         }
