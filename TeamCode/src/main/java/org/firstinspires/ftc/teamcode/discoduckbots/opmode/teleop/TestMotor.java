@@ -32,13 +32,11 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensor;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensorTensorFlow;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 
 
 /**
@@ -53,9 +51,9 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensorTensorFlo
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test Tensor", group= "Linear Opmode")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test Motor", group= "Linear Opmode")
 
-public class TestTensor extends LinearOpMode {
+public class TestMotor extends LinearOpMode {
 
 
 
@@ -68,7 +66,7 @@ public class TestTensor extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
+        HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
         duckSensor = new DuckSensorTensorFlow(hardwareMap, false);
 
         // Wait for the game to start (driver presses PLAY)
@@ -76,7 +74,29 @@ public class TestTensor extends LinearOpMode {
 
         while (opModeIsActive()) {
             Log.d("DUCKPOS: " , "pos = " + duckSensor.getDuckPos());
+            if (gamepad1.y) {
+                hardwareStore.frontRight.setPower(0.5);
+            } else {
+                hardwareStore.frontRight.setPower(0);
+            }
 
+            if (gamepad1.b) {
+                hardwareStore.backRight.setPower(0.5);
+            } else {
+                hardwareStore.backRight.setPower(0);
+            }
+
+            if (gamepad1.a) {
+                hardwareStore.backLeft.setPower(0.5);
+            } else {
+                hardwareStore.backLeft.setPower(0);
+            }
+
+            if (gamepad1.x) {
+                hardwareStore.frontLeft.setPower(0.5);
+            } else {
+                hardwareStore.frontLeft.setPower(0);
+            }
 
         }
 
