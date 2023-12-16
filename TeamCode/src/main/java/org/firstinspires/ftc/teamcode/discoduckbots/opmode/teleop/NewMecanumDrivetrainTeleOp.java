@@ -162,13 +162,13 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
                 arm.stopExtend();
             } */
 
-            /*if (gamepad2.a) {
-                pixelMechanism.onPressLeftGrabber();
-                pixelMechanism.onPressRightGrabber();
+            if (gamepad2.x) {
+                pixelMechanism.onPressLeftHook();
+                pixelMechanism.onPressRightHook();
             } else {
-                pixelMechanism.onReleaseLeftGrabber();
-                pixelMechanism.onReleaseRightGrabber();
-            }*/
+                pixelMechanism.onReleaseLeftHook();
+                pixelMechanism.onReleaseRightHook();
+            }
 
 
             /*if (gamepad2.left_stick_y != 0) {
@@ -180,7 +180,7 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
             }*/
 
             if (gamepad1.left_bumper) {
-                pixelMechanism.grabFlipHook();
+                pixelMechanism.newGrabFlipHook(this);
 
             }
             if (gamepad1.right_bumper) {
@@ -220,12 +220,12 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
             if(gamepad2.a) {
                 extendingManually = false;
-                arm.extendToPosition(Arm.EXTEND_IN, EXTEND_POWER);
+                arm.extendToPosition(arm.EXTEND_IN, EXTEND_POWER);
             }
 
             if(gamepad2.b) {
                 extendingManually = false;
-                arm.extendToPosition(Arm.EXTEND_OUT, EXTEND_POWER);
+                arm.extendToPosition(arm.EXTEND_OUT, EXTEND_POWER);
             }
 
             /*if(gamepad2.x) { //close

@@ -26,7 +26,7 @@ public class PixelMechanism {
     private boolean buttonPressLH = false;
     private boolean buttonPressRH = false;
 
-    private static int DOWN_POSITION = -124;
+    public static int FLIP_DOWN = -97;
     private static double FLIP_POWER = .75;
     public static double LG_OPEN_POS = 1;
     public static double LG_CLOSE_POS = 0;
@@ -38,7 +38,7 @@ public class PixelMechanism {
     public static double LH_CLOSE_POS = 1;
     public static double RH_OPEN_POS = 1;
     public static double RH_CLOSE_POS = 0;
-    private static int FLIP_GROUND;
+    private static int FLIP_UP = 0;
 
 
 
@@ -87,11 +87,18 @@ public class PixelMechanism {
             hookRight(RH_CLOSE_POS);
         }
 
+        public void newGrabFlipHook(LinearOpMode opmode) {
+            flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            intakeLeft(LG_CLOSE_POS);
+            intakeRight(RG_CLOSE_POS);
+            opmode.sleep(100);
+            flipToPosition(0, FLIP_POWER);
+        }
         public void resetIntake(LinearOpMode opmode) {
             flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeLeft(LG_HALF_POS);
-            intakeRight(RG_HALF_POS);
-            flipToPosition(-124, FLIP_POWER);
+            intakeLeft(LG_CLOSE_POS);
+            intakeRight(RG_CLOSE_POS);
+            flipToPosition(FLIP_DOWN, FLIP_POWER);
             opmode.sleep(100);
             intakeLeft(1);
             intakeRight(0);
@@ -112,7 +119,7 @@ public class PixelMechanism {
         public void dropPixels() {
         hookRight(RH_OPEN_POS);
         hookLeft(LH_OPEN_POS);
-        flipToPosition(DOWN_POSITION, FLIP_POWER);
+        flipToPosition(FLIP_DOWN, FLIP_POWER);
         }
 
         public void increasePosition(Servo servo, String servoName) {
@@ -157,6 +164,39 @@ public class PixelMechanism {
         buttonPressRG = false;
     }
 
+    public void onPressLeftHook() {
+        if (buttonPressLH) return;
+        buttonPressLH = true;
+        if (isClosedLH) {
+            isClosedLH = false;
+            hookLeft(LH_OPEN_POS);
+        }
+        else {
+            isClosedLH = true;
+            hookLeft(LH_CLOSE_POS);
+        }
+    }
+    public void onReleaseLeftHook() {
+
+        buttonPressLH = false;
+    }
+
+    public void onPressRightHook() {
+        if (buttonPressRH) return;
+        buttonPressRH = true;
+        if (isClosedRH) {
+            isClosedRH = false;
+            hookRight(RH_OPEN_POS);
+        }
+        else {
+            isClosedRH = true;
+            hookRight(RH_CLOSE_POS);
+        }
+    }
+    public void onReleaseRightHook() {
+
+        buttonPressRH = false;
+    }
     public void print() {
         Log.d("FLIP_MOTOR:" , "pos : " + flipMotor.getCurrentPosition());
     }

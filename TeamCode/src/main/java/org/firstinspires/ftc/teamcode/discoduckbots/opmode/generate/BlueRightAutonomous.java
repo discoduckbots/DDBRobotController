@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 //@Disabled
-@Autonomous(name="BlueLeft", group="Robot")
-public class BlueLeftAutonomous extends LinearOpMode{
+@Autonomous(name="BlueRight", group="Robot")
+public class BlueRightAutonomous extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
@@ -51,23 +51,24 @@ public class BlueLeftAutonomous extends LinearOpMode{
                 DriveConstants.TRACK_WIDTH);
         TrajectoryAccelerationConstraint accelerationConstraint =
                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);
-        Trajectory trajectory_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(25.02307299221072  ,-1.6323970010151758 ,4.826679289444172 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(34.05269148749113  ,39.21633051623326 ,4.685907491092916 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(3.0932097021644545  ,34.47346962790206 ,4.685328976853096 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(23.939402621490817  ,-8.183827650253622 ,5.809382144783726 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(3.663984276103438  ,-1.5488249384112152 ,4.67954383445516 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(6.179084137492377  ,53.95845387709959 ,4.656981779102999 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(36.49077013995197  ,84.74660139728778 ,4.702491565967232 ), velocityConstraint, accelerationConstraint).build();
 
-        Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(29.01983435553843  ,0.6159402153823778 ,0.018319617593649973 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(23.21095741253507  ,0.28597339084468903 ,0.016584074874249843 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(26.901732509020526  ,39.39505887225584 ,4.729296059077911 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(2.888611744260757  ,35.11650332889798 ,4.743180400833097 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(28.753015902635457  ,0.8670257884277952 ,0.016776912954204803 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(3.1197067434487167  ,0.8616565844115662 ,4.752436628669916 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(2.938246986329252  ,51.764750092214896 ,4.694585204689975 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(25.843999275360865  ,87.47802014144273 ,4.731224439877302 ), velocityConstraint, accelerationConstraint).build();
 
-        Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(25.132896597351902  ,4.208402079906273 ,0.767109881974231 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(14.0987834775114  ,2.565614006193363 ,0.935071849596044 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(16.963410363055445  ,37.91843733826426 ,4.724532958363216 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(2.669060205122779  ,35.20350125321692 ,4.722411739483938 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(21.64225935033772  ,0.7867594681671506 ,0.22581339160175862 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_1 = drive.trajectoryBuilder(trajectory_0.end()).lineToLinearHeading( new Pose2d(24.919884696294844  ,4.316659698121112 ,0.8801129968150789 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_2 = drive.trajectoryBuilder(trajectory_1.end()).lineToLinearHeading( new Pose2d(3.2589563528424392  ,-5.50657030644373 ,4.886844770383327 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(3.5390623307922544  ,50.104674724651915 ,4.677615453655825 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_4 = drive.trajectoryBuilder(trajectory_3.end()).lineToLinearHeading( new Pose2d(21.627082076536883  ,87.64627067437824 ,4.696320747409352 ), velocityConstraint, accelerationConstraint).build();
 
         pixelMechanism.intakeLeft(pixelMechanism.LG_CLOSE_POS);
         pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
-
         waitForStart();
 
         if (opModeIsActive()) {
@@ -75,21 +76,22 @@ public class BlueLeftAutonomous extends LinearOpMode{
             if (duckPos == DuckSensorTensorFlow.CLOSER) {
                 pixelMechanism.flipToPosition(-124, 0.5);
                 drive.followTrajectory(trajectory_2_0);
-                sleep(500);
+                sleep(250);
+                drive.followTrajectory(trajectory_2_1);
                 pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
-                sleep(1000);
+                sleep(350);
                 pixelMechanism.flipToPosition(0, 0.5);
                 //drive backward
-                arm.extendToPosition(arm.EXTEND_OUT, 0.5);
-                drive.followTrajectory(trajectory_2_1);
-                sleep(2000);
+                drive.followTrajectory(trajectory_2_2 );
+                sleep(350);
+                drive.followTrajectory(trajectory_2_3 );
+                sleep(350);
+                arm.extendToPosition(Arm.AUTOEXTEND, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
                 sleep(2000);
-                drive.followTrajectory(trajectory_2_2);
-                sleep(1000);
+                drive.followTrajectory(trajectory_2_4 );
                 pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
-                sleep(2000);
-                drive.followTrajectory(trajectory_2_3 );
+
             } else if (duckPos == DuckSensorTensorFlow.CENTER) {
                 pixelMechanism.flipToPosition(-124, 0.5);
                 //drive forward
@@ -101,34 +103,33 @@ public class BlueLeftAutonomous extends LinearOpMode{
                 drive.followTrajectory(trajectory_1_1);
                 sleep(350);
                 sleep(350);
-                arm.extendToPosition(arm.EXTEND_OUT, 0.5);
-                sleep(2000);
+                drive.followTrajectory(trajectory_1_2);
+                arm.extendToPosition(arm.AUTOEXTEND, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
                 //drive to board
-                drive.followTrajectory(trajectory_1_2);
-                sleep(2000);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
-                sleep(2000);
-                //drive to side
                 drive.followTrajectory(trajectory_1_3);
+                sleep(350);
+                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+                sleep(350);
+                //drive to side
 
             } else { // far from board
                 pixelMechanism.flipToPosition(-124, 0.5);
                 drive.followTrajectory(trajectory_0);
-                sleep(350);
+                sleep(2000);
                 pixelMechanism.intakeLeft(pixelMechanism.LG_OPEN_POS);
-                sleep(350);
+                sleep(2000);
                 pixelMechanism.flipToPosition(0, 0.5);
                 drive.followTrajectory(trajectory_1);
                 sleep(350);
+                drive.followTrajectory(trajectory_2);
                 sleep(350);
                 arm.extendToPosition(arm.AUTOEXTEND, 0.5);
-                sleep(2000);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
-                drive.followTrajectory(trajectory_2);
-                sleep(2000);
+                drive.followTrajectory(trajectory_3);
+                sleep(1000);
                 pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
-                sleep(2000);
+                sleep(1000);
 
             }
         }
