@@ -331,64 +331,53 @@ public class NewAutonomousGenerator extends LinearOpMode {
         Log.d("AUT", "filepath " + file.getAbsolutePath());
         FileWriter writer = new FileWriter(file);
         try {
-            String AUTONOMOUS = "package org.firstinspires.ftc.teamcode.discoduckbots.opmode.powerPlay;\n" +
-                    "\n" +
-                    "import android.util.Log;\n" +
+            String AUTONOMOUS = "package org.firstinspires.ftc.teamcode.discoduckbots.opmode.generate;\n" +
                     "\n" +
                     "import com.acmerobotics.roadrunner.geometry.Pose2d;\n" +
                     "import com.acmerobotics.roadrunner.trajectory.Trajectory;\n" +
                     "import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;\n" +
                     "import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;\n" +
                     "import com.qualcomm.robotcore.eventloop.opmode.Autonomous;\n" +
-                    "import com.qualcomm.robotcore.eventloop.opmode.Disabled;\n" +
                     "import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\n" +
-                    "import com.qualcomm.robotcore.hardware.DcMotor;\n" +
-                    "import com.qualcomm.robotcore.hardware.Servo;\n" +
                     "import com.qualcomm.robotcore.util.ElapsedTime;\n" +
                     "\n" +
-                    "import org.firstinspires.ftc.robotcore.external.Telemetry;\n" +
-                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeArm;\n" +
-                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeDetector;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensorTensorFlow;\n" +
                     "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;\n" +
-                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;\n" +
-                    "import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;\n" +
                     "import org.firstinspires.ftc.teamcode.drive.DriveConstants;\n" +
                     "import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;\n" +
                     "\n" +
-                    "@Disabled\n" +
-                    "@Autonomous(name=\"Generated\", group=\"Robot\")\n" +
-                    "public class GeneratedAutonomous extends LinearOpMode{\n" +
+                    "//@Disabled\n" +
+                    "@Autonomous(name=\"BlueRight\", group=\"Robot\")\n" +
+                    "public class BlueRightAutonomous extends LinearOpMode{\n" +
                     "\n" +
                     "    private static final double STRAFE_SPEED = .5 ;\n" +
                     "    private ElapsedTime runtime = new ElapsedTime();\n" +
-                    "    private MecanumDrivetrain mecanumDrivetrain = null;\n" +
-                    "    private ConeArm coneArm = null;\n" +
-                    "    TensorFlow tensorFlow = null;\n" +
-                    "    private static final double AUTONOMOUS_SPEED = 1;\n" +
+                    "    \n" +
+                    "    private static final double AUTONOMOUS_SPEED = 0.5;\n" +
                     "\n" +
-                    "    private static final double ROTATION_SPEED = 0.4;\n" +
-                    "    private static final int WOBBLE_GRABBER_REVOLUTIONS = 6250;\n" +
+                    "    private DuckSensorTensorFlow duckSensor =null;\n" +
+                    "    private Arm arm;\n" +
+                    "    private PixelMechanism pixelMechanism;" +
                     "\n" +
                     "    @Override\n" +
                     "    public void runOpMode() {\n" +
                     "        HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);\n" +
-                    "        mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();\n" +
-                    "        DcMotor coneLift = hardwareStore.getConeLift();\n" +
-                    "        DcMotor coneTurret = hardwareStore.getConeTurret();\n" +
-                    "        Servo coneGrabber = hardwareStore.getConeGrabber();\n" +
-                    "        ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);\n" +
-                    "        ConeDetector coneDetector = new ConeDetector(hardwareStore.getWebcam(), hardwareMap, telemetry);\n" +
                     "        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);\n" +
-                    "        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);\n" +
+                    "        duckSensor = new DuckSensorTensorFlow(hardwareMap, false);\n" +
+                    "        arm = hardwareStore.getArm();\n" +
+                    "        pixelMechanism = hardwareStore.getPixelMechanism();\n" +
+                    "\n" +
                     "        /** Wait for the game to begin */\n" +
                     "        telemetry.addData(\">\", \"Press Play to start op mode\");\n" +
                     "        telemetry.update();\n" +
                     "\n" +
-                    "        TrajectoryVelocityConstraint velocityConstraint = SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,\n" +
-                    "                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,\n" +
+                    "        TrajectoryVelocityConstraint velocityConstraint = SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * AUTONOMOUS_SPEED,\n" +
+                    "                DriveConstants.MAX_ANG_VEL * AUTONOMOUS_SPEED,\n" +
                     "                DriveConstants.TRACK_WIDTH);\n" +
                     "        TrajectoryAccelerationConstraint accelerationConstraint =\n" +
-                    "        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED);\n";
+                    "                SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);";
 
             String AUTONOMOUS_PART2 = "        waitForStart();\n" +
                     "\n" +

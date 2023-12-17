@@ -128,7 +128,7 @@ public class RedRightAutonomous extends LinearOpMode{
                 pixelMechanism.flipToPosition(0, 0.5);
                 drive.followTrajectory(trajectory_1_1);
                 sleep(350);
-                arm.extendToPosition(arm.AUTOEXTEND, 0.5);
+                arm.extendToPosition(arm.EXTEND_OUT, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 drive.followTrajectory(trajectory_1_2);
                 sleep(350);
