@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DuckSensorTensorFlow;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -22,12 +21,9 @@ public class BlueRightAutonomous extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
-    private MecanumDrivetrain mecanumDrivetrain = null;
 
     private static final double AUTONOMOUS_SPEED = 0.5;
 
-    private static final double ROTATION_SPEED = 0.4;
-    private static final int WOBBLE_GRABBER_REVOLUTIONS = 6250;
     private DuckSensorTensorFlow duckSensor =null;
     private Arm arm;
     private PixelMechanism pixelMechanism;
