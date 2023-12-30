@@ -170,13 +170,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
             if (gamepad2.dpad_right) {
                 pixelMechanism.intakeLeft(1);
             }
-            if (gamepad1.dpad_right) {
-                arm.extendForward(.45);
-            } else if (gamepad1.dpad_left) {
-                arm.extendBackward(.45);
-            } else {
-                arm.stopExtend();
-            }
+
             if (gamepad1.dpad_up) {
                 arm.lift(.5);
             } else if (gamepad1.dpad_down) {

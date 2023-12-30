@@ -87,7 +87,7 @@ public class BlueLeftAutonomous extends LinearOpMode{
         Trajectory trajectory_2_3 = drive.trajectoryBuilder(trajectory_2.end()).lineToLinearHeading( new Pose2d(2.70750141300368  ,33.56216197820187 ,4.684943300693286 ), velocityConstraint, accelerationConstraint).build();
 
         pixelMechanism.intakeLeft(pixelMechanism.LG_CLOSE_POS);
-        pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
+        //pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
 
         waitForStart();
 
@@ -103,12 +103,12 @@ public class BlueLeftAutonomous extends LinearOpMode{
                 //drive backward
                 arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 sleep(2000);
-                arm.extendToPosition(arm.EXTEND_OUT, 0.5);
+               // arm.extendToPosition(arm.EXTEND_OUT, 0.5);
                 drive.followTrajectory(trajectory_2_1);
                 sleep(2000);
                 drive.followTrajectory(trajectory_2_2);
                 sleep(1000);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+               // pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(2000);
                 drive.followTrajectory(trajectory_2_3 );
             } else if (duckPos == DuckSensorTensorFlow.CENTER) {
@@ -125,12 +125,12 @@ public class BlueLeftAutonomous extends LinearOpMode{
                 sleep(350);
                 arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 sleep(2000);
-                arm.extendToPosition(arm.EXTEND_OUT, 0.5);
+                //arm.extendToPosition(arm.EXTEND_OUT, 0.5);
                 sleep(2000);
                 //drive to board
                 drive.followTrajectory(trajectory_1_2);
                 sleep(2000);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+                //pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(2000);
                 //drive to side
                 drive.followTrajectory(trajectory_1_3);
@@ -148,10 +148,10 @@ public class BlueLeftAutonomous extends LinearOpMode{
                 sleep(350);
                 arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 sleep(350);
-                arm.extendToPosition(arm.AUTOEXTEND, 0.5);
+                //arm.extendToPosition(arm.AUTOEXTEND, 0.5);
                 sleep(2000);
                 sleep(2000);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+               // pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(2000);
                 drive.followTrajectory(trajectory_2);
                 sleep(2000);

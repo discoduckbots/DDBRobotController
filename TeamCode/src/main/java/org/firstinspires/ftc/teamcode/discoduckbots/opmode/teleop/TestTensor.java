@@ -81,7 +81,7 @@ public class TestTensor extends LinearOpMode {
             Log.d("DUCKPOS: " , "pos = " + duckSensor.getDuckPos());
             if (!startedArm) {
                 startedArm = true;
-                arm.extendToPosition(Arm.EXTEND_OUT, 0.5);
+                //arm.extendToPosition(Arm.EXTEND_OUT, 0.5);
                 //sleep(1000);
             }
             arm.print();

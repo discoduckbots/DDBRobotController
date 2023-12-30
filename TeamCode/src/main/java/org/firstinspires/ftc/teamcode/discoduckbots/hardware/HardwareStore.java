@@ -28,13 +28,14 @@ public class HardwareStore {
     public DcMotorEx backRight ;
     public DcMotorEx backLeft ;
     public DcMotor liftMotor;
-    public DcMotor extensionMotor;
+    //public DcMotor extensionMotor;
     //public DcMotor hangMotor;
     public Servo leftGrabber;
     public Servo rightGrabber;
-    public Servo leftHook;
-    public Servo rightHook;
+    //public Servo leftHook;
+    //public Servo rightHook;
     public DcMotor flipMotor;
+    public DcMotor pivotMotor;
 
     //public DistanceSensor leftIntakeSensor;
     //public DistanceSensor rightIntakeSensor;
@@ -50,28 +51,25 @@ public class HardwareStore {
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        extensionMotor = hardwareMap.get(DcMotor.class, "extensionMotor");
-        extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         //hangMotor = hardwareMap.get(DcMotor.class, "hangMotor");
         //hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftGrabber = hardwareMap.get(Servo.class, "leftGrabber");
         rightGrabber = hardwareMap.get(Servo.class, "rightGrabber");
 
-        leftHook = hardwareMap.get(Servo.class, "leftHook");
-        rightHook = hardwareMap.get(Servo.class, "rightHook");
-
         flipMotor = hardwareMap.get(DcMotor.class, "flipMotor");
         flipMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
+        pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         flipStateMachine = new FlipStateMachine();
 
         //ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "led");
         //ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
-        arm = new Arm(liftMotor, extensionMotor);
-        pixelMechanism = new PixelMechanism(flipMotor, rightHook, leftHook, rightGrabber, leftGrabber, flipStateMachine);
+        arm = new Arm(liftMotor);
+        pixelMechanism = new PixelMechanism(flipMotor, pivotMotor, rightGrabber, leftGrabber, flipStateMachine);
 
 
         // frontRight.setDirection(DcMotorEx.Direction.FORWARD);

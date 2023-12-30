@@ -29,6 +29,11 @@
 
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 
+import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.LG_CLOSE_POS;
+import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.LG_OPEN_POS;
+import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.RG_CLOSE_POS;
+import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.RG_OPEN_POS;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -65,11 +70,14 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
     private static double SLIDE_SPEED = 0.75;
     private static double PIVOT_SPEED = 0.5;
     private static double HANG_SPEED = 0.3;
-    private static double LIFT_POWER = .5;
+    private static double LIFT_POWER = 1.0;
     private static double EXTEND_POWER = .5;
-
+    private int liftPosition = 0;
+    private int pivotPosition = 0;
+    private int flipPosition = 0;
     boolean liftAtEncoderPos = false;
     boolean pivotAtEncoderPos = false;
+    boolean flipAtEncoderPos = false;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -79,7 +87,6 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
     //private DcMotor hangMotor = null;
     private PixelMechanism pixelMechanism = null;
     private FlipStateMachine flipStateMachine = null;
-    boolean flipMotorAtEncoderPos = false;
 
     @Override
     public void runOpMode() {
@@ -89,6 +96,10 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
         pixelMechanism = hardwareStore.getPixelMechanism();
         //hangMotor = hardwareStore.getHangMotor();
         flipStateMachine = hardwareStore.getFlipStateMachine();
+
+        hardwareStore.flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardwareStore.pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //hardwareStore.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -100,10 +111,9 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
             Log.d("LIFT" , "pos : " + hardwareStore.liftMotor.getCurrentPosition());
 
-            Log.d("ARM", "lift pos : " + hardwareStore.liftMotor.getCurrentPosition() +
-                    " extend pos : " + hardwareStore.extensionMotor.getCurrentPosition());
-
             Log.d("FLIP" , "pos : " + hardwareStore.flipMotor.getCurrentPosition());
+
+            Log.d("PIVOT" , "pos : " + hardwareStore.pivotMotor.getCurrentPosition());
 
              //Gamepad 1
             mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
@@ -130,18 +140,18 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
             //gamepad 2
 
-            /*if (gamepad2.a) {
-                pixelMechanism.increasePosition(pixelMechanism.leftHook, "leftHook");
+            if (gamepad2.left_bumper) {
+                pixelMechanism.increasePosition(pixelMechanism.leftGrabber, "leftGrabber");
             }
-            if (gamepad2.b) {
-                pixelMechanism.decreasePosition(pixelMechanism.leftHook, "leftHook");
+            if (gamepad2.left_trigger > 0.01) {
+                pixelMechanism.decreasePosition(pixelMechanism.leftGrabber, "leftGrabber");
             }
-            if (gamepad2.x) {
-                pixelMechanism.increasePosition(pixelMechanism.rightHook, "rightHook");
+            if (gamepad2.right_bumper) {
+                pixelMechanism.increasePosition(pixelMechanism.rightGrabber, "rightGrabber");
             }
-            if (gamepad2.y) {
-                pixelMechanism.decreasePosition(pixelMechanism.rightHook, "rightHook");
-            } */
+            if (gamepad2.right_trigger > 0.01) {
+                pixelMechanism.decreasePosition(pixelMechanism.rightGrabber, "rightGrabber");
+            }
 
             /*if (gamepad2.dpad_up) {
                 Log.d("dpadup " , "setpower 0.45");
@@ -163,22 +173,39 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
                 arm.stopExtend();
             } */
 
-            if (gamepad2.x) {
-                pixelMechanism.onPressLeftHook();
-                pixelMechanism.onPressRightHook();
-            } else {
-                pixelMechanism.onReleaseLeftHook();
-                pixelMechanism.onReleaseRightHook();
+            if (gamepad1.left_bumper) {
+                pixelMechanism.intakeLeft(LG_CLOSE_POS);
+                pixelMechanism.intakeRight(RG_CLOSE_POS);
             }
 
             if (gamepad1.a) {
-                pixelMechanism.onPressLeftGrabber();
-                pixelMechanism.onPressRightGrabber();
-            } else {
-                pixelMechanism.onReleaseLeftGrabber();
-                pixelMechanism.onReleaseRightGrabber();
+                pixelMechanism.intakeLeft(LG_CLOSE_POS);
             }
 
+            if (gamepad1.b) {
+                pixelMechanism.intakeRight(RG_CLOSE_POS);
+            }
+
+            if (gamepad1.x) {
+                pixelMechanism.toScore();
+            }
+
+            if (gamepad2.a) {
+                pixelMechanism.intakeLeft(LG_OPEN_POS);
+                pixelMechanism.intakeRight(RG_OPEN_POS);
+            }
+
+            if (gamepad2.b) {
+                pixelMechanism.intakeLeft(LG_OPEN_POS);
+            }
+
+            if (gamepad2.x) {
+                pixelMechanism.intakeRight(RG_OPEN_POS);
+            }
+
+            /*if (gamepad2.y) {
+                pixelMechanism.toGrab(this);
+            } */
 
             /*if (gamepad2.left_stick_y != 0) {
                 Log.d("LEFT_STICK", "value " + )
@@ -192,43 +219,65 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
                 pixelMechanism.newGrabFlipHook(this);
 
             } */
-            if(gamepad1.dpad_up) {
-                pixelMechanism.flipMotor.setPower(0.5);
-            } else if(gamepad1.dpad_down) {
-                pixelMechanism.flipMotor.setPower(-0.5);
+
+            if(Math.abs(gamepad2.left_stick_y) > 0.01) {
+                flipAtEncoderPos = false;
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                pixelMechanism.flipMotor.setPower(gamepad2.left_stick_y);
+                flipPosition = pixelMechanism.flipMotor.getCurrentPosition();
+            } else {
+                pixelMechanism.flipMotor.setTargetPosition(flipPosition);
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                pixelMechanism.flipMotor.setPower(1.0);
+            }
+
+            if(gamepad2.y) {
+                flipAtEncoderPos = true;
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                pixelMechanism.flipMotor.setTargetPosition(832);
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                pixelMechanism.flipMotor.setPower(1.0);
+            }
+
+            /*if(Math.abs(gamepad2.left_stick_y) > 0.01) {
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                pixelMechanism.flipMotor.setPower(gamepad2.left_stick_y);
+            } else if(gamepad2.y) {
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                pixelMechanism.flipMotor.setTargetPosition(832);
             } else {
                 pixelMechanism.flipMotor.setPower(0);
-            }
+            } */
+
             if(gamepad2.dpad_left) {
-                arm.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                arm.liftMotor.setPower(.5);
+                pixelMechanism.pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                pixelMechanism.pivotMotor.setPower(PIVOT_SPEED);
+                pivotPosition = pixelMechanism.pivotMotor.getCurrentPosition();
             } else if (gamepad2.dpad_right) {
-                arm.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                arm.liftMotor.setPower(-.5);
+                pixelMechanism.pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                pixelMechanism.pivotMotor.setPower(-PIVOT_SPEED);
+                pivotPosition = pixelMechanism.pivotMotor.getCurrentPosition();
             } else {
-                arm.liftMotor.setTargetPosition(arm.liftMotor.getCurrentPosition());
+                pixelMechanism.pivotMotor.setTargetPosition(pivotPosition);
+                pixelMechanism.pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                pixelMechanism.pivotMotor.setPower(PIVOT_SPEED);
+            }
+
+            if(gamepad2.dpad_up) {
+                arm.lift(LIFT_POWER);
+                liftPosition = arm.getLiftPos();
+            } else if (gamepad2.dpad_down) {
+                arm.lower(LIFT_POWER);
+                liftPosition = arm.getLiftPos();
+            } else {
+                arm.liftMotor.setTargetPosition(liftPosition);
                 arm.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 arm.liftMotor.setPower(.5);
             }
 
-            if(gamepad1.b) {
-                pixelMechanism.intakeLeft(pixelMechanism.LG_CLOSE_POS);
-                pixelMechanism.intakeRight(pixelMechanism.RG_CLOSE_POS);
-            }
 
-           /* if (gamepad1.right_bumper) {
-                pixelMechanism.resetIntake(this);
-            } */
-
-            /*if(gamepad1.left_bumper) { //open
-                pixelMechanism.intakeLeft(1);
-                pixelMechanism.intakeRight(0);
-            }
-            if(gamepad1.right_bumper) { //close
-                pixelMechanism.intakeLeft(0);
-                pixelMechanism.intakeRight(1);
-            } */
-            if (gamepad2.right_bumper) {
+           /* if (gamepad2.right_bumper) {
                 arm.onPressArm();
             } else {
                 arm.onReleaseArm();
@@ -243,27 +292,27 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
 
             if(gamepad2.dpad_down) {
                 extendingManually = true;
-                arm.extendBackward(EXTEND_POWER);
+                //arm.extendBackward(EXTEND_POWER);
             }
             else if (gamepad2.dpad_up) {
                 extendingManually = true;
-                arm.extendForward(EXTEND_POWER);
+                //arm.extendForward(EXTEND_POWER);
             }
             else {
                 if (extendingManually) {
-                    arm.stopExtend();
+                    //arm.stopExtend();
                 }
             }
 
             if(gamepad2.a) {
                 extendingManually = false;
-                arm.extendToPosition(arm.EXTEND_IN, EXTEND_POWER);
+                //arm.extendToPosition(arm.EXTEND_IN, EXTEND_POWER);
             }
 
             if(gamepad2.b) {
                 extendingManually = false;
-                arm.extendToPosition(arm.EXTEND_OUT, EXTEND_POWER);
-            }
+                //arm.extendToPosition(arm.EXTEND_OUT, EXTEND_POWER);
+            } */
 
             /*if(gamepad2.x) { //close
                 pixelMechanism.hookLeft(1);
