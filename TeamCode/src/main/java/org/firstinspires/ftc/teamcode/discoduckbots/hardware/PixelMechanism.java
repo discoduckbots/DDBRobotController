@@ -15,7 +15,9 @@ public class PixelMechanism {
     public DcMotor pivotMotor;
     public FlipStateMachine flipStateMachine;
 
-    //private int UP_POSITION = 0;
+    private boolean isInGrabbingPosition = false;
+    private boolean isLeftGrabberClosed = false;
+    private boolean isRightGrabberClosed = false;
     private boolean isClosedLG = true;
     private boolean isClosedRG = true;
     private boolean buttonPressLG = false;
@@ -23,160 +25,139 @@ public class PixelMechanism {
 
     public static int FLIP_DOWN = -115;
     public static int FLIP_UP_TELEOP = 112;
-    private static double FLIP_POWER = 1.0;
-    private static double PIVOT_POWER = 1.0;
-    private static int FLIP_SCORE = -281;
-    private static int FLIP_GRAB = 832;
-    private static int PIVOT_SCORE = 1218;
-    private static int PIVOT_GRAB = 108;
+    private static double FLIP_POWER = 0.5;
+    private static double PIVOT_POWER = 0.5;
+    public static final int FLIP_SCORE = -281;
+    public static final int FLIP_GRAB = 832;
+    public static final int PIVOT_SCORE = 1218;
+    public static final int PIVOT_GRAB = 108;
     public static double LG_OPEN_POS = 1;
     public static double LG_CLOSE_POS = 0;
-    public static double LG_HALF_POS = .5;
     public static double RG_OPEN_POS = 0;
     public static double RG_CLOSE_POS = 1;
-    public static double RG_HALF_POS = .5;
     private static int FLIP_UP = 0;
-
 
 
     public PixelMechanism(DcMotor flipMotor, DcMotor pivotMotor, Servo rightGrabber, Servo leftGrabber, FlipStateMachine flipStateMachine) {
         this.flipMotor = flipMotor;
-       // flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.pivotMotor = pivotMotor;
         this.rightGrabber = rightGrabber;
         this.leftGrabber = leftGrabber;
         this.flipStateMachine = flipStateMachine;
 
+        this.flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-       public void flipToPosition(int position, double power) {
+    public void flipToPosition(int position, double power) {
         flipMotor.setTargetPosition(position);
         flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         flipMotor.setPower(power);
     }
-        public void pivotToPosition(int position, double power) {
-            pivotMotor.setTargetPosition(position);
-            pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            pivotMotor.setPower(power);
-        }
-        public void intakeLeft(double position) {
-            leftGrabber.setPosition(position);
-        }
-        public void intakeRight(double position) {
-            rightGrabber.setPosition(position);
-        }
 
-        public void toScore() {
-            flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            pivotToPosition(PIVOT_SCORE, PIVOT_POWER);
-            flipToPosition(FLIP_SCORE, FLIP_POWER);
-        }
-        public void toGrab(LinearOpMode opmode) {
-            flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            intakeLeft(LG_CLOSE_POS);
-            intakeRight(RG_CLOSE_POS);
-            opmode.sleep(200);
-            flipToPosition(FLIP_GRAB, FLIP_POWER);
-            pivotToPosition(PIVOT_GRAB, PIVOT_POWER);
-        }
+    public void flipToGrabbingPosition(){
+        flipToPosition(FLIP_GRAB, FLIP_POWER);
+        isInGrabbingPosition = true;
+    }
 
-        public void grabFlipHook() {
-            flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeLeft(LG_CLOSE_POS);
-            intakeRight(RG_CLOSE_POS);
-            //maybe sleep(250);
-            flipToPosition(0, FLIP_POWER);
-            flipStateMachine.flippingUp();
-            //maybe sleep(250);
-            //hookLeft(LH_CLOSE_POS);
-            //hookRight(RH_CLOSE_POS);
-        }
+    public void flipToScoringPosition(){
+        flipToPosition(FLIP_SCORE, FLIP_POWER);
+        isInGrabbingPosition = false;
+    }
 
-        public void newGrabFlipHook(LinearOpMode opmode) {
-            flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeLeft(LG_CLOSE_POS);
-            intakeRight(RG_CLOSE_POS);
-            opmode.sleep(200);
-            flipToPosition(FLIP_UP_TELEOP, FLIP_POWER);
-        }
-        public void resetIntake(LinearOpMode opmode) {
-            flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeLeft(LG_CLOSE_POS);
-            intakeRight(RG_CLOSE_POS);
-            flipToPosition(0, FLIP_POWER);
-            opmode.sleep(200);
-            intakeLeft(1);
-            intakeRight(0);
-        }
+    public void pivotToPosition(int position, double power) {
+        pivotMotor.setTargetPosition(position);
+        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pivotMotor.setPower(power);
+    }
 
-
-        public void updateState() {
-            FlipStateMachine.State state = flipStateMachine.onFlipMovement(flipMotor);
-            if (state == FlipStateMachine.State.FLIP_UP) {
-                //hookRight(0);
-                //hookLeft(0);
-                //maybe sleep(250);
-                intakeLeft(LG_OPEN_POS);
-                intakeRight(RG_OPEN_POS);
-            }
+    public void pivotToGrabbingPosition(){
+        if (!areGrabbersClosed()){
+            closeGrabbers();
         }
-
-        public void dropPixels() {
-        //hookRight(RH_OPEN_POS);
-        //hookLeft(LH_OPEN_POS);
-        flipToPosition(FLIP_DOWN, FLIP_POWER);
+        if (!isInGrabbingPosition){
+            flipToGrabbingPosition();
         }
+        pivotToPosition(PIVOT_GRAB, PIVOT_POWER);
+    }
 
-        public void increasePosition(Servo servo, String servoName) {
-            servo.setPosition(servo.getPosition() + 0.01);
-            Log.d(servoName, "POS: " + servo.getPosition());
+    public void pivotToScoringPosition(){
+        if (!areGrabbersClosed()){
+            closeGrabbers();
         }
+        if (!isInGrabbingPosition){
+            flipToGrabbingPosition();
+        }
+        pivotToPosition(PIVOT_SCORE, PIVOT_POWER);
+    }
+
+    public void intakeLeft(double position) {
+        leftGrabber.setPosition(position);
+    }
+
+    public void intakeRight(double position) {
+        rightGrabber.setPosition(position);
+    }
+
+    public void toScore() {
+        flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pivotToPosition(PIVOT_SCORE, PIVOT_POWER);
+        flipToPosition(FLIP_SCORE, FLIP_POWER);
+    }
+
+    public void toGrab(LinearOpMode opmode) {
+        flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        intakeLeft(LG_CLOSE_POS);
+        intakeRight(RG_CLOSE_POS);
+        opmode.sleep(200);
+        flipToPosition(FLIP_GRAB, FLIP_POWER);
+        pivotToPosition(PIVOT_GRAB, PIVOT_POWER);
+    }
+
+    public void increasePosition(Servo servo, String servoName) {
+        servo.setPosition(servo.getPosition() + 0.01);
+        Log.d(servoName, "POS: " + servo.getPosition());
+    }
 
     public void decreasePosition(Servo servo, String servoName) {
         servo.setPosition(servo.getPosition() - 0.01);
         Log.d(servoName, "POS: " + servo.getPosition());
     }
 
-    public void onPressLeftGrabber() {
-        if (buttonPressLG) return;
-        buttonPressLG = true;
-        if (isClosedLG) {
-            isClosedLG = false;
-            intakeLeft(LG_OPEN_POS);
-        }
-        else {
-            isClosedLG = true;
-            intakeLeft(LG_CLOSE_POS);
-        }
-    }
-    public void onReleaseLeftGrabber() {
-        buttonPressLG = false;
-    }
-
-    public void onPressRightGrabber() {
-        if (buttonPressRG) return;
-        buttonPressRG = true;
-        if (isClosedRG) {
-            isClosedRG = false;
-            intakeRight(RG_OPEN_POS);
-        }
-        else {
-            isClosedRG = true;
-            intakeRight(RG_CLOSE_POS);
-        }
-    }
-    public void onReleaseRightGrabber() {
-        buttonPressRG = false;
-    }
-
-
     public void print() {
-        Log.d("FLIP_MOTOR:" , "pos : " + flipMotor.getCurrentPosition());
+        Log.d("FLIP_MOTOR:", "pos : " + flipMotor.getCurrentPosition());
         Log.d("FLIP_PIV", "flip pos : " + flipMotor.getCurrentPosition() +
                 " piv pos : " + pivotMotor.getCurrentPosition());
     }
 
+    public void openLeftGrabber(){
+        leftGrabber.setPosition(LG_OPEN_POS);
+        isLeftGrabberClosed = false;
+    }
+
+    public void closeLeftGrabber(){
+        leftGrabber.setPosition(LG_CLOSE_POS);
+        isLeftGrabberClosed = true;
+    }
+
+    public void openRightGrabber(){
+        rightGrabber.setPosition(RG_OPEN_POS);
+        isRightGrabberClosed = false;
+    }
+
+    public void closeRightGrabber(){
+        rightGrabber.setPosition(RG_CLOSE_POS);
+        isRightGrabberClosed = true;
+    }
+
+    private boolean areGrabbersClosed() {
+        return isRightGrabberClosed && isLeftGrabberClosed;
+    }
+
+    public void closeGrabbers(){
+        closeLeftGrabber();
+        closeRightGrabber();
+    }
 }

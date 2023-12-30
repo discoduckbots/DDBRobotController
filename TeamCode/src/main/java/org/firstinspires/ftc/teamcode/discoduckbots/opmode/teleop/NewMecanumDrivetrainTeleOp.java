@@ -126,18 +126,6 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
                 THROTTLE = .75;
             }
 
-            /*if (gamepad1.left_trigger > 0.05) {
-                hangMotor.setDirection(DcMotor.Direction.FORWARD);
-                hangMotor.setPower(gamepad1.left_trigger);
-            }
-            else if (gamepad1.right_trigger > 0.05) {
-                hangMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-                hangMotor.setPower(gamepad1.right_trigger);
-            }
-            else {
-                hangMotor.setPower(0);
-            } */
-
             //gamepad 2
 
             if (gamepad2.left_bumper) {
