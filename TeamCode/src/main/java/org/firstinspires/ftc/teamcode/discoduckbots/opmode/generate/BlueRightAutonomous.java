@@ -64,7 +64,7 @@ public class BlueRightAutonomous extends LinearOpMode{
         Trajectory trajectory_2_4 = drive.trajectoryBuilder(trajectory_3.end()).lineToLinearHeading( new Pose2d(21.627082076536883  ,87.64627067437824 ,4.696320747409352 ), velocityConstraint, accelerationConstraint).build();
 
         pixelMechanism.intakeLeft(pixelMechanism.LG_CLOSE_POS);
-        pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
+       // pixelMechanism.hookRight(pixelMechanism.RH_CLOSE_POS);
         waitForStart();
 
         if (opModeIsActive()) {
@@ -82,11 +82,11 @@ public class BlueRightAutonomous extends LinearOpMode{
                 sleep(350);
                 drive.followTrajectory(trajectory_2_3 );
                 sleep(350);
-                arm.extendToPosition(Arm.AUTOEXTEND, 0.5);
+                //arm.extendToPosition(Arm.AUTOEXTEND, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
                 sleep(2000);
                 drive.followTrajectory(trajectory_2_4 );
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+               // pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
 
             } else if (duckPos == DuckSensorTensorFlow.CENTER) {
                 pixelMechanism.flipToPosition(-124, 0.5);
@@ -100,12 +100,12 @@ public class BlueRightAutonomous extends LinearOpMode{
                 sleep(350);
                 sleep(350);
                 drive.followTrajectory(trajectory_1_2);
-                arm.extendToPosition(arm.AUTOEXTEND, 0.5);
+                //arm.extendToPosition(arm.AUTOEXTEND, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
                 //drive to board
                 drive.followTrajectory(trajectory_1_3);
                 sleep(350);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+                //pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(350);
                 //drive to side
 
@@ -120,11 +120,11 @@ public class BlueRightAutonomous extends LinearOpMode{
                 sleep(350);
                 drive.followTrajectory(trajectory_2);
                 sleep(350);
-                arm.extendToPosition(arm.AUTOEXTEND, 0.5);
+                //arm.extendToPosition(arm.AUTOEXTEND, 0.5);
                 arm.liftToPosition(arm.LIFT_ROW1, 0.5);
                 drive.followTrajectory(trajectory_3);
                 sleep(1000);
-                pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
+                //pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
                 sleep(1000);
 
             }

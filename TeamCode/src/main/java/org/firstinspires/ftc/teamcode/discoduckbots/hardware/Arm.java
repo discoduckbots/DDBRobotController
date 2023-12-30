@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class Arm {
     public DcMotor liftMotor;
 
-    public DcMotor extensionMotor;
+    //public DcMotor extensionMotor;
     //delete pivotMotor and rename to extensionMotor
-    private static double LIFT_POWER = .5;
+    private static double LIFT_POWER = 1.0;
     public static int AUTOEXTEND = 1933;
     public static int LIFT_ROW1 = 445;
     public static int LIFT_ROW2 = 1097;
@@ -25,34 +25,32 @@ public class Arm {
     private boolean isRow2 = false;
     private boolean isRow3 = false;
 
-    public Arm(DcMotor liftMotor, DcMotor extensionMotor) {
+    public Arm(DcMotor liftMotor) {
 
         this.liftMotor = liftMotor;
         this.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.extensionMotor = extensionMotor;
-        this.extensionMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.extensionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //this.extensionMotor = extensionMotor;
+        //this.extensionMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //this.extensionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //this.extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public int getLiftPos() {
         return liftMotor.getCurrentPosition();
     }
-    public int getExtensionPos() {
-        return extensionMotor.getCurrentPosition();
-    }
+
     public void lift(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor.setDirection(DcMotor.Direction.REVERSE);
+        //liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setPower(power);
         Log.d("LIFT ", "pos: " + liftMotor.getCurrentPosition());
     }
-
+//hi abigail -arthur
     public void lower(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor.setDirection(DcMotor.Direction.REVERSE);
+        //liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setPower(-power);
     }
 
@@ -67,27 +65,7 @@ public class Arm {
         liftMotor.setPower(power);
     }
 
-    public void extendForward(double power) {
-        extensionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extensionMotor.setPower(power);
-    }
 
-    public void extendBackward(double power) {
-        extensionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extensionMotor.setPower(power * -1);
-    }
-
-    public void stopExtend() {
-        extensionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extensionMotor.setPower(0);
-    }
-
-    public void extendToPosition(int position, double power) {
-        extensionMotor.setTargetPosition(position);
-        extensionMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        extensionMotor.setPower(power);
-
-    }
     public void onReleaseArm() {
         buttonPressArm = false;
     }
@@ -105,6 +83,6 @@ public class Arm {
 
     public void print() {
         Log.d("LIFT_MOTOR:" , "pos : " + liftMotor.getCurrentPosition());
-        Log.d("EXT_MOTOR:" , "pos : " + extensionMotor.getCurrentPosition());
+        //Log.d("EXT_MOTOR:" , "pos : " + extensionMotor.getCurrentPosition());
     }
 }
