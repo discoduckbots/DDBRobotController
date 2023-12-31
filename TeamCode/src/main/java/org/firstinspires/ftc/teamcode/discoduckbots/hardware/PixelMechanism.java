@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Line;
 import org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop.NewMecanumDrivetrainTeleOp;
 
 public class PixelMechanism {
@@ -36,7 +37,6 @@ public class PixelMechanism {
     public static double RG_OPEN_POS = 0;
     public static double RG_CLOSE_POS = 1;
     private static int FLIP_UP = 0;
-
 
     public PixelMechanism(DcMotor flipMotor, DcMotor pivotMotor, Servo rightGrabber, Servo leftGrabber, FlipStateMachine flipStateMachine) {
         this.flipMotor = flipMotor;
@@ -71,22 +71,24 @@ public class PixelMechanism {
         pivotMotor.setPower(power);
     }
 
-    public void pivotToGrabbingPosition(){
+    public void pivotToGrabbingPosition(LinearOpMode opMode) throws InterruptedException{
         if (!areGrabbersClosed()){
             closeGrabbers();
         }
         if (!isInGrabbingPosition){
             flipToGrabbingPosition();
+            opMode.sleep(200);
         }
         pivotToPosition(PIVOT_GRAB, PIVOT_POWER);
     }
 
-    public void pivotToScoringPosition(){
+    public void pivotToScoringPosition(LinearOpMode opMode) throws InterruptedException{
         if (!areGrabbersClosed()){
             closeGrabbers();
         }
         if (!isInGrabbingPosition){
             flipToGrabbingPosition();
+            opMode.sleep(200);
         }
         pivotToPosition(PIVOT_SCORE, PIVOT_POWER);
     }
@@ -99,21 +101,20 @@ public class PixelMechanism {
         rightGrabber.setPosition(position);
     }
 
-    public void toScore() {
-        flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        pivotToPosition(PIVOT_SCORE, PIVOT_POWER);
-        flipToPosition(FLIP_SCORE, FLIP_POWER);
+    public void toScore(LinearOpMode opmode) {
+        try {
+            pivotToScoringPosition(opmode);
+            flipToScoringPosition();
+        }
+        catch (InterruptedException e){/*eat exception*/}
     }
 
     public void toGrab(LinearOpMode opmode) {
-        flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        intakeLeft(LG_CLOSE_POS);
-        intakeRight(RG_CLOSE_POS);
-        opmode.sleep(200);
-        flipToPosition(FLIP_GRAB, FLIP_POWER);
-        pivotToPosition(PIVOT_GRAB, PIVOT_POWER);
+        try{
+            flipToGrabbingPosition();
+            pivotToGrabbingPosition(opmode);
+        }
+        catch (InterruptedException e){/*eat exception*/}
     }
 
     public void increasePosition(Servo servo, String servoName) {

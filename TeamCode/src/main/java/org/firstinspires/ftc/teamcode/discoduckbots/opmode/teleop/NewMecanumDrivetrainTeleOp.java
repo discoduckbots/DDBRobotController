@@ -175,7 +175,7 @@ public class NewMecanumDrivetrainTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.x) {
-                pixelMechanism.toScore();
+                pixelMechanism.toScore(this);
             }
 
             if (gamepad2.a) {
