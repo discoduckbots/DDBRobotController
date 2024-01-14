@@ -165,9 +165,6 @@ public class MecanumDrivetrain implements DrivetrainInterface {
         double throttledX = speedX * throttle;
         double throttledY = speedY * throttle;
         double throttledRotation = rotation * throttle;
-        mTelemetry.addData("x:","speedX");
-        mTelemetry.addData("y:","speedY");
-        mTelemetry.update();
         drive(throttledX, throttledY, throttledRotation);
     }
     public void turnLeft(LinearOpMode opMode, int degree){
@@ -190,10 +187,6 @@ public class MecanumDrivetrain implements DrivetrainInterface {
      * @param rotation - the x value of the joystick controlling the rotation
      */
     public void drive(double speedX, double speedY, double rotation) {
-        mTelemetry.addData("speedX", speedX);
-        mTelemetry.addData("speedY", speedY);
-        mTelemetry.addData("rotation", rotation);
-        mTelemetry.update();
 
         double fl = speedX + speedY + rotation;
         double fr = -speedX + speedY - rotation;
