@@ -5,15 +5,16 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.apache.commons.math3.geometry.euclidean.twod.Line;
-import org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop.NewMecanumDrivetrainTeleOp;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class PixelMechanism {
     public Servo leftGrabber;
     public Servo rightGrabber;
     public DcMotor flipMotor;
     public DcMotor pivotMotor;
+
+    public TouchSensor pivotTouchSensor;
+
     public FlipStateMachine flipStateMachine;
 
     private boolean isInGrabbingPosition = false;
@@ -24,25 +25,23 @@ public class PixelMechanism {
     private boolean buttonPressLG = false;
     private boolean buttonPressRG = false;
 
-    public static int FLIP_DOWN = -115;
-    public static int FLIP_UP_TELEOP = 112;
-    private static double FLIP_POWER = 0.5;
-    private static double PIVOT_POWER = 0.5;
+    public static final double FLIP_POWER = 0.5;
+    private static final double PIVOT_POWER = 0.5;
     public static final int FLIP_SCORE = -281;
     public static final int FLIP_GRAB = 832;
-    public static final int PIVOT_SCORE = 1218;
-    public static final int PIVOT_GRAB = 108;
-    public static double LG_OPEN_POS = 1;
-    public static double LG_CLOSE_POS = 0;
-    public static double RG_OPEN_POS = 0;
-    public static double RG_CLOSE_POS = 1;
-    private static int FLIP_UP = 0;
+    public static final int PIVOT_SCORE = -1218;
+    public static final int PIVOT_GRAB = 0;
+    public static final double LG_OPEN_POS = 1;
+    public static final double LG_CLOSE_POS = 0;
+    public static final double RG_OPEN_POS = 0;
+    public static final double RG_CLOSE_POS = 1;
 
-    public PixelMechanism(DcMotor flipMotor, DcMotor pivotMotor, Servo rightGrabber, Servo leftGrabber, FlipStateMachine flipStateMachine) {
+    public PixelMechanism(DcMotor flipMotor, DcMotor pivotMotor, Servo rightGrabber, Servo leftGrabber, TouchSensor pivotTouchSensor, FlipStateMachine flipStateMachine) {
         this.flipMotor = flipMotor;
         this.pivotMotor = pivotMotor;
         this.rightGrabber = rightGrabber;
         this.leftGrabber = leftGrabber;
+        this.pivotTouchSensor = pivotTouchSensor;
         this.flipStateMachine = flipStateMachine;
 
         this.flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -65,7 +64,15 @@ public class PixelMechanism {
         isInGrabbingPosition = false;
     }
 
+    public void resetPivotEncoder(){
+        pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     public void pivotToPosition(int position, double power) {
+        if (pivotTouchSensor.isPressed()){
+            resetPivotEncoder();
+        }
+
         pivotMotor.setTargetPosition(position);
         pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         pivotMotor.setPower(power);
@@ -93,6 +100,10 @@ public class PixelMechanism {
         pivotToPosition(PIVOT_SCORE, PIVOT_POWER);
     }
 
+    public boolean isPivotTouchSensorPressed(){
+        return pivotTouchSensor.isPressed();
+    }
+
     public void intakeLeft(double position) {
         leftGrabber.setPosition(position);
     }
@@ -115,6 +126,35 @@ public class PixelMechanism {
             pivotToGrabbingPosition(opmode);
         }
         catch (InterruptedException e){/*eat exception*/}
+    }
+
+    public void onePressGrabber() {
+        if(leftGrabber.getPosition() == LG_OPEN_POS || rightGrabber.getPosition() == RG_OPEN_POS) {
+           closeLeftGrabber();
+           closeRightGrabber();
+        }
+        else {
+            openLeftGrabber();
+            openRightGrabber();
+        }
+    }
+
+    public void onPressLeft() {
+        if (leftGrabber.getPosition() == LG_OPEN_POS) {
+            closeLeftGrabber();
+        }
+        else {
+            openLeftGrabber();
+        }
+    }
+
+    public void onPressRight() {
+        if (rightGrabber.getPosition() == RG_OPEN_POS) {
+            closeRightGrabber();
+        }
+        else {
+            openRightGrabber();
+        }
     }
 
     public void increasePosition(Servo servo, String servoName) {

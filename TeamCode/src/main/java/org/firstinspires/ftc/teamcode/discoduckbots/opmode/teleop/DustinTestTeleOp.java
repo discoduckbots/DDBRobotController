@@ -29,19 +29,11 @@
 
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 
-import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.LG_CLOSE_POS;
-import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.LG_OPEN_POS;
-import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.RG_CLOSE_POS;
-import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.RG_OPEN_POS;
-
-import android.util.Log;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.FlipStateMachine;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
@@ -60,11 +52,12 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Dustin Test Op Mode", group= "Linear Opmode")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Lydia Test Op Mode", group= "Linear Opmode")
 
 public class DustinTestTeleOp extends LinearOpMode {
 
-    private static final double LIFT_POWER = 0.5;
+    private static double THROTTLE = 0.75;
+    private static final double LIFT_POWER = 0.75;
     private static final double LOWER_POWER = 0.25;
 
     // Declare OpMode members.
@@ -72,6 +65,7 @@ public class DustinTestTeleOp extends LinearOpMode {
     private Intake intake = null;
     private Arm arm = null;
     private PixelMechanism pixelMechanism = null;
+    private MecanumDrivetrain mecanumDrivetrain = null;
 
     private int liftPosition = 0;
     boolean inGrabPosition = false;
@@ -82,6 +76,7 @@ public class DustinTestTeleOp extends LinearOpMode {
         HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
         arm = hardwareStore.getArm();
         pixelMechanism = hardwareStore.getPixelMechanism();
+        mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
         waitForStart();
 
         /* Put in Grab Position */
@@ -89,10 +84,17 @@ public class DustinTestTeleOp extends LinearOpMode {
         pixelMechanism.toGrab(this);
 
         while (opModeIsActive()) {
+
+            mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
+
+            //mecanumDrivetrain.drive(gamepad1.dpad_down, gamepad1.dpad_up, gamepad1.dpad_left, gamepad1.dpad_right, SLOW_THROTTLE);
+
             if(gamepad2.dpad_up) {
+                telemetry.addData("dpad up", "pressed");
                 arm.lower(LIFT_POWER);
                 liftPosition = arm.getLiftPos();
             } else if (gamepad2.dpad_down) {
+                telemetry.addData("dpad down", "pressed");
                 arm.lift(LOWER_POWER);
                 liftPosition = arm.getLiftPos();
             } else {
@@ -101,18 +103,36 @@ public class DustinTestTeleOp extends LinearOpMode {
                 arm.liftMotor.setPower(.5);
             }
 
-            if(gamepad2.left_bumper){
+            if(gamepad1.left_bumper){
                 pixelMechanism.openLeftGrabber();
+                pixelMechanism.openRightGrabber();
             }
-            else if (gamepad2.left_trigger > 0.5){
+            if (gamepad1.left_trigger > 0.5){
                 pixelMechanism.closeLeftGrabber();
             }
 
-            if (gamepad2.right_bumper){
+            if (gamepad1.right_bumper){
+                pixelMechanism.closeRightGrabber();
+                pixelMechanism.closeLeftGrabber();
+            }
+            if (gamepad1.right_trigger > 0.5){
+                pixelMechanism.closeRightGrabber();
+            }
+
+            if(gamepad2.left_bumper){
+                pixelMechanism.openLeftGrabber();
                 pixelMechanism.openRightGrabber();
             }
-            else if (gamepad2.right_trigger > 0.5){
+            if (gamepad2.left_trigger > 0.5){
+                pixelMechanism.openLeftGrabber();
+            }
+
+            if (gamepad2.right_bumper){
                 pixelMechanism.closeRightGrabber();
+                pixelMechanism.closeLeftGrabber();
+            }
+            if (gamepad2.right_trigger > 0.5){
+                pixelMechanism.openRightGrabber();
             }
 
             if (gamepad2.y){
@@ -123,7 +143,7 @@ public class DustinTestTeleOp extends LinearOpMode {
                 }
             }
 
-            if (gamepad2.x){
+            if (gamepad1.a){
                 if (!inGrabPosition){
                     inGrabPosition = true;
                     inScorePosition = false;
@@ -140,12 +160,22 @@ public class DustinTestTeleOp extends LinearOpMode {
                 inScorePosition = false;
             }
 
+            if(gamepad1.b) {
+                THROTTLE = .75;
+            }
+            if(gamepad1.x) {
+                THROTTLE = .4;
+            }
+
+            if (pixelMechanism.isPivotTouchSensorPressed()){
+                telemetry.addData("Pivot Touch Sensor", "pressed");
+                pixelMechanism.resetPivotEncoder();
+            }
 
             telemetry.addData("Pivot Position", pixelMechanism.pivotMotor.getCurrentPosition());
             telemetry.addData("Flip Position", pixelMechanism.flipMotor.getCurrentPosition());
+            telemetry.addData("Lift Position", arm.liftMotor.getCurrentPosition());
             telemetry.update();
-
-
         }
 
         telemetry.addData("MecanumDrivetrainTeleOp", "Stopping");
