@@ -31,6 +31,8 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode.generate;
 
 
 
+import static org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism.FLIP_POWER;
+
 import android.os.Environment;
 import android.util.Log;
 
@@ -140,13 +142,35 @@ public class NewAutonomousGenerator extends LinearOpMode {
             }
         }, hardwareStore.getBlockSensor());
 */
+        pixelMechanism.closeLeftGrabber();
+        pixelMechanism.closeRightGrabber();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        boolean gamepad1xRelease = true;
+        boolean gamepad1yRelease = true;
         while (opModeIsActive()) {
             arm.print();
             pixelMechanism.print();
-            pixelMechanism.intakeLeft(1);
+            //pixelMechanism.intakeLeft(1);
+
+            if (gamepad1.x && gamepad1xRelease) {
+                pixelMechanism.toScore(this);
+                gamepad1xRelease = false;
+            } else if (!gamepad1.x) {
+                gamepad1xRelease = true;
+            }
+
+            if (gamepad1.y && gamepad1yRelease) {
+                pixelMechanism.toGrab(this);
+                gamepad1yRelease = false;
+            } else if (!gamepad1.y) {
+                gamepad1yRelease = true;
+            }
+
+            if (gamepad1.a) {
+                pixelMechanism.flipToPosition(0, FLIP_POWER);
+            }
 
 
          //   Log.d("Pivot " , "pos : " + arm.getPivotCurrentPosition());
@@ -297,6 +321,8 @@ public class NewAutonomousGenerator extends LinearOpMode {
         shutDown();
     }
     public ArrayList<Trajectory> arrayList = new ArrayList<Trajectory>();
+    private int tries = 1;
+
     private void completeAutonomousPath(SampleMecanumDrive drive) {
         Pose2d newEnd= new Pose2d (0,0,0);
         Trajectory firstTrajectory = drive.trajectoryBuilder(arrayList.get(arrayList.size() - 1).end())
@@ -312,6 +338,10 @@ public class NewAutonomousGenerator extends LinearOpMode {
         }
         try {
             printStatement(arrayList);
+
+            tries++;
+            arrayList.clear();
+            
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("AUT", ":exception writing");
@@ -321,7 +351,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
 
     public void printStatement(ArrayList<Trajectory> arrayList) throws IOException {
         File path =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(path, "GeneratedAutonomous.java");
+        File file = new File(path, "GeneratedAutonomous_"+ tries + ".java");
         Log.d("AUT", "filepath " + file.getAbsolutePath());
         FileWriter writer = new FileWriter(file);
         try {
@@ -383,7 +413,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
 
 
 
-            String TRAJ_CODE = "        Trajectory trajectory_INDEX = drive.trajectoryBuilder(START)" +
+            String TRAJ_CODE = "        Trajectory trajectory_TRIES_INDEX = drive.trajectoryBuilder(START)" +
                     ".lineToLinearHeading( new Pose2d(XPOS,YPOS,ZPOS), " +
                     "velocityConstraint, accelerationConstraint)" +
                     ".build();\n";
@@ -396,23 +426,26 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 if (i == 0) {
                     startReplacement = "drive.getPoseEstimate()";
                 } else {
-                    startReplacement = "trajectory_INDEX.end()".replace("INDEX", (i - 1) + "");
+                    startReplacement = "trajectory_TRIES_INDEX.end()".replace("INDEX", (i - 1) + "");
+                    startReplacement = startReplacement.replace("TRIES", tries +"");
+
                 }
                 newValue = TRAJ_CODE.replace("INDEX", i + "");
                 newValue = newValue.replace("START", startReplacement);
                 newValue = newValue.replace("XPOS", arrayList.get(i).end().getX() + "  ");
                 newValue = newValue.replace("YPOS", arrayList.get(i).end().getY() + " ");
                 newValue = newValue.replace("ZPOS", arrayList.get(i).end().getHeading() + " ");
+                newValue = newValue.replace("TRIES", tries + "");
                 writer.append(newValue);
             }
 
             writer.append(AUTONOMOUS_PART2);
-            String FOLLOW = "        drive.followTrajectory(trajectory_INDEX);\n";
+            String FOLLOW = "        drive.followTrajectory(trajectory_TRIES_INDEX);\n";
             for (int i = 0; i < arrayList.size(); i++) {
 
                 String newerValue = " ";
                 newerValue = FOLLOW.replace("INDEX", i + " ");
-
+                newerValue = newerValue.replace("TRIES", tries + "");
                 writer.append(newerValue);
             }
 

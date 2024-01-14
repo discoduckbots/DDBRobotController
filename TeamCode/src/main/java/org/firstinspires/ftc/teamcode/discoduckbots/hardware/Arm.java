@@ -10,7 +10,8 @@ public class Arm {
 
     //public DcMotor extensionMotor;
     //delete pivotMotor and rename to extensionMotor
-    private static double LIFT_POWER = 1.0;
+    public static double LIFT_POWER = 1.0;
+    public static int LIFT_AUTO_POS = -608;
     public static int AUTOEXTEND = 1933;
     public static int LIFT_ROW1 = 445;
     public static int LIFT_ROW2 = 1097;
@@ -31,10 +32,6 @@ public class Arm {
         this.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //this.extensionMotor = extensionMotor;
-        //this.extensionMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //this.extensionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //this.extensionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public int getLiftPos() {
@@ -43,14 +40,12 @@ public class Arm {
 
     public void lift(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setPower(power);
         Log.d("LIFT ", "pos: " + liftMotor.getCurrentPosition());
     }
-//hi abigail -arthur
+
     public void lower(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setPower(-power);
     }
 
