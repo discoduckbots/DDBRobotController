@@ -52,9 +52,9 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Dustin Test Op Mode", group= "Linear Opmode")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Lydia Test Op Mode", group= "Linear Opmode")
 
-public class DustinTestTeleOp extends LinearOpMode {
+public class LydiaZakTeleop extends LinearOpMode {
 
     private static double THROTTLE = 0.75;
     private static final double LIFT_POWER = 0.75;
@@ -104,19 +104,11 @@ public class DustinTestTeleOp extends LinearOpMode {
             }
 
             if(gamepad1.left_bumper){
-                pixelMechanism.openLeftGrabber();
-                pixelMechanism.openRightGrabber();
-            }
-            if (gamepad1.left_trigger > 0.5){
-                pixelMechanism.closeLeftGrabber();
+                THROTTLE = .75;
             }
 
             if (gamepad1.right_bumper){
-                pixelMechanism.closeRightGrabber();
-                pixelMechanism.closeLeftGrabber();
-            }
-            if (gamepad1.right_trigger > 0.5){
-                pixelMechanism.closeRightGrabber();
+                THROTTLE = .3;
             }
 
             if(gamepad2.left_bumper){
@@ -143,7 +135,7 @@ public class DustinTestTeleOp extends LinearOpMode {
                 }
             }
 
-            if (gamepad1.a){
+            if(gamepad2.x) {
                 if (!inGrabPosition){
                     inGrabPosition = true;
                     inScorePosition = false;
@@ -151,26 +143,20 @@ public class DustinTestTeleOp extends LinearOpMode {
                 }
             }
 
-            if (gamepad2.b){
-                pixelMechanism.flipToScoringPosition();
+            if(gamepad2.y) {
+                if (!inScorePosition){
+                    inScorePosition = true;
+                    inGrabPosition = false;
+                    pixelMechanism.toScore(this);
+                }
             }
 
-            if (gamepad2.a){
-                pixelMechanism.flipToGrabbingPosition();
-                inScorePosition = false;
-            }
 
-            if(gamepad1.b) {
-                THROTTLE = .75;
-            }
-            if(gamepad1.x) {
-                THROTTLE = .4;
-            }
 
-            if (pixelMechanism.isPivotTouchSensorPressed()){
-                telemetry.addData("Pivot Touch Sensor", "pressed");
-                pixelMechanism.resetPivotEncoder();
-            }
+//            if (pixelMechanism.isPivotTouchSensorPressed()){
+//                telemetry.addData("Pivot Touch Sensor", "pressed");
+//                pixelMechanism.resetPivotEncoder();
+//            }
 
             telemetry.addData("Pivot Position", pixelMechanism.pivotMotor.getCurrentPosition());
             telemetry.addData("Flip Position", pixelMechanism.flipMotor.getCurrentPosition());
