@@ -45,11 +45,12 @@ public class RedLeftAutonomous extends LinearOpMode{
                 DriveConstants.TRACK_WIDTH);
         TrajectoryAccelerationConstraint accelerationConstraint =
                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);
-        Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(30.542710554317654  ,-2.764686613778897 ,6.226377395057771 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_1_0.end()).lineToLinearHeading( new Pose2d(18.394201013620666  ,-2.3755652520048045 ,6.2361322890584745 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1_1.end()).lineToLinearHeading( new Pose2d(24.574243185525738  ,-42.55822590984887 ,1.5750144086007438 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_1_2.end()).forward(3, velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_4 = drive.trajectoryBuilder(trajectory_1_3.end()).strafeLeft(20,velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(0.2010497776976018  ,-5.450504644317084 ,6.273812958041638 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_1_0.end()).lineToLinearHeading( new Pose2d(28.417880045227395  ,5.000156793086839 ,1.6145305933334582 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1_1.end()).lineToLinearHeading( new Pose2d(29.017486775266118  ,-37.53386919150146 ,1.6175909522356484 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_1_2.end()).lineToLinearHeading( new Pose2d(29.09862928787415  ,-39.38868838305406 ,1.6139567760393057 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_4 = drive.trajectoryBuilder(trajectory_1_3.end()).lineToLinearHeading( new Pose2d(28.952786591363083  ,-35.828460079553125 ,1.621416400863378 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_5 = drive.trajectoryBuilder(trajectory_1_4.end()).lineToLinearHeading( new Pose2d(1.4509636591244899  ,-37.81163016697837 ,1.6986904631435316 ), velocityConstraint, accelerationConstraint).build();
         pixelMechanism.closeLeftGrabber();
         pixelMechanism.closeRightGrabber();
         waitForStart();
@@ -58,20 +59,20 @@ public class RedLeftAutonomous extends LinearOpMode{
         if (opModeIsActive()) {
             pixelMechanism.toGrab(this);
             drive.followTrajectory(trajectory_1_0 );
+            drive.followTrajectory(trajectory_1_1 );
             pixelMechanism.openLeftGrabber();
             sleep(1000);
             pixelMechanism.toScore(this);
-            drive.followTrajectory(trajectory_1_1 );
-            arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_POWER);
             drive.followTrajectory(trajectory_1_2 );
+            arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_POWER);
+            drive.followTrajectory(trajectory_1_3);
             pixelMechanism.openRightGrabber();
             sleep(1000);
             pixelMechanism.closeRightGrabber();
-
-            drive.followTrajectory(trajectory_1_3);
+            drive.followTrajectory(trajectory_1_4);
             arm.liftToPosition(0, .5);
             pixelMechanism.toGrab(this);
-            drive.followTrajectory(trajectory_1_4);
+            drive.followTrajectory(trajectory_1_5);
             pixelMechanism.pivotToPosition(0, .5);
             pixelMechanism.flipToPosition(0, .5);
 

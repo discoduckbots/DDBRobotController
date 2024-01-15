@@ -83,11 +83,13 @@ public class NewAutonomousGenerator extends LinearOpMode {
     private Intake intake = null;
    // private Arm arm = null;
    // private PixelGrabber pixelGrabber = null;
-    private static double THROTTLE = 0.7;
-    private static double STRAFE_THROTTLE = 0.7;
+    private static double THROTTLE = 0.5;
+    private static double STRAFE_THROTTLE = 0.5;
     private static double TURN_THROTTLE = 0.7;
     private static double intakeSpeed = .81;
     private static final double ARM_SPEED = 1;
+    private static final double LIFT_POWER = 0.75;
+    private static final double LOWER_POWER = 0.25;
     boolean leftBumperPressed = false;
     boolean rightBumperPressed = false;
     TrajectoryVelocityConstraint velocityConstraint = SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * THROTTLE,
@@ -99,6 +101,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private Arm arm;
     private PixelMechanism pixelMechanism;
+    private int liftPosition = 0;
 
 
     @Override
@@ -149,9 +152,14 @@ public class NewAutonomousGenerator extends LinearOpMode {
 
         boolean gamepad1xRelease = true;
         boolean gamepad1yRelease = true;
+        boolean gamepad1DpadLeftRelease = true;
+        boolean gamepad1DpadRightRelease = true;
+        boolean gamepad1LeftTriggerRelease = true;
+        boolean gamepad1RightTriggerRelease = true;
         while (opModeIsActive()) {
             arm.print();
             pixelMechanism.print();
+            Log.d("Tries", "" + tries);
             //pixelMechanism.intakeLeft(1);
 
             if (gamepad1.x && gamepad1xRelease) {
@@ -172,35 +180,50 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 pixelMechanism.flipToPosition(0, FLIP_POWER);
             }
 
-
          //   Log.d("Pivot " , "pos : " + arm.getPivotCurrentPosition());
          //   Log.d("Motor " , "pos : " + arm.getLiftMotorPosition());
 
-            if (gamepad2.dpad_up) {
-                Log.d("dpadup " , "setpower 0.45");
-                pixelMechanism.flipMotor.setPower(0.45);
-            }
-            else if (gamepad2.dpad_down) {
-                pixelMechanism.flipMotor.setPower(-0.45);
-                Log.d("dpadup " , "setpower - 0.45");
-            }
-            else {
-                Log.d("dpadup " , "setpower 0");
-                pixelMechanism.flipMotor.setPower(0);
-            }
-            if (gamepad2.dpad_left) {
-                pixelMechanism.intakeLeft(1);
-            }
-            if (gamepad2.dpad_right) {
-                pixelMechanism.intakeLeft(1);
+            if(gamepad1.dpad_up) {
+                telemetry.addData("dpad up", "pressed");
+                arm.lower(LIFT_POWER);
+                liftPosition = arm.getLiftPos();
+            } else if (gamepad1.dpad_down) {
+                telemetry.addData("dpad down", "pressed");
+                arm.lift(LOWER_POWER);
+                liftPosition = arm.getLiftPos();
+            } else {
+                arm.liftMotor.setTargetPosition(liftPosition);
+                arm.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.liftMotor.setPower(.5);
             }
 
-            if (gamepad1.dpad_up) {
-                arm.lift(.5);
-            } else if (gamepad1.dpad_down) {
-                arm.lift(-0.5);
-            }else {
-                arm.stopLift();
+            if (gamepad1.dpad_left && gamepad1DpadLeftRelease) {
+                pixelMechanism.closeGrabbers();
+                gamepad1DpadLeftRelease = false;
+            } else {
+                gamepad1DpadLeftRelease = true;
+            }
+
+            if (gamepad1.dpad_right && gamepad1DpadRightRelease) {
+                pixelMechanism.openLeftGrabber();
+                pixelMechanism.openRightGrabber();
+                gamepad1DpadRightRelease = false;
+            } else {
+                gamepad1DpadRightRelease = true;
+            }
+
+            if (gamepad1.left_trigger > 0 && gamepad1LeftTriggerRelease) {
+                tries++;
+                gamepad1LeftTriggerRelease = false;
+            } else {
+                gamepad1LeftTriggerRelease = true;
+            }
+
+            if (gamepad1.right_trigger > 0 && gamepad1RightTriggerRelease) {
+                tries = 0;
+                gamepad1RightTriggerRelease = false;
+            } else {
+                gamepad1RightTriggerRelease = true;
             }
 
             /* Gamepad 1 */
@@ -219,73 +242,13 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 telemetry.addData("x", poseEstimate.getX());
                 telemetry.addData("y", poseEstimate.getY());
                 telemetry.addData("heading", poseEstimate.getHeading());
+                telemetry.addData("Tries", tries);
                 telemetry.update();
                 Log.d("LOC", "x = " + poseEstimate.getX() +
                         " y= " + poseEstimate.getY() +
                         " heading " + Math.toDegrees(poseEstimate.getHeading()));
             }
-            if (gamepad2.dpad_down) {
-                coneArmAtEncoderPos = false;
-             //   coneArm.lower(ARM_SPEED);
-            }
-            else if (gamepad2.dpad_up) {
-                coneArmAtEncoderPos = false;
-              //  coneArm.lift(ARM_SPEED);
-            }
-            else if (!coneArmAtEncoderPos){
-             //   coneArm.stop();
-                //coneArm.holdPosition();
-            }
 
-
-
-            if (gamepad2.right_bumper) {
-                coneArmAtEncoderPos = true;
-               // coneArm.liftByEncoder(2900);
-            }
-
-            if (gamepad2.left_bumper) {
-                coneArmAtEncoderPos = true;
-               // coneArm.liftToMedium();
-            }
-            if (gamepad2.left_trigger > 0) {
-                coneArmAtEncoderPos = true;
-                // coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-               // coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-
-
-            if (gamepad2.dpad_left) {
-                coneTurretEncoderPos = false;
-               // coneArm.pivotRight();
-            }
-            else if (gamepad2.dpad_right) {
-                coneTurretEncoderPos = false;
-               // coneArm.pivotLeft();
-            }   else if (!coneTurretEncoderPos){
-                //coneArm.stopPivot();
-            }
-
-
-            if (gamepad2.x) {
-                coneTurretEncoderPos = true;
-               // coneArm.pivotLeft90();
-            }
-            if (gamepad2.y) {
-                coneTurretEncoderPos = true;
-             //   coneArm.pivotCenter();
-            }
-            if (gamepad2.b) {
-                coneTurretEncoderPos = true;
-              //  coneArm.pivotRight90();
-            }
-
-            if (gamepad2.a) {
-               // coneArm.onPress();
-                //  coneArmAtEncoderPos = false;
-            } else {
-               // coneArm.onRelease();
-            }
 
             if (gamepad1.left_bumper) {
                 Log.d("GEN", "LB " + gamepad1.left_bumper + " LBP " + leftBumperPressed);
@@ -307,14 +270,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 rightBumperPressed = false;
             }
 
-            /*if (turretSensor.isPressed()) {
-                coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }*/
         }
-
-
-
 
         telemetry.addData("MecanumOdometryTeleOp", "Stopping");
 
@@ -339,7 +295,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
         try {
             printStatement(arrayList);
 
-            tries++;
+           // tries++;
             arrayList.clear();
             
         } catch (IOException e) {
@@ -401,7 +357,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
                     "                DriveConstants.MAX_ANG_VEL * AUTONOMOUS_SPEED,\n" +
                     "                DriveConstants.TRACK_WIDTH);\n" +
                     "        TrajectoryAccelerationConstraint accelerationConstraint =\n" +
-                    "                SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);";
+                    "                SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);\n";
 
             String AUTONOMOUS_PART2 = "        waitForStart();\n" +
                     "\n" +
@@ -439,6 +395,8 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 writer.append(newValue);
             }
 
+            writer.append("        pixelMechanism.closeLeftGrabber();\n" +
+                    "        pixelMechanism.closeRightGrabber();\n");
             writer.append(AUTONOMOUS_PART2);
             String FOLLOW = "        drive.followTrajectory(trajectory_TRIES_INDEX);\n";
             for (int i = 0; i < arrayList.size(); i++) {
