@@ -30,11 +30,9 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DroneLauncher;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
@@ -53,129 +51,202 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Naveah Test Op Mode", group= "Linear Opmode")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test Op Mode", group= "Linear Opmode")
 
-public class ConnorNevaehTeleop extends LinearOpMode {
+public class TestTeleOp extends LinearOpMode {
 
     private static double THROTTLE = 0.75;
     private static final double LIFT_POWER = 0.75;
-    private static double LOWER_POWER = 0.25;
+    private static final double LOWER_POWER = 0.25;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private Intake intake = null;
     private Arm arm = null;
     private PixelMechanism pixelMechanism = null;
-    private DroneLauncher droneLauncher = null;
     private MecanumDrivetrain mecanumDrivetrain = null;
 
     private int liftPosition = 0;
     boolean inGrabPosition = false;
     boolean inScorePosition = false;
+    private int pivotPosition = 0;
+    private int flipPosition = 0;
 
     @Override
     public void runOpMode() {
         HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
         arm = hardwareStore.getArm();
         pixelMechanism = hardwareStore.getPixelMechanism();
-        droneLauncher = hardwareStore.getDroneLauncher();
         mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
         waitForStart();
 
         /* Put in Grab Position */
         inGrabPosition = true;
-        pixelMechanism.toGrab(this);
+        //pixelMechanism.toGrab(this);
 
         while (opModeIsActive()) {
 
             mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
 
-            //mecanumDrivetrain.drive(gamepad1.dpad_down, gamepad1.dpad_up, gamepad1.dpad_left, gamepad1.dpad_right, SLOW_THROTTLE);
-
-            if(Math.abs(gamepad2.left_stick_y) > 0.05) {
+           if(gamepad2.dpad_up) {
                 telemetry.addData("dpad up", "pressed");
-                arm.lift(gamepad2.left_stick_y);
-                liftPosition = arm.getLiftPos();
+                pixelMechanism.liftPivot(LIFT_POWER);
+                pivotPosition = pixelMechanism.getPivotPos();
+            } else if (gamepad2.dpad_down) {
+                telemetry.addData("dpad down", "pressed");
+                pixelMechanism.lowerPivot(LOWER_POWER);
+                pivotPosition = pixelMechanism.getPivotPos();
             } else {
-                arm.liftMotor1.setTargetPosition(liftPosition);
-                arm.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm.liftMotor1.setPower(.5);
+
+                pixelMechanism.pivotMotor.setPower(0);
             }
 
-            if(gamepad1.left_bumper){
-                pixelMechanism.openLeftGrabber();
-                pixelMechanism.openRightGrabber();
+            if(gamepad2.dpad_right) {
+                telemetry.addData("dpad up", "pressed");
+                pixelMechanism.liftFlip(LIFT_POWER);
+                flipPosition = pixelMechanism.getFlipPos();
+            } else if (gamepad2.dpad_left) {
+                telemetry.addData("dpad down", "pressed");
+                pixelMechanism.lowerFlip(LOWER_POWER);
+                flipPosition = pixelMechanism.getFlipPos();
+            } else {
+
+                pixelMechanism.flipMotor.setPower(0);
+            } /*
+            if (gamepad1.a) {
+               frontLeft.setPower(0.5);
             }
-            if (gamepad1.left_trigger > 0.5){
-                pixelMechanism.openLeftGrabber();
+            else {
+                frontLeft.setPower(0);
+            }
+
+            if (gamepad1.b) {
+                frontBack.setPower(0.5);
+            }
+            else {
+                frontBack.setPower(0);
             }
 
             if (gamepad1.x) {
-                droneLauncher.release();
+                backLeft.setPower(0.5);
             }
+            else {
+                backLeft.setPower(0);
+            } */
 
-            if (gamepad1.y) {
-                droneLauncher.launch();
+
+
+            if (gamepad2.a) {
+                pixelMechanism.toStack();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
-
-            if (gamepad1.right_bumper){
-                pixelMechanism.closeRightGrabber();
+            if (gamepad2.x) {
+                pixelMechanism.openLeftGrabber();
+            }
+            if (gamepad2.y) {
                 pixelMechanism.closeLeftGrabber();
             }
-            if (gamepad1.right_trigger > 0.5){
-                pixelMechanism.openRightGrabber();
-            }
 
-            if(gamepad2.left_bumper){
-                pixelMechanism.openLeftGrabber();
-                pixelMechanism.openRightGrabber();
+           /* if (gamepad2.dpad_up) {
+                arm.lift(0.5);
             }
-            if (gamepad2.left_trigger > 0.5){
-                pixelMechanism.openLeftGrabber();
+            else if (gamepad2.dpad_down) {
+                arm.lower(0.5);
             }
-
-            if (gamepad2.right_bumper){
-                pixelMechanism.closeRightGrabber();
-                pixelMechanism.closeLeftGrabber();
-            }
-            if (gamepad2.right_trigger > 0.5){
-                pixelMechanism.openRightGrabber();
-            }
-
-            if (gamepad2.y){
-                if (!inScorePosition){
-                    inScorePosition = true;
-                    inGrabPosition = false;
-                    pixelMechanism.toScore(this);
-                }
-            }
-
-            if(gamepad2.x) {
-                if (!inGrabPosition){
-                    inGrabPosition = true;
-                    inScorePosition = false;
-                    pixelMechanism.toGrab(this);
-                }
-            }
-            if(gamepad2.y) {
-                if (!inScorePosition){
-                    inScorePosition = true;
-                    inGrabPosition = false;
-                    pixelMechanism.toScore(this);
-                }
-            }
-
-            if(gamepad1.b) {
-                THROTTLE = .75;
-            }
-            if(gamepad1.x) {
-                THROTTLE = .4;
-            }
-
-//            if (pixelMechanism.isPivotTouchSensorPressed()){
-//                telemetry.addData("Pivot Touch Sensor", "pressed");
-//                pixelMechanism.resetPivotEncoder();
-//            }
+            else {
+                arm.stopLift();
+            } */
 
             telemetry.addData("Pivot Position", pixelMechanism.pivotMotor.getCurrentPosition());
             telemetry.addData("Flip Position", pixelMechanism.flipMotor.getCurrentPosition());

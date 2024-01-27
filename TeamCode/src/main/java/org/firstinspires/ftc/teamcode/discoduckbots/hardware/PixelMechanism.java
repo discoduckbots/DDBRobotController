@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Line;
+
 public class PixelMechanism {
     public Servo leftGrabber;
     public Servo rightGrabber;
@@ -27,14 +29,15 @@ public class PixelMechanism {
 
     public static final double FLIP_POWER = 0.5;
     private static final double PIVOT_POWER = 0.5;
+    public static final int FLIP_INIT = 0;
     public static final int FLIP_SCORE = -281;
     public static final int FLIP_GRAB = 832;
     public static final int PIVOT_SCORE = -1218;
     public static final int PIVOT_GRAB = 0;
-    public static final double LG_OPEN_POS = 1;
-    public static final double LG_CLOSE_POS = 0;
-    public static final double RG_OPEN_POS = 0;
-    public static final double RG_CLOSE_POS = 1;
+    public static final double LG_OPEN_POS = 0;
+    public static final double LG_CLOSE_POS = 1;
+    public static final double RG_OPEN_POS = 1;
+    public static final double RG_CLOSE_POS = 0;
 
     public PixelMechanism(DcMotor flipMotor, DcMotor pivotMotor, Servo rightGrabber, Servo leftGrabber, TouchSensor pivotTouchSensor, FlipStateMachine flipStateMachine) {
         this.flipMotor = flipMotor;
@@ -47,7 +50,19 @@ public class PixelMechanism {
         this.flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+    public int getFlipPos() {
+        return flipMotor.getCurrentPosition();
+    }
+    public void liftFlip(double power) {
+        flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flipMotor.setPower(power);
+        Log.d("PIVOT ", "pos: " + pivotMotor.getCurrentPosition());
+    }
 
+    public void lowerFlip(double power) {
+        flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flipMotor.setPower(-power);
+    }
     public void flipToPosition(int position, double power) {
         flipMotor.setTargetPosition(position);
         flipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -63,7 +78,19 @@ public class PixelMechanism {
         flipToPosition(FLIP_SCORE, FLIP_POWER);
         isInGrabbingPosition = false;
     }
+    public void liftPivot(double power) {
+        pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pivotMotor.setPower(power);
+        Log.d("PIVOT ", "pos: " + pivotMotor.getCurrentPosition());
+    }
 
+    public int getPivotPos() {
+        return pivotMotor.getCurrentPosition();
+    }
+    public void lowerPivot(double power) {
+        pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pivotMotor.setPower(-power);
+    }
     public void resetPivotEncoder(){
         pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -87,6 +114,12 @@ public class PixelMechanism {
             opMode.sleep(200);
         }
         pivotToPosition(PIVOT_GRAB, PIVOT_POWER);
+    }
+
+    public void pivotToInitPosition(LinearOpMode opMode) throws InterruptedException{
+        pivotToGrabbingPosition(opMode);
+
+        flipToPosition(FLIP_INIT, FLIP_POWER);
     }
 
     public void pivotToScoringPosition(LinearOpMode opMode) throws InterruptedException{
@@ -120,12 +153,24 @@ public class PixelMechanism {
         catch (InterruptedException e){/*eat exception*/}
     }
 
+    public void toInit(LinearOpMode opmode){
+        try{
+            pivotToInitPosition(opmode);
+        }
+        catch (InterruptedException e){/*eat exception*/}
+    }
+
     public void toGrab(LinearOpMode opmode) {
         try{
             flipToGrabbingPosition();
             pivotToGrabbingPosition(opmode);
         }
         catch (InterruptedException e){/*eat exception*/}
+    }
+
+    public void toStack() {
+        flipToPosition(1022, FLIP_POWER);
+        pivotToPosition(-141, PIVOT_POWER);
     }
 
     public void onePressGrabber() {

@@ -42,12 +42,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
@@ -56,8 +52,6 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,6 +96,9 @@ public class NewAutonomousGenerator extends LinearOpMode {
     private Arm arm;
     private PixelMechanism pixelMechanism;
     private int liftPosition = 0;
+    private int liftPosition2 = 0; 
+    private int pivotPosition = 0;
+    private int flipPosition = 0;
 
 
     @Override
@@ -187,15 +184,22 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 telemetry.addData("dpad up", "pressed");
                 arm.lower(LIFT_POWER);
                 liftPosition = arm.getLiftPos();
+                liftPosition2 = arm.getLiftPos2();
             } else if (gamepad1.dpad_down) {
                 telemetry.addData("dpad down", "pressed");
                 arm.lift(LOWER_POWER);
                 liftPosition = arm.getLiftPos();
+                liftPosition2 = arm.getLiftPos2();
             } else {
-                arm.liftMotor.setTargetPosition(liftPosition);
-                arm.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm.liftMotor.setPower(.5);
+                arm.liftMotor1.setTargetPosition(liftPosition);
+                arm.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.liftMotor2.setTargetPosition(liftPosition2);
+                arm.liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.liftMotor1.setPower(.5);
+                arm.liftMotor2.setPower(.5);
             }
+
+
 
             if (gamepad1.dpad_left && gamepad1DpadLeftRelease) {
                 pixelMechanism.closeGrabbers();
@@ -212,9 +216,11 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 gamepad1DpadRightRelease = true;
             }
 
-            if (gamepad1.left_trigger > 0 && gamepad1LeftTriggerRelease) {
-                tries++;
-                gamepad1LeftTriggerRelease = false;
+            if (gamepad1.left_trigger > 0 ) {
+                if (gamepad1LeftTriggerRelease) {
+                    tries++;
+                    gamepad1LeftTriggerRelease = false;
+                }
             } else {
                 gamepad1LeftTriggerRelease = true;
             }
@@ -243,6 +249,8 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 telemetry.addData("y", poseEstimate.getY());
                 telemetry.addData("heading", poseEstimate.getHeading());
                 telemetry.addData("Tries", tries);
+                telemetry.addData("Pivot Pos:" , pixelMechanism.pivotMotor.getCurrentPosition());
+                telemetry.addData("FLIP Pos:", pixelMechanism.flipMotor.getCurrentPosition());
                 telemetry.update();
                 Log.d("LOC", "x = " + poseEstimate.getX() +
                         " y= " + poseEstimate.getY() +
