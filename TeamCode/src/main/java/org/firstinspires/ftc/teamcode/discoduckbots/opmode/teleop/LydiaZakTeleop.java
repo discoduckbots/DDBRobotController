@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Arm;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DroneLauncher;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
@@ -58,16 +59,18 @@ public class LydiaZakTeleop extends LinearOpMode {
 
     private static double THROTTLE = 0.75;
     private static final double LIFT_POWER = 0.75;
-    private static final double LOWER_POWER = 0.25;
+    private static double LOWER_POWER = 0.25;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private Intake intake = null;
     private Arm arm = null;
     private PixelMechanism pixelMechanism = null;
+    private DroneLauncher droneLauncher = null;
     private MecanumDrivetrain mecanumDrivetrain = null;
 
     private int liftPosition = 0;
+    private int liftPosition2 = 0;
     boolean inGrabPosition = false;
     boolean inScorePosition = false;
 
@@ -76,6 +79,7 @@ public class LydiaZakTeleop extends LinearOpMode {
         HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
         arm = hardwareStore.getArm();
         pixelMechanism = hardwareStore.getPixelMechanism();
+        droneLauncher = hardwareStore.getDroneLauncher();
         mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
         waitForStart();
 
@@ -93,14 +97,19 @@ public class LydiaZakTeleop extends LinearOpMode {
                 telemetry.addData("dpad up", "pressed");
                 arm.lower(LIFT_POWER);
                 liftPosition = arm.getLiftPos();
+                liftPosition2 = arm.getLiftPos2();
             } else if (gamepad2.dpad_down) {
                 telemetry.addData("dpad down", "pressed");
                 arm.lift(LOWER_POWER);
                 liftPosition = arm.getLiftPos();
+                liftPosition2 = arm.getLiftPos2();
             } else {
-                arm.liftMotor.setTargetPosition(liftPosition);
-                arm.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm.liftMotor.setPower(.5);
+                arm.liftMotor1.setTargetPosition(liftPosition);
+                arm.liftMotor2.setTargetPosition(liftPosition2);
+                arm.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.liftMotor1.setPower(0.5);
+                arm.liftMotor2.setPower(0.5);
             }
 
             if(gamepad1.left_bumper){
@@ -109,6 +118,14 @@ public class LydiaZakTeleop extends LinearOpMode {
 
             if (gamepad1.right_bumper){
                 THROTTLE = .3;
+            }
+
+            if (gamepad1.x) {
+                droneLauncher.release();
+            }
+
+            if (gamepad1.y) {
+                droneLauncher.launch();
             }
 
             if(gamepad2.left_bumper){
@@ -151,7 +168,9 @@ public class LydiaZakTeleop extends LinearOpMode {
                 }
             }
 
-
+            if (gamepad2.a) {
+                LOWER_POWER = 0.85;
+            }
 
 //            if (pixelMechanism.isPivotTouchSensorPressed()){
 //                telemetry.addData("Pivot Touch Sensor", "pressed");
@@ -160,7 +179,10 @@ public class LydiaZakTeleop extends LinearOpMode {
 
             telemetry.addData("Pivot Position", pixelMechanism.pivotMotor.getCurrentPosition());
             telemetry.addData("Flip Position", pixelMechanism.flipMotor.getCurrentPosition());
-            telemetry.addData("Lift Position", arm.liftMotor.getCurrentPosition());
+            telemetry.addData("Lift Position", arm.liftMotor1.getCurrentPosition());
+            telemetry.addData("Lift Position", arm.liftMotor2.getCurrentPosition());
+            telemetry.addData("Hold Servo", droneLauncher.holdServo.getPosition());
+            telemetry.addData("Drone Servo", droneLauncher.droneServo.getPosition());
             telemetry.update();
         }
 

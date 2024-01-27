@@ -98,9 +98,9 @@ public class DustinTestTeleOp extends LinearOpMode {
                 arm.lift(LOWER_POWER);
                 liftPosition = arm.getLiftPos();
             } else {
-                arm.liftMotor.setTargetPosition(liftPosition);
-                arm.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm.liftMotor.setPower(.5);
+                arm.liftMotor1.setTargetPosition(liftPosition);
+                arm.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.liftMotor1.setPower(.5);
             }
 
             if(gamepad1.left_bumper){
@@ -174,7 +174,7 @@ public class DustinTestTeleOp extends LinearOpMode {
 
             telemetry.addData("Pivot Position", pixelMechanism.pivotMotor.getCurrentPosition());
             telemetry.addData("Flip Position", pixelMechanism.flipMotor.getCurrentPosition());
-            telemetry.addData("Lift Position", arm.liftMotor.getCurrentPosition());
+            telemetry.addData("Lift Position", arm.liftMotor1.getCurrentPosition());
             telemetry.update();
         }
 

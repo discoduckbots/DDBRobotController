@@ -88,7 +88,7 @@ public class RedRightAutonomous extends LinearOpMode{
                 drive.followTrajectory(trajectory_2_1 );
                 sleep(350);
                 //arm.extendToPosition(arm.EXTEND_OUT, 0.5);
-                arm.liftToPosition(arm.LIFT_ROW2, 0.5);
+                //arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 sleep(1000);
                 drive.followTrajectory(trajectory_2_2 );
                 //pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
@@ -108,7 +108,7 @@ public class RedRightAutonomous extends LinearOpMode{
                 drive.followTrajectory(trajectory_1);
                 sleep(350);
                // arm.extendToPosition(arm.EXTEND_OUT, 0.5);
-                arm.liftToPosition(arm.LIFT_ROW2, 0.5);
+                //arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 //drive to board
                 drive.followTrajectory(trajectory_2);
                 sleep(350);
@@ -129,7 +129,7 @@ public class RedRightAutonomous extends LinearOpMode{
                 drive.followTrajectory(trajectory_1_1);
                 sleep(350);
                // arm.extendToPosition(arm.EXTEND_OUT, 0.5);
-                arm.liftToPosition(arm.LIFT_ROW2, 0.5);
+                //arm.liftToPosition(arm.LIFT_ROW2, 0.5);
                 drive.followTrajectory(trajectory_1_2);
                 sleep(350);
                 //pixelMechanism.hookRight(pixelMechanism.RH_OPEN_POS);
