@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -52,7 +53,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test Op Mode", group= "Linear Opmode")
-
+@Disabled
 public class TestTeleOp extends LinearOpMode {
 
     private static double THROTTLE = 0.75;
@@ -90,29 +91,47 @@ public class TestTeleOp extends LinearOpMode {
 
            if(gamepad2.dpad_up) {
                 telemetry.addData("dpad up", "pressed");
-                pixelMechanism.liftPivot(LIFT_POWER);
+                pixelMechanism.liftPivot(1.0);
                 pivotPosition = pixelMechanism.getPivotPos();
+
             } else if (gamepad2.dpad_down) {
                 telemetry.addData("dpad down", "pressed");
                 pixelMechanism.lowerPivot(LOWER_POWER);
                 pivotPosition = pixelMechanism.getPivotPos();
-            } else {
 
-                pixelMechanism.pivotMotor.setPower(0);
+            } else {
+                pixelMechanism.pivotToPosition(pivotPosition, 0.75);
+                //pixelMechanism.pivotMotor.setPower(0);
             }
 
-            if(gamepad2.dpad_right) {
+            /*if(gamepad2.dpad_right) {
                 telemetry.addData("dpad up", "pressed");
                 pixelMechanism.liftFlip(LIFT_POWER);
                 flipPosition = pixelMechanism.getFlipPos();
+
             } else if (gamepad2.dpad_left) {
                 telemetry.addData("dpad down", "pressed");
                 pixelMechanism.lowerFlip(LOWER_POWER);
                 flipPosition = pixelMechanism.getFlipPos();
-            } else {
 
-                pixelMechanism.flipMotor.setPower(0);
-            } /*
+            } else {
+                pixelMechanism.flipToPosition(flipPosition, 0.5);
+                //pixelMechanism.flipMotor.setPower(0);
+            } */
+
+            if (gamepad2.dpad_right) {
+                telemetry.addData("dpad up", "pressed");
+                pixelMechanism.liftFlip(LIFT_POWER);
+            }
+            else if (gamepad2.dpad_left) {
+                telemetry.addData("dpad down", "pressed");
+                pixelMechanism.lowerFlip(LOWER_POWER);
+
+            } else {
+                pixelMechanism.flipMotor.setPower(0.0);
+            }
+
+            /*
             if (gamepad1.a) {
                frontLeft.setPower(0.5);
             }
@@ -138,99 +157,8 @@ public class TestTeleOp extends LinearOpMode {
 
             if (gamepad2.a) {
                 pixelMechanism.toStack();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
+
             if (gamepad2.x) {
                 pixelMechanism.openLeftGrabber();
             }

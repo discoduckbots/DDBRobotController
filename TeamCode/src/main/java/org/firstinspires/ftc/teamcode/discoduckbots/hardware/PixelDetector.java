@@ -13,20 +13,13 @@ public class PixelDetector {
 
     private NormalizedColorSensor leftColorSensor;
     private NormalizedColorSensor rightColorSensor;
-    private RevBlinkinLedDriver lights;
 
     private static final int RANGE = 40; //mm of range
 
-    public PixelDetector(NormalizedColorSensor leftColorSensor, NormalizedColorSensor rightColorSensor, RevBlinkinLedDriver lights){
+    public PixelDetector(NormalizedColorSensor leftColorSensor, NormalizedColorSensor rightColorSensor){
         this.leftColorSensor = leftColorSensor;
         this.rightColorSensor = rightColorSensor;
-        this.lights = lights;
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
         /*lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");*/
-    }
-
-    public RevBlinkinLedDriver getLights(){
-        return lights;
     }
 
     private double getDistance (NormalizedColorSensor colorSensor){

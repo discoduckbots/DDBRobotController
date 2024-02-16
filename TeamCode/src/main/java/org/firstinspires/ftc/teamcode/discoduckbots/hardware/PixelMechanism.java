@@ -53,6 +53,7 @@ public class PixelMechanism {
     public int getFlipPos() {
         return flipMotor.getCurrentPosition();
     }
+
     public void liftFlip(double power) {
         flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         flipMotor.setPower(power);
@@ -78,15 +79,17 @@ public class PixelMechanism {
         flipToPosition(FLIP_SCORE, FLIP_POWER);
         isInGrabbingPosition = false;
     }
+
+    public int getPivotPos() {
+        return pivotMotor.getCurrentPosition();
+    }
+
     public void liftPivot(double power) {
         pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pivotMotor.setPower(power);
         Log.d("PIVOT ", "pos: " + pivotMotor.getCurrentPosition());
     }
 
-    public int getPivotPos() {
-        return pivotMotor.getCurrentPosition();
-    }
     public void lowerPivot(double power) {
         pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pivotMotor.setPower(-power);
