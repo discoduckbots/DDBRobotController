@@ -59,24 +59,26 @@ public class RedWingAuto extends LinearOpMode{
         Trajectory trajectory_1_7 = drive.trajectoryBuilder(trajectory_1_6.end()).lineToLinearHeading( new Pose2d(32.588511981565325  ,-81.12189752279126 ,1.594255715606522 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_8 = drive.trajectoryBuilder(trajectory_1_7.end()).lineToLinearHeading( new Pose2d(49.870279819202885  ,-82.02888571069201 ,1.682049761612923 ), velocityConstraint, accelerationConstraint).build();
 
-        Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(29.512070571587266  ,0.9100215722970646 ,0.08358605251590223 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(30  ,0.9100215722970646 ,0.08358605251590223 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_1 = drive.trajectoryBuilder(trajectory_2_0.end()).lineToLinearHeading( new Pose2d(2.3800415292188326  ,-1.3667953744679886 ,0.06522389910279536 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_2 = drive.trajectoryBuilder(trajectory_2_1.end()).lineToLinearHeading( new Pose2d(15.267743263936035  ,16.015085529352806 ,6.279359858551846 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_3 = drive.trajectoryBuilder(trajectory_2_2.end()).lineToLinearHeading( new Pose2d(51.35935203836575  ,16.618337529878318 ,0.03787194141451611 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_4 = drive.trajectoryBuilder(trajectory_2_3.end()).lineToLinearHeading( new Pose2d(50.18083804033668  ,17.39361616731772 ,1.6501072655713749 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_5 = drive.trajectoryBuilder(trajectory_2_4.end()).lineToLinearHeading( new Pose2d(51.80017214860947  ,-70.65392303416228 ,1.5588703158000126 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_6 = drive.trajectoryBuilder(trajectory_2_5.end()).lineToLinearHeading( new Pose2d(27.891718915429074  ,-88.49454776975418 ,1.6260069392166816 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_6 = drive.trajectoryBuilder(trajectory_2_5.end()).lineToLinearHeading( new Pose2d(25  ,-88.49454776975418 ,1.6260069392166816 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_7 = drive.trajectoryBuilder(trajectory_2_6.end()).lineToLinearHeading( new Pose2d(28.018476819186052  ,-79.68594969590839 ,1.6038193371758505 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_8 = drive.trajectoryBuilder(trajectory_2_7.end()).lineToLinearHeading( new Pose2d(48.02909308148708  ,-82.45332896055854 ,1.628876025687478 ), velocityConstraint, accelerationConstraint).build();
 
-        Trajectory trajectory_3_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(21.355998234636882  ,2.537693791170814 ,6.280890038002969 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_1 = drive.trajectoryBuilder(trajectory_3_0.end()).lineToLinearHeading( new Pose2d(24.35504968327053  ,-4.5371001091176195 ,5.204982611453875 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_2 = drive.trajectoryBuilder(trajectory_3_1.end()).lineToLinearHeading( new Pose2d(13.173796837310496  ,16.40249825320052 ,5.192167358550982 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_3 = drive.trajectoryBuilder(trajectory_3_2.end()).lineToLinearHeading( new Pose2d(49.80052502325498  ,16.98542001381469 ,0.010902528589046945 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_4 = drive.trajectoryBuilder(trajectory_3_3.end()).lineToLinearHeading( new Pose2d(48.49494080966164  ,-75.45436801502036 ,1.5408907072497229 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_5 = drive.trajectoryBuilder(trajectory_3_4.end()).lineToLinearHeading( new Pose2d(18.558840714272346  ,-88.85743626346265 ,1.642838913178739 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_6 = drive.trajectoryBuilder(trajectory_3_5.end()).lineToLinearHeading( new Pose2d(18.329304598328417  ,-80.70475985397852 ,1.6367181953743728 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_7 = drive.trajectoryBuilder(trajectory_3_6.end()).lineToLinearHeading( new Pose2d(47.05587972038703  ,-81.33260607424948 ,1.5311358132490183 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(22.74018615833937  ,8.122559796332215 ,0.05757300184733616 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_1 = drive.trajectoryBuilder(trajectory_3_0.end()).lineToLinearHeading( new Pose2d(25.314098645159135  ,-2.848293008570664 ,4.875802757037675 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_2 = drive.trajectoryBuilder(trajectory_3_1.end()).lineToLinearHeading( new Pose2d(21.917932131407895  ,17.982665134501325 ,4.845199168015842 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_3 = drive.trajectoryBuilder(trajectory_3_2.end()).lineToLinearHeading( new Pose2d(49.071531407764155  ,19.033317930439626 ,0.08894168059473095 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_4 = drive.trajectoryBuilder(trajectory_3_3.end()).lineToLinearHeading( new Pose2d(47.45390643165187  ,20.158531752377232 ,1.5462463353285205 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_5 = drive.trajectoryBuilder(trajectory_3_4.end()).lineToLinearHeading( new Pose2d(53.32251746202466  ,-65.61063554335179 ,1.5626957644277653 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_6 = drive.trajectoryBuilder(trajectory_3_5.end()).lineToLinearHeading( new Pose2d(21.665890103735027  ,-84.64812741737151 ,1.5684339373693685 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_7 = drive.trajectoryBuilder(trajectory_3_6.end()).lineToLinearHeading( new Pose2d(20.360022211725752  ,-89.3033499903841 ,1.5856484561941508 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_8 = drive.trajectoryBuilder(trajectory_3_7.end()).lineToLinearHeading( new Pose2d(20.90330984408877  ,-80.96889617351157 ,1.6076447858035987 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_9 = drive.trajectoryBuilder(trajectory_3_8.end()).lineToLinearHeading( new Pose2d(49.304059295771054  ,-78.81611693366193 ,1.6384396472568241 ), velocityConstraint, accelerationConstraint).build();
 
         pixelMechanism.closeLeftGrabber();
         pixelMechanism.closeRightGrabber();
@@ -144,16 +146,18 @@ public class RedWingAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_3_3);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_3_4);
-                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_3_5);
+                drive.followTrajectory(trajectory_3_6);
+                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
+                drive.followTrajectory(trajectory_3_7);
                 sleep(500);
                 pixelMechanism.openLeftGrabber();
                 sleep(1000);
-                drive.followTrajectory(trajectory_3_6);
+                drive.followTrajectory(trajectory_3_8);
                 pixelMechanism.closeLeftGrabber();
                 arm.liftToPosition(0, 0,.5);
                 pixelMechanism.toGrab(this);
-                drive.followTrajectory(trajectory_3_7);
+                drive.followTrajectory(trajectory_3_9);
                 pixelMechanism.toInit(this);
                 sleep(1000);
 

@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
 
 @Autonomous(name="CenterStage-DriveByTime-Noob-Auto", group="Robot")
+@Disabled
 public class DriveByTimeAutonomous extends LinearOpMode {
 
     private MecanumDrivetrain mecanumDrivetrain = null;

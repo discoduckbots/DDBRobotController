@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.WaitSegment;
 
 //@Disabled
 @Autonomous(name="RedBoard", group="Robot")
@@ -27,6 +28,7 @@ public class RedBoardAuto extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double AUTONOMOUS_SPEED = 0.5;
+    private static int WAIT_TIME = 8000;
 
     private DuckSensorTensorFlow duckSensor =null;
     private Arm arm;
@@ -80,17 +82,18 @@ public class RedBoardAuto extends LinearOpMode{
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_1_0);
                 drive.followTrajectory(trajectory_1_1);
-                pixelMechanism.openLeftGrabber();
+                pixelMechanism.openRightGrabber();
                 sleep(1000);
+                sleep(WAIT_TIME);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_1_2);
                 arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_1_3);
                 sleep(500);
-                pixelMechanism.openRightGrabber();
+                pixelMechanism.openLeftGrabber();
                 sleep(1000);
                 drive.followTrajectory(trajectory_1_4);
-                pixelMechanism.closeRightGrabber();
+                pixelMechanism.closeLeftGrabber();
                 arm.liftToPosition(0, 0,.5);
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_1_5);
@@ -101,18 +104,19 @@ public class RedBoardAuto extends LinearOpMode{
             else if(duckSensor.getDuckPos() == CENTER) {
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_2_0);
-                pixelMechanism.openLeftGrabber();
+                pixelMechanism.openRightGrabber();
                 sleep(1000);
+                sleep(WAIT_TIME);
                 drive.followTrajectory(trajectory_2_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_2_2);
                 arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_2_3);
                 sleep(500);
-                pixelMechanism.openRightGrabber();
+                pixelMechanism.openLeftGrabber();
                 sleep(1000);
                 drive.followTrajectory(trajectory_2_4);
-                pixelMechanism.closeRightGrabber();
+                pixelMechanism.closeLeftGrabber();
                 arm.liftToPosition(0, 0,.5);
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_2_5);
@@ -123,18 +127,19 @@ public class RedBoardAuto extends LinearOpMode{
             else if (duckSensor.getDuckPos() == CLOSER) {
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_3_0);
-                pixelMechanism.openLeftGrabber();
+                pixelMechanism.openRightGrabber();
                 sleep(1000);
+                sleep(WAIT_TIME);
                 drive.followTrajectory(trajectory_3_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_3_2);
                 arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_3_3);
                 sleep(500);
-                pixelMechanism.openRightGrabber();
+                pixelMechanism.openLeftGrabber();
                 sleep(1000);
                 drive.followTrajectory(trajectory_3_4);
-                pixelMechanism.closeRightGrabber();
+                pixelMechanism.closeLeftGrabber();
                 arm.liftToPosition(0, 0,.5);
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_3_5);

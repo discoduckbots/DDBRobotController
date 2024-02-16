@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 import android.graphics.Color;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -42,12 +43,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelDetector;
 
 @TeleOp(name = "LED Light Test", group = "Sensor")
-
+@Disabled
 public class LEDLightTest extends LinearOpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */
-  NormalizedColorSensor leftSensor;
-  NormalizedColorSensor rightSensor;
   RevBlinkinLedDriver lights;
   PixelDetector detector;
 
@@ -55,33 +54,39 @@ public class LEDLightTest extends LinearOpMode {
 
     final float[] hsvValues = new float[3];
     final float[] hsvValues2 = new float[3];
-    leftSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-    rightSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
     lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
-    detector = new PixelDetector(leftSensor, rightSensor, lights);
+
+    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE);
 
     waitForStart();
 
 
     while (opModeIsActive()){
-      if(detector.isBothPixels()){
-        telemetry.addData("Pixel Detected", "Both");
-        detector.getLights().setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-      }
-      else if (detector.isLeftPixel()){
-        telemetry.addData("Pixel Detected", "Left");
-        detector.getLights().setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_GRADIENT);
-      }
-      else if (detector.isRightPixel()){
-        telemetry.addData("Pixel Detected", "Right");
-        detector.getLights().setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES);
-      }
-      else{
-        telemetry.addData("Pixel Detected", "None");
-        detector.getLights().setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+
+      if (gamepad1.cross){
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
       }
 
-      telemetry.update();
+      if (gamepad1.square){
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_GRADIENT);
+      }
+
+      if (gamepad1.circle){
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES);
+      }
+
+      if (gamepad1.triangle){
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+      }
+
+      if (gamepad1.dpad_up){
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED);
+      }
+
+      if (gamepad1.dpad_down){
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE);
+      }
+
     }
   }
 }

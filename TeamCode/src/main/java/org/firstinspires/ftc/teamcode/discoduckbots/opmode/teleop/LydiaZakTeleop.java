@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.teleop;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -38,6 +39,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.DroneLauncher;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.Intake;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
+import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelDetector;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
 
 
@@ -68,11 +70,25 @@ public class LydiaZakTeleop extends LinearOpMode {
     private PixelMechanism pixelMechanism = null;
     private DroneLauncher droneLauncher = null;
     private MecanumDrivetrain mecanumDrivetrain = null;
+    private PixelDetector pixelDetector = null;
+    private RevBlinkinLedDriver lights = null;
 
     private int liftPosition = 0;
     private int liftPosition2 = 0;
     boolean inGrabPosition = false;
     boolean inScorePosition = false;
+    boolean isBackPressed = false;
+    boolean isManual = false;
+    boolean minute = false;
+    boolean endgame = false;
+    boolean tenSec = false;
+    boolean rumbling = false;
+
+    private RevBlinkinLedDriver.BlinkinPattern INIT_COLOR = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE;
+    private RevBlinkinLedDriver.BlinkinPattern LEFT_ONLY_COLOR = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_GRADIENT;
+    private RevBlinkinLedDriver.BlinkinPattern RIGHT_ONLY_COLOR = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
+    private RevBlinkinLedDriver.BlinkinPattern BOTH_COLOR = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+    private RevBlinkinLedDriver.BlinkinPattern NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
 
     @Override
     public void runOpMode() {
@@ -81,14 +97,18 @@ public class LydiaZakTeleop extends LinearOpMode {
         pixelMechanism = hardwareStore.getPixelMechanism();
         droneLauncher = hardwareStore.getDroneLauncher();
         mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
+        pixelDetector = hardwareStore.getPixelDetector();
+        lights = hardwareStore.getLedDriver();
+        lights.setPattern(INIT_COLOR);
         waitForStart();
+        runtime.reset();
 
         /* Put in Grab Position */
         inGrabPosition = true;
         pixelMechanism.toGrab(this);
 
-        while (opModeIsActive()) {
 
+        while (opModeIsActive()) {
             mecanumDrivetrain.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, THROTTLE);
 
             //mecanumDrivetrain.drive(gamepad1.dpad_down, gamepad1.dpad_up, gamepad1.dpad_left, gamepad1.dpad_right, SLOW_THROTTLE);
@@ -120,6 +140,7 @@ public class LydiaZakTeleop extends LinearOpMode {
                 THROTTLE = .3;
             }
 
+
             if (gamepad1.x) {
                 droneLauncher.release();
             }
@@ -144,14 +165,6 @@ public class LydiaZakTeleop extends LinearOpMode {
                 pixelMechanism.openRightGrabber();
             }
 
-            if (gamepad2.y){
-                if (!inScorePosition){
-                    inScorePosition = true;
-                    inGrabPosition = false;
-                    pixelMechanism.toScore(this);
-                }
-            }
-
             if(gamepad2.x) {
                 if (!inGrabPosition){
                     inGrabPosition = true;
@@ -168,9 +181,86 @@ public class LydiaZakTeleop extends LinearOpMode {
                 }
             }
 
+            if (gamepad2.b) {
+                if (Math.abs(gamepad2.left_stick_y) > 0.05) {
+                    isManual = true;
+                    pixelMechanism.liftPivot(gamepad2.left_stick_y);
+                }
+                else if (gamepad2.dpad_up) {
+                    pixelMechanism.liftFlip(0.5);
+                    isManual = true;
+                }
+                else if (gamepad2.dpad_down) {
+                    pixelMechanism.lowerFlip(0.5);
+                    isManual = true;
+                }
+                else {
+                    if (isManual == true) {
+                        pixelMechanism.liftPivot(0);
+                        pixelMechanism.liftFlip(0);
+                        pixelMechanism.flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        pixelMechanism.pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        pixelMechanism.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        isManual = false;
+                    }
+                }
+            }
+
             if (gamepad2.a) {
                 LOWER_POWER = 0.85;
             }
+
+            if(pixelDetector.isBothPixels() && !rumbling){
+                rumbling = true;
+                telemetry.addData("Pixel Detected", "Both");
+                lights.setPattern(BOTH_COLOR);
+                gamepad2.rumble(250);
+            }
+            else if (pixelDetector.isLeftPixel()){
+                telemetry.addData("Pixel Detected", "Left");
+                lights.setPattern(LEFT_ONLY_COLOR);
+            }
+            else if (pixelDetector.isRightPixel()){
+                telemetry.addData("Pixel Detected", "Right");
+                lights.setPattern(RIGHT_ONLY_COLOR);
+            }
+            else{
+                rumbling = false;
+                telemetry.addData("Pixel Detected", "None");
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            }
+
+            if (runtime.time() >= 60 && !minute) {
+                gamepad2.rumbleBlips(1);
+                minute = true;
+            }
+            if (runtime.time() >= 90 && !endgame) {
+                gamepad2.rumbleBlips(2);
+                NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;
+                endgame = true;
+            }
+            if (runtime.time() >= 110 && !tenSec) {
+                gamepad2.rumbleBlips(3);
+                NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE;
+                tenSec = true;
+            }
+
+
+
+            /*if (gamepad2.back) {
+                isBackPressed = true;
+                pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                pixelMechanism.flipMotor.setPower(-0.5);
+            }
+            else {
+                if (isBackPressed == true) {
+                    pixelMechanism.flipMotor.setPower(0);
+                    pixelMechanism.flipMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    pixelMechanism.flipMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                }
+                isBackPressed = false;
+            } */
 
 //            if (pixelMechanism.isPivotTouchSensorPressed()){
 //                telemetry.addData("Pivot Touch Sensor", "pressed");

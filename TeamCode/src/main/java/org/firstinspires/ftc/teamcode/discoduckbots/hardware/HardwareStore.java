@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.hardware;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -18,8 +21,12 @@ public class HardwareStore {
     private PixelMechanism pixelMechanism;
     private DroneLauncher droneLauncher;
     private FlipStateMachine flipStateMachine;
+    private PixelDetector pixelDetector;
 
     private TouchSensor pivotTouchSensor = null;
+    public NormalizedColorSensor leftColorSensor;
+    public NormalizedColorSensor rightColorSensor;
+    public RevBlinkinLedDriver lights;
     //private WebcamName webcam = null;
     public DcMotorEx frontLeft ;
     public DcMotorEx frontRight ;
@@ -56,6 +63,8 @@ public class HardwareStore {
         flipMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         pivotTouchSensor = hardwareMap.get(TouchSensor.class, "pivotTouchSensor");
+        leftColorSensor = hardwareMap.get(NormalizedColorSensor.class, "leftColorSensor");
+        rightColorSensor = hardwareMap.get(NormalizedColorSensor.class, "rightColorSensor");
 
         pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -65,12 +74,13 @@ public class HardwareStore {
 
         flipStateMachine = new FlipStateMachine();
 
-        //ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "led");
+        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
         //ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
         arm = new Arm(liftMotor1, liftMotor2);
         pixelMechanism = new PixelMechanism(flipMotor, pivotMotor, rightGrabber, leftGrabber, pivotTouchSensor, flipStateMachine);
         droneLauncher = new DroneLauncher(droneServo, holdServo);
+        pixelDetector = new PixelDetector(leftColorSensor, rightColorSensor);
         //webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         mecanumDrivetrain = createDrivetrain(telemetry, opMode, frontLeft, frontRight, backLeft, backRight);
@@ -91,11 +101,14 @@ public class HardwareStore {
 
     public SampleMecanumDrive getSampleMecanumDrive() { return sampleMecanumDrive; }
 
-    //public DuckSensor getDuckSensor() { return duckSensor; }
+    public PixelDetector getPixelDetector() { return pixelDetector; }
+
+
+
 
     //public WebcamName getWebcam() {return webcam;}
 
-    //public RevBlinkinLedDriver getLedDriver() { return ledDriver;}
+    public RevBlinkinLedDriver getLedDriver() { return lights;}
 
 
     public Arm getArm() {
