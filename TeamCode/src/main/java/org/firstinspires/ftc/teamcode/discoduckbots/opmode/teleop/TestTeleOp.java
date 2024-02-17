@@ -53,7 +53,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Test Op Mode", group= "Linear Opmode")
-@Disabled
+
 public class TestTeleOp extends LinearOpMode {
 
     private static double THROTTLE = 0.75;
@@ -103,6 +103,17 @@ public class TestTeleOp extends LinearOpMode {
                 pixelMechanism.pivotToPosition(pivotPosition, 0.75);
                 //pixelMechanism.pivotMotor.setPower(0);
             }
+
+           if (gamepad1.dpad_up) {
+               arm.lower(0.5);
+           }
+           else if (gamepad1.dpad_down) {
+               arm.lift(0.5);
+           }
+           else {
+               arm.liftMotor1.setPower(0);
+               arm.liftMotor2.setPower(0);
+           }
 
             /*if(gamepad2.dpad_right) {
                 telemetry.addData("dpad up", "pressed");

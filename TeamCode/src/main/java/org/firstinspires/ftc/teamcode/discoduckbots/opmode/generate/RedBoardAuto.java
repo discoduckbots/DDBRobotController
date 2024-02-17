@@ -28,7 +28,7 @@ public class RedBoardAuto extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double AUTONOMOUS_SPEED = 0.5;
-    private static int WAIT_TIME = 8000;
+    private static int WAIT_TIME = 0;
 
     private DuckSensorTensorFlow duckSensor =null;
     private Arm arm;

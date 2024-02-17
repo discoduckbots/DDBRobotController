@@ -288,6 +288,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
     private int tries = 1;
 
     private void completeAutonomousPath(SampleMecanumDrive drive) {
+        drive.setPoseEstimate(new Pose2d());
         Pose2d newEnd= new Pose2d (0,0,0);
         Trajectory firstTrajectory = drive.trajectoryBuilder(arrayList.get(arrayList.size() - 1).end())
                 .lineToLinearHeading( newEnd,
@@ -295,7 +296,7 @@ public class NewAutonomousGenerator extends LinearOpMode {
                 .build();
 
         Log.d("GEN", "Moving to " + firstTrajectory);
-        drive.followTrajectory(firstTrajectory);
+        //drive.followTrajectory(firstTrajectory);
         for(Trajectory trajectory: arrayList){
             Log.d("GEN", "Moving to " + trajectory);
             drive.followTrajectory(trajectory);
