@@ -27,6 +27,7 @@ public class BlueBoardAuto extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double AUTONOMOUS_SPEED = 0.5;
+    private static int WAIT_TIME = 0;
 
     private DuckSensorTensorFlow duckSensor =null;
     private Arm arm;
@@ -52,14 +53,14 @@ public class BlueBoardAuto extends LinearOpMode{
         Trajectory trajectory_4_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(22  ,11.25 ,0.027734502551036933 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_4_1 = drive.trajectoryBuilder(trajectory_4_0.end()).lineToLinearHeading( new Pose2d(7.851241670238913  ,9.003304983062003 ,0.05527773267069147 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_4_2 = drive.trajectoryBuilder(trajectory_4_1.end()).lineToLinearHeading( new Pose2d(14.41964524136867  ,34.74617993026693 ,4.716281549261342 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_4_3 = drive.trajectoryBuilder(trajectory_4_2.end()).lineToLinearHeading( new Pose2d(21.5  ,41 ,4.709395741731431 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_4_3 = drive.trajectoryBuilder(trajectory_4_2.end()).lineToLinearHeading( new Pose2d(21.5  ,41.5 ,4.709395741731431 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_4_4 = drive.trajectoryBuilder(trajectory_4_3.end()).lineToLinearHeading( new Pose2d(16.25753424058732  ,32.96755182190088 ,4.705379020672311 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_4_5 = drive.trajectoryBuilder(trajectory_4_4.end()).lineToLinearHeading( new Pose2d(-0.5801152918707295  ,39.950172229511935 ,4.7007884823190444 ), velocityConstraint, accelerationConstraint).build();
 
         Trajectory trajectory_5_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(30  ,0.8624158103143039 ,6.280890038002891 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_5_1 = drive.trajectoryBuilder(trajectory_5_0.end()).lineToLinearHeading( new Pose2d(13.362493646025605  ,7.300283948273949 ,0.032898858198427305 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_5_2 = drive.trajectoryBuilder(trajectory_5_1.end()).lineToLinearHeading( new Pose2d(22.85568377725055  ,38.42733106981765 ,4.735982609694069 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_5_3 = drive.trajectoryBuilder(trajectory_5_2.end()).lineToLinearHeading( new Pose2d(29.5  ,41.95377262155687 ,4.716664094124052 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_5_3 = drive.trajectoryBuilder(trajectory_5_2.end()).lineToLinearHeading( new Pose2d(29.5  ,43 ,4.716664094124052 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_5_4 = drive.trajectoryBuilder(trajectory_5_3.end()).lineToLinearHeading( new Pose2d(22.561282613093322  ,34.2403741327491 ,4.711691010908002 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_5_5 = drive.trajectoryBuilder(trajectory_5_4.end()).lineToLinearHeading( new Pose2d(0.3955945738936819  ,33.70807611841769 ,4.706717927691958 ), velocityConstraint, accelerationConstraint).build();
 
@@ -81,6 +82,7 @@ public class BlueBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_4_0);
                 sleep(500);
                 pixelMechanism.openRightGrabber();
+                sleep(WAIT_TIME);
                 drive.followTrajectory(trajectory_4_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_4_2);
@@ -103,6 +105,7 @@ public class BlueBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_5_0);
                 pixelMechanism.openRightGrabber();
                 sleep(1000);
+                sleep(WAIT_TIME);
                 drive.followTrajectory(trajectory_5_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_5_2);
@@ -126,6 +129,7 @@ public class BlueBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_6_1);
                 pixelMechanism.openRightGrabber();
                 sleep(1000);
+                sleep(WAIT_TIME);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_6_2);
                 arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);

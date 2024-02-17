@@ -118,6 +118,8 @@ public class LydiaZakTeleop extends LinearOpMode {
                 arm.lower(LIFT_POWER);
                 liftPosition = arm.getLiftPos();
                 liftPosition2 = arm.getLiftPos2();
+                telemetry.addData("lift position 1: ", arm.getLiftPos());
+                telemetry.addData("lift position 2: ", arm.getLiftPos2());
             } else if (gamepad2.dpad_down) {
                 telemetry.addData("dpad down", "pressed");
                 arm.lift(LOWER_POWER);
@@ -126,10 +128,14 @@ public class LydiaZakTeleop extends LinearOpMode {
             } else {
                 arm.liftMotor1.setTargetPosition(liftPosition);
                 arm.liftMotor2.setTargetPosition(liftPosition2);
+                telemetry.addData("target position 1: ", liftPosition);
+                telemetry.addData("target position 2: ", liftPosition2);
                 arm.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 arm.liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm.liftMotor1.setPower(0.5);
-                arm.liftMotor2.setPower(0.5);
+                telemetry.addData("currentPosition 1: ", arm.getLiftPos());
+                telemetry.addData("currentPosition 2: ", arm.getLiftPos2());
+                arm.liftMotor1.setPower(0.3);
+                arm.liftMotor2.setPower(0.3);
             }
 
             if(gamepad1.left_bumper){
@@ -211,11 +217,13 @@ public class LydiaZakTeleop extends LinearOpMode {
                 LOWER_POWER = 0.85;
             }
 
-            if(pixelDetector.isBothPixels() && !rumbling){
-                rumbling = true;
+            if(pixelDetector.isBothPixels()){
                 telemetry.addData("Pixel Detected", "Both");
                 lights.setPattern(BOTH_COLOR);
-                gamepad2.rumble(250);
+                if (!rumbling) {
+                    gamepad2.rumble(250);
+                    rumbling = true;
+                }
             }
             else if (pixelDetector.isLeftPixel()){
                 telemetry.addData("Pixel Detected", "Left");
@@ -228,20 +236,20 @@ public class LydiaZakTeleop extends LinearOpMode {
             else{
                 rumbling = false;
                 telemetry.addData("Pixel Detected", "None");
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                lights.setPattern(NEITHER_COLOR);
             }
 
             if (runtime.time() >= 60 && !minute) {
-                gamepad2.rumbleBlips(1);
+                gamepad2.rumbleBlips(2);
                 minute = true;
             }
             if (runtime.time() >= 90 && !endgame) {
-                gamepad2.rumbleBlips(2);
+                gamepad2.rumbleBlips(3);
                 NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;
                 endgame = true;
             }
             if (runtime.time() >= 110 && !tenSec) {
-                gamepad2.rumbleBlips(3);
+                gamepad2.rumbleBlips(5);
                 NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE;
                 tenSec = true;
             }
