@@ -14,6 +14,8 @@ public class Arm {
     public static double LIFT_POWER = 1.0;
     public static int LIFT_AUTO_POS = -608;
     public static int LIFT_2_AUTO_POS = 631;
+    public static int LIFT_HIGH_AUTO_POS = -920;
+    public static int LIFT_2_HIGH_AUTO_POS =983;
     public static int AUTOEXTEND = 1933;
     public static int LIFT_ROW1 = 445;
     public static int LIFT_ROW2 = 1097;
@@ -57,11 +59,21 @@ public class Arm {
         Log.d("LIFT ", "pos1: " + liftMotor1.getCurrentPosition() + "pos2: " + liftMotor2.getCurrentPosition());
     }
 
+    public void lift1 (double power) {
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor1.setPower(power);
+    }
+
     public void lower(double power) {
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor1.setPower(-power);
         liftMotor2.setPower(power);
+    }
+
+    public void lower1 (double power) {
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor1.setPower(-power);
     }
 
     public void stopLift() {

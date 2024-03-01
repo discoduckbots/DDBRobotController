@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 //@Disabled
-@Autonomous(name="BlueBoard", group="Robot")
-public class BlueBoardAuto extends LinearOpMode{
+@Autonomous(name="THORBlueBoard", group="Robot")
+public class THORBlueBoardAuto extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
@@ -50,8 +50,6 @@ public class BlueBoardAuto extends LinearOpMode{
                 DriveConstants.TRACK_WIDTH);
         TrajectoryAccelerationConstraint accelerationConstraint =
                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);
-
-        //trajectory_4_0
 
         Trajectory trajectory_4_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(22  ,11.25 ,0.027734502551036933 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_4_1 = drive.trajectoryBuilder(trajectory_4_0.end()).lineToLinearHeading( new Pose2d(7.851241670238913  ,9.003304983062003 ,0.05527773267069147 ), velocityConstraint, accelerationConstraint).build();
@@ -86,7 +84,7 @@ public class BlueBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_4_0);
                 sleep(500);
                 pixelMechanism.openRightGrabber();
-                sleep(WAIT_TIME);
+                sleep(8000);
                 drive.followTrajectory(trajectory_4_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_4_2);
@@ -100,8 +98,8 @@ public class BlueBoardAuto extends LinearOpMode{
                 arm.liftToPosition(0, 0, .5);
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_4_5);
-                //pixelMechanism.toInit(this);
-                //sleep(1000);
+                pixelMechanism.toInit(this);
+                sleep(1000);
             }
 
             else if(duckSensor.getDuckPos() == CENTER) {
@@ -110,7 +108,7 @@ public class BlueBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_5_0);
                 pixelMechanism.openRightGrabber();
                 sleep(1000);
-                sleep(WAIT_TIME);
+                sleep(8000);
                 drive.followTrajectory(trajectory_5_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_5_2);
@@ -124,8 +122,8 @@ public class BlueBoardAuto extends LinearOpMode{
                 arm.liftToPosition(0, 0,.5);
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_5_5);
-                //pixelMechanism.toInit(this);
-                //sleep(1000);
+                pixelMechanism.toInit(this);
+                sleep(1000);
             }
 
             else if (duckSensor.getDuckPos() == FARTHER) {
@@ -135,7 +133,7 @@ public class BlueBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_6_1);
                 pixelMechanism.openRightGrabber();
                 sleep(1000);
-                sleep(WAIT_TIME);
+                sleep(8000);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_6_2);
                 arm.liftToPosition(arm.LIFT_HIGH_AUTO_POS, arm.LIFT_2_HIGH_AUTO_POS, arm.LIFT_POWER);
@@ -148,10 +146,10 @@ public class BlueBoardAuto extends LinearOpMode{
                 arm.liftToPosition(0, 0, .5);
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_6_5);
-               // pixelMechanism.pivotToPosition(0, .5);
-
-              //  pixelMechanism.toInit(this);
-
+                //pixelMechanism.pivotToPosition(0, .5);
+                //pixelMechanism.flipToPosition(0, .5);
+                //pixelMechanism.toInit(this);
+                //sleep(1000);
 
             }
             pixelMechanism.flipToPosition(0, .5);

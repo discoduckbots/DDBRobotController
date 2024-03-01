@@ -148,9 +148,7 @@ public class FancyLydiaTeleop extends LinearOpMode {
                 THROTTLE = .3;
             }
 
-            if (gamepad1.x) {
-                droneLauncher.release();
-            }
+
 
             if (gamepad1.y) {
                 droneLauncher.launch();
@@ -226,7 +224,6 @@ public class FancyLydiaTeleop extends LinearOpMode {
             telemetry.addData("Flip Position", pixelMechanism.flipMotor.getCurrentPosition());
             telemetry.addData("Lift Position", arm.liftMotor1.getCurrentPosition());
             telemetry.addData("Lift Position", arm.liftMotor2.getCurrentPosition());
-            telemetry.addData("Hold Servo", droneLauncher.holdServo.getPosition());
             telemetry.addData("Drone Servo", droneLauncher.droneServo.getPosition());
             telemetry.update();
         }

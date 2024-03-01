@@ -49,9 +49,20 @@ public class RedWingAuto extends LinearOpMode{
         TrajectoryAccelerationConstraint accelerationConstraint =
                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);
 
+
+        //trajectory_1_0 go forward to drop pixel
+        //trajectory_1_1 back up after dropping pixel
+        //trajectory_1_2 go back to the center
+        //trajectory_1_3 go forward to in front of bridge
+        //trajectory_1_4 turn in place
+        //trajectory_1_5 go forward to the board
+        //trajectory_1_6 go to board to drop pixels
+        //trajectory_1_7 come back a little bit
+        //trajectory_1_8 go park
+
         Trajectory trajectory_1_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(25.203007812016107  ,5.94528395929207 ,0.5085933950567192 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_1 = drive.trajectoryBuilder(trajectory_1_0.end()).lineToLinearHeading( new Pose2d(5.213992459671129  ,-0.12882823315687109 ,6.2732391407474815 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1_1.end()).lineToLinearHeading( new Pose2d(50.33106486946866  ,-0.17566735880394646 ,0.04341884192472367 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_1_2 = drive.trajectoryBuilder(trajectory_1_1.end()).lineToLinearHeading( new Pose2d(50.33106486946866  ,1.5 ,0.04341884192472367 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_3 = drive.trajectoryBuilder(trajectory_1_2.end()).lineToLinearHeading( new Pose2d(49.36827145042456  ,1 ,1.5837357318802496 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_4 = drive.trajectoryBuilder(trajectory_1_3.end()).lineToLinearHeading( new Pose2d(49.45468576399666  ,-74.31878308666862 ,1.5083743939139715 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_5 = drive.trajectoryBuilder(trajectory_1_4.end()).lineToLinearHeading( new Pose2d(31.662297480498317  ,-84.87494656021451 ,1.546055062897123 ), velocityConstraint, accelerationConstraint).build();
@@ -59,15 +70,36 @@ public class RedWingAuto extends LinearOpMode{
         Trajectory trajectory_1_7 = drive.trajectoryBuilder(trajectory_1_6.end()).lineToLinearHeading( new Pose2d(32.588511981565325  ,-81.12189752279126 ,1.594255715606522 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_1_8 = drive.trajectoryBuilder(trajectory_1_7.end()).lineToLinearHeading( new Pose2d(49.870279819202885  ,-82.02888571069201 ,1.682049761612923 ), velocityConstraint, accelerationConstraint).build();
 
+        //trajectory_2_0 go forward to drop pixel
+        //trajectory_2_1 back back up to center
+        //trajectory_2_2 turn away from tress
+        //trajectory_2_3 strafe over in front to the bridge
+        //trajectory_2_4 go forward towards the board
+        //trajectory_2_5 strafe over to be in front of the board
+        //trajectory_2_6 go forward a little to drop pixels
+        //trajectory_2_7 move back a little bit
+        //trajectory_2_8 go to park
+
         Trajectory trajectory_2_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(30  ,2 ,0.08358605251590223 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_1 = drive.trajectoryBuilder(trajectory_2_0.end()).lineToLinearHeading( new Pose2d(2.3800415292188326  ,2 ,0.06522389910279536 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_2 = drive.trajectoryBuilder(trajectory_2_1.end()).lineToLinearHeading( new Pose2d(15.267743263936035  ,16.015085529352806 ,6.279359858551846 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_3 = drive.trajectoryBuilder(trajectory_2_2.end()).lineToLinearHeading( new Pose2d(51.35935203836575  ,16.618337529878318 ,0.03787194141451611 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_4 = drive.trajectoryBuilder(trajectory_2_3.end()).lineToLinearHeading( new Pose2d(50.18083804033668  ,17.39361616731772 ,1.6501072655713749 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_5 = drive.trajectoryBuilder(trajectory_2_4.end()).lineToLinearHeading( new Pose2d(51.80017214860947  ,-70.65392303416228 ,1.5588703158000126 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_2_6 = drive.trajectoryBuilder(trajectory_2_5.end()).lineToLinearHeading( new Pose2d(25  ,-90 ,1.6260069392166816 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_2_6 = drive.trajectoryBuilder(trajectory_2_5.end()).lineToLinearHeading( new Pose2d(24  ,-90 ,1.6260069392166816 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_7 = drive.trajectoryBuilder(trajectory_2_6.end()).lineToLinearHeading( new Pose2d(28.018476819186052  ,-79.68594969590839 ,1.6038193371758505 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_2_8 = drive.trajectoryBuilder(trajectory_2_7.end()).lineToLinearHeading( new Pose2d(48.02909308148708  ,-82.45332896055854 ,1.628876025687478 ), velocityConstraint, accelerationConstraint).build();
+
+        //trajectory_3_0 go forward
+        //trajectory_3_1 turn to drop pixel
+        //trajectory_3_2 go back to center position
+        //trajectory_3_3 go forward towards the bridge
+        //trajectory_3_4 go forward towards the board
+        //trajectory_3_5 strafe over towards the board
+        //trajectory_3_6 go forward towards the board
+        //trajectory_3_7 drop pixels on the board
+        //trajectory_3_8 move back a little
+        //trajectory_3_9 go park
 
         Trajectory trajectory_3_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(22.74018615833937  ,8.122559796332215 ,0.05757300184733616 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_1 = drive.trajectoryBuilder(trajectory_3_0.end()).lineToLinearHeading( new Pose2d(25.314098645159135  ,-2.848293008570664 ,4.875802757037675 ), velocityConstraint, accelerationConstraint).build();
@@ -76,7 +108,7 @@ public class RedWingAuto extends LinearOpMode{
         Trajectory trajectory_3_4 = drive.trajectoryBuilder(trajectory_3_3.end()).lineToLinearHeading( new Pose2d(50  ,20.158531752377232 ,1.5462463353285205 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_5 = drive.trajectoryBuilder(trajectory_3_4.end()).lineToLinearHeading( new Pose2d(53.32251746202466  ,-65.61063554335179 ,1.5626957644277653 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_6 = drive.trajectoryBuilder(trajectory_3_5.end()).lineToLinearHeading( new Pose2d(22.5  ,-84.64812741737151 ,1.5684339373693685 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_7 = drive.trajectoryBuilder(trajectory_3_6.end()).lineToLinearHeading( new Pose2d(20.360022211725752  ,-90 ,1.5856484561941508 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_7 = drive.trajectoryBuilder(trajectory_3_6.end()).lineToLinearHeading( new Pose2d(17  ,-90 ,1.5856484561941508 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_8 = drive.trajectoryBuilder(trajectory_3_7.end()).lineToLinearHeading( new Pose2d(20.90330984408877  ,-80.96889617351157 ,1.6076447858035987 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_9 = drive.trajectoryBuilder(trajectory_3_8.end()).lineToLinearHeading( new Pose2d(49.304059295771054  ,-78.81611693366193 ,1.6384396472568241 ), velocityConstraint, accelerationConstraint).build();
 
@@ -97,7 +129,7 @@ public class RedWingAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_1_3);
                 drive.followTrajectory(trajectory_1_4);
                 drive.followTrajectory(trajectory_1_5);
-                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
+                arm.liftToPosition(arm.LIFT_HIGH_AUTO_POS, arm.LIFT_2_HIGH_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_1_6);
                 sleep(500);
                 pixelMechanism.openLeftGrabber();
@@ -122,7 +154,7 @@ public class RedWingAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_2_3);
                 drive.followTrajectory(trajectory_2_4);
                 drive.followTrajectory(trajectory_2_5);
-                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
+                arm.liftToPosition(arm.LIFT_HIGH_AUTO_POS, arm.LIFT_2_HIGH_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_2_6);
                 sleep(500);
                 pixelMechanism.openLeftGrabber();
@@ -148,7 +180,7 @@ public class RedWingAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_3_4);
                 drive.followTrajectory(trajectory_3_5);
                 drive.followTrajectory(trajectory_3_6);
-                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
+                arm.liftToPosition(arm.LIFT_HIGH_AUTO_POS, arm.LIFT_2_HIGH_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_3_7);
                 sleep(500);
                 pixelMechanism.openLeftGrabber();
@@ -158,9 +190,13 @@ public class RedWingAuto extends LinearOpMode{
                 arm.liftToPosition(0, 0,.5);
                 pixelMechanism.toGrab(this);
                 drive.followTrajectory(trajectory_3_9);
-                pixelMechanism.toInit(this);
-                sleep(1000);
+                //pixelMechanism.toInit(this);
+                //sleep(1000);
 
+            }
+            pixelMechanism.flipToPosition(0, .5);
+            while(pixelMechanism.flipMotor.getCurrentPosition() != 0) {
+                sleep(1000);
             }
 
         }

@@ -18,42 +18,17 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.PixelMechanism;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.WaitSegment;
 
 //@Disabled
-@Autonomous(name="RedBoard", group="Robot")
-public class RedBoardAuto extends LinearOpMode{
+@Autonomous(name="THORRedBoard", group="Robot")
+public class THORRedBoardAuto extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double AUTONOMOUS_SPEED = 0.5;
     private static int START_WAIT = 0;
-    private static int WAIT_TIME = 8000; //circuit breakers 12000
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private static int WAIT_TIME = 0; //circuit breakers 12000
 
     private DuckSensorTensorFlow duckSensor =null;
     private Arm arm;
@@ -93,7 +68,7 @@ public class RedBoardAuto extends LinearOpMode{
         Trajectory trajectory_3_0 = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading( new Pose2d(22  ,-14 ,0.042271207336409766 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_1 = drive.trajectoryBuilder(trajectory_3_0.end()).lineToLinearHeading( new Pose2d(9.0635737400733  ,-13.569947682889088 ,0.052599918631281106 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_2 = drive.trajectoryBuilder(trajectory_3_1.end()).lineToLinearHeading( new Pose2d(18.704528131335884  ,-34.13812830291473 ,1.6195036765495239 ), velocityConstraint, accelerationConstraint).build();
-        Trajectory trajectory_3_3 = drive.trajectoryBuilder(trajectory_3_2.end()).lineToLinearHeading( new Pose2d(20.550611840828342  ,-40.91831542759491 ,1.6087924203918842 ), velocityConstraint, accelerationConstraint).build();
+        Trajectory trajectory_3_3 = drive.trajectoryBuilder(trajectory_3_2.end()).lineToLinearHeading( new Pose2d(21.5  ,-40.91831542759491 ,1.6087924203918842 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_4 = drive.trajectoryBuilder(trajectory_3_3.end()).lineToLinearHeading( new Pose2d(20.43645358809851  ,-35.543940469365445 ,1.596550984783149 ), velocityConstraint, accelerationConstraint).build();
         Trajectory trajectory_3_5 = drive.trajectoryBuilder(trajectory_3_4.end()).lineToLinearHeading( new Pose2d(0.7952916538680732  ,-35.56883829046704 ,1.6009502507050373 ), velocityConstraint, accelerationConstraint).build();
 
@@ -110,10 +85,10 @@ public class RedBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_1_1);
                 pixelMechanism.openRightGrabber();
                 sleep(1000);
-                sleep(WAIT_TIME);
+                sleep(8000);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_1_2);
-                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
+                arm.liftToPosition(arm.LIFT_HIGH_AUTO_POS, arm.LIFT_2_HIGH_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_1_3);
                 sleep(500);
                 pixelMechanism.openLeftGrabber();
@@ -133,11 +108,11 @@ public class RedBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_2_0);
                 pixelMechanism.openRightGrabber();
                 sleep(1000);
-                sleep(WAIT_TIME);
+                sleep(8000);
                 drive.followTrajectory(trajectory_2_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_2_2);
-                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
+                arm.liftToPosition(arm.LIFT_HIGH_AUTO_POS, arm.LIFT_2_HIGH_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_2_3);
                 sleep(500);
                 pixelMechanism.openLeftGrabber();
@@ -157,11 +132,11 @@ public class RedBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_3_0);
                 pixelMechanism.openRightGrabber();
                 sleep(1000);
-                sleep(WAIT_TIME);
+                sleep(8000);
                 drive.followTrajectory(trajectory_3_1);
                 pixelMechanism.toScore(this);
                 drive.followTrajectory(trajectory_3_2);
-                arm.liftToPosition(arm.LIFT_AUTO_POS, arm.LIFT_2_AUTO_POS, arm.LIFT_POWER);
+                arm.liftToPosition(arm.LIFT_HIGH_AUTO_POS, arm.LIFT_2_HIGH_AUTO_POS, arm.LIFT_POWER);
                 drive.followTrajectory(trajectory_3_3);
                 sleep(500);
                 pixelMechanism.openLeftGrabber();
@@ -173,7 +148,6 @@ public class RedBoardAuto extends LinearOpMode{
                 drive.followTrajectory(trajectory_3_5);
                 //pixelMechanism.toInit(this);
                 //sleep(1000);
-
             }
             pixelMechanism.flipToPosition(0, .5);
             while(pixelMechanism.flipMotor.getCurrentPosition() != 0) {
