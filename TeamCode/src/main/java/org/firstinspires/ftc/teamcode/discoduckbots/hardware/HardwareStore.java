@@ -39,7 +39,7 @@ public class HardwareStore {
     public DcMotor flipMotor;
     public DcMotor pivotMotor;
     public Servo droneServo;
-    public Servo holdServo;
+
 
 
     //public RevBlinkinLedDriver ledDriver;
@@ -70,16 +70,16 @@ public class HardwareStore {
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         droneServo = hardwareMap.get(Servo.class, "droneServo");
-        holdServo = hardwareMap.get(Servo.class, "holdServo");
+
 
         flipStateMachine = new FlipStateMachine();
 
         lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
-        //ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
         arm = new Arm(liftMotor1, liftMotor2);
         pixelMechanism = new PixelMechanism(flipMotor, pivotMotor, rightGrabber, leftGrabber, pivotTouchSensor, flipStateMachine);
-        droneLauncher = new DroneLauncher(droneServo, holdServo);
+        droneLauncher = new DroneLauncher(droneServo);
         pixelDetector = new PixelDetector(leftColorSensor, rightColorSensor);
         //webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
 

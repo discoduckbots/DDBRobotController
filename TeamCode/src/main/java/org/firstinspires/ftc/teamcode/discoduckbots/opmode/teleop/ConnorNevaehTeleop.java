@@ -111,9 +111,7 @@ public class ConnorNevaehTeleop extends LinearOpMode {
                 pixelMechanism.openLeftGrabber();
             }
 
-            if (gamepad1.x) {
-                droneLauncher.release();
-            }
+
 
             if (gamepad1.y) {
                 droneLauncher.launch();

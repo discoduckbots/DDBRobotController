@@ -4,20 +4,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class DroneLauncher {
     public Servo droneServo;
-    public Servo holdServo;
-    public static double LAUNCH_POS = 0.0;
+    //public Servo holdServo;
+    public static double LAUNCH_POS = 1.0;
     public static double HOLD_POS = 0.0;
 
-    public DroneLauncher(Servo droneServo, Servo holdServo) {
+    public DroneLauncher(Servo droneServo) {
         this.droneServo = droneServo;
-        this.holdServo = holdServo;
     }
 
     public void launch() {
-        droneServo.setPosition(LAUNCH_POS);
-    }
 
-    public void release() {
-        holdServo.setPosition(HOLD_POS);
+        droneServo.setPosition(LAUNCH_POS);
     }
 }

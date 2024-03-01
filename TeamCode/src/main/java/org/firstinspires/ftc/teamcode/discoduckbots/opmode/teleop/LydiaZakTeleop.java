@@ -84,7 +84,7 @@ public class LydiaZakTeleop extends LinearOpMode {
     boolean tenSec = false;
     boolean rumbling = false;
 
-    private RevBlinkinLedDriver.BlinkinPattern INIT_COLOR = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE;
+    private RevBlinkinLedDriver.BlinkinPattern INIT_COLOR = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
     private RevBlinkinLedDriver.BlinkinPattern LEFT_ONLY_COLOR = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_GRADIENT;
     private RevBlinkinLedDriver.BlinkinPattern RIGHT_ONLY_COLOR = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
     private RevBlinkinLedDriver.BlinkinPattern BOTH_COLOR = RevBlinkinLedDriver.BlinkinPattern.GREEN;
@@ -147,9 +147,6 @@ public class LydiaZakTeleop extends LinearOpMode {
             }
 
 
-            if (gamepad1.x) {
-                droneLauncher.release();
-            }
 
             if (gamepad1.y) {
                 droneLauncher.launch();
@@ -245,12 +242,12 @@ public class LydiaZakTeleop extends LinearOpMode {
             }
             if (runtime.time() >= 90 && !endgame) {
                 gamepad2.rumbleBlips(3);
-                NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;
+                NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.ORANGE;
                 endgame = true;
             }
             if (runtime.time() >= 110 && !tenSec) {
                 gamepad2.rumbleBlips(5);
-                NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE;
+                NEITHER_COLOR = RevBlinkinLedDriver.BlinkinPattern.RED;
                 tenSec = true;
             }
 
@@ -279,7 +276,6 @@ public class LydiaZakTeleop extends LinearOpMode {
             telemetry.addData("Flip Position", pixelMechanism.flipMotor.getCurrentPosition());
             telemetry.addData("Lift Position", arm.liftMotor1.getCurrentPosition());
             telemetry.addData("Lift Position", arm.liftMotor2.getCurrentPosition());
-            telemetry.addData("Hold Servo", droneLauncher.holdServo.getPosition());
             telemetry.addData("Drone Servo", droneLauncher.droneServo.getPosition());
             telemetry.update();
         }
